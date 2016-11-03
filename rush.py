@@ -9,147 +9,65 @@ import random
 import workshop3_visualize
 import pylab
 
-# === Provided classes
 
-class Position(object):
-    """
-    A Position represents a location in a two-dimensional room.
-    """
-    def __init__(self, x, y):
-        """
-        Initializes a position with coordinates (x, y).
-        """
-        self.x = x
-        self.y = y
-    def getX(self):
-        return self.x
-    def getY(self):
-        return self.y
-    def getNewPosition(self, stepsx, stepsy):
-        """
-        Computes and returns the new Position after a single clock-tick has
-        passed, with this object as the current position, and with the
-        specified angle and speed.
 
-        Does NOT test whether the returned position fits inside the room.
-
-        angle: float representing angle in degrees, 0 <= angle < 360
-        speed: positive float representing speed
-
-        Returns: a Position object representing the new position.
-        """
-        old_x, old_y = self.getX(), self.getY())
-        # Add that to the existing position
-        new_x = old_x + stepsx
-        new_y = old_y + stepsy
-        return Position(new_x, new_y)
-
-# === Problems 1
 
 class RectangularRoom(object):
-    """
-    A RectangularRoom represents a rectangular region containing clean or dirty
-    tiles.
 
-    A room has a width and a height and contains (width * height) tiles. At any
-    particular time, each of these tiles is either clean or dirty.
-    """
     def __init__(self, width, height):
-        """
-        Initializes a rectangular room with the specified width and height.
 
-        Initially, no tiles in the room have been cleaned.
-
-        width: an integer > 0
-        height: an integer > 0
-
-        dictionary with the tiles. 1 is for dirty and 0 for clean
-        """
         self.height = height
         self.width = width
         self.tiles = []
 
-        # For loop to add the coordinates (in a list) to the list of dirty tiles
         for i in range(width):
             for j in range(height):
                 self.tiles.append([i, j]])
 
     def isPositionInRoom(self, pos):
-        """
-        Return True if pos is inside the room.
 
-        pos: a Position object.
-        returns: True if pos is in the room, False otherwise.
-        """
-        x = pos.getX()
-        y = pos.getY()
-        # Conditions for being in the room
+        x = pos[0]
+        y = pos[1]
         if x <= self.width and x >= 0 and y <= self.height and y >= 0:
             return True
         else:
             return False
 
     def winningRow(self):
-        winrow = self.height / 2 + 1
+
+        winrow = self.height / 2
         return winrow
 
 
 
 
 class Car(object):
-    """
-    Represents a robot cleaning a particular room.
 
-    At all times the robot has a particular position and direction in the room.
-    The robot also has a fixed speed.
-
-    Subclasses of Robot should provide movement strategies by implementing
-    updatePositionAndClean(), which simulates a single time-step.
-    """
-    def __init__(self, room):
-        """
-        Initializes a Robot with the given speed in the specified room. The
-        robot initially has a random direction and a random position in the
-        room. The robot cleans the tile it is on.
-
-        room:  a RectangularRoom object.
-        speed: a float (speed > 0)
-        """
+    def __init__(self, room, direction, length, startpos):
 
         self.room = room
-        # Make integer from float
-        x = int(self.position.getX())
-        y = int(self.position.getY())
-        # For multiple robots that start on the same tile, the tile must be dirty in order to clean
-        if self.room.isTileCleaned(x, y) == False:
-                self.room.cleanTileAtPosition(self.position)
+        self.direction = direction
+        self.pos = []
+        self.x = startpos[0]
+        self.y = startpos[1]
+        self.length = length
+        if self.direction == 0:
+            for i in range(self.length):
+                self.pos.append([self.x + i, self.y])
+        else:
+            for i in range(self.length):
+                self.pos.append([self.x, self.y + i])
 
 
-    def getRobotPosition(self):
-        """
-        Return the position of the robot.
-
-        returns: a Position object giving the robot's position.
-        """
-        return self.position
 
 
     def setRobotPosition(self, position):
-        """
-        Set the position of the robot to POSITION.
 
-        position: a Position object.
-        """
         self.position = position
 
 
     def updatePositionAndClean(self):
-        """
-        Simulate the raise passage of a single time-step.
 
-        Move the robot to a new position and mark the tile it is on as having
-        been cleaned.
-        """
         # For a robot that keeps going in the same direction
         new_pos = self.position.getNewPosition(self.direction, self.speed)
         setRobotPosition(new_pos)
@@ -161,98 +79,81 @@ class Car(object):
 
 
 
-# === Problem 2
-class Truck(Car):
-    """
-    A StandardRobot is a Robot with the standard movement strategy.
-
-    At each time-step, a StandardRobot attempts to move in its current direction; when
-    it hits a wall, it chooses a new direction randomly.
-    """
-
-    def updatePositionAndClean(self):
-        """
-        Simulate the passage of a single time-step.
-
-        Move the robot to a new position and mark the tile it is on as having
-        been cleaned.
-        """
-        new_pos = self.position.getNewPosition(self.direction, self.speed)
-        # Checks if new position in room else go a different direction
-        if self.room.isPositionInRoom(new_pos):
-            self.setRobotPosition(new_pos)
-            x = int(new_pos.getX())
-            y = int(new_pos.getY())
-            # The tile must be dirty in order to clean
-            if self.room.isTileCleaned(x, y) == False:
-                    self.room.cleanTileAtPosition(self.position)
-        else:
-            self.setRobotDirection((random.random() * 360))
-
-# === Problem 3
-
-def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
-                  robot_type):
-    """
-    Runs NUM_TRIALS trials of the simulation and returns the mean number of
-    time-steps needed to clean the fraction MIN_COVERAGE of the room.
-
-    The simulation is run with NUM_ROBOTS robots of type ROBOT_TYPE, each with
-    speed SPEED, in a room of dimensions WIDTH x HEIGHT.
-
-    num_robots: an int (num_robots > 0)
-    speed: a float (speed > 0)
-    width: an int (width > 0)
-    height: an int (height > 0)
-    min_coverage: a float (0 <= min_coverage <= 1.0)
-    num_trials: an int (num_trials > 0)
-    robot_type: class of robot to be instantiated (e.g. Robot or
-                RandomWalkRobot)
-    """
-    room = RectangularRoom(width, height)
-    robots = []
-    # Put the number of robots in the list
-    for i in range(num_robots):
-        robots.append(robot_type(room, speed))
-    # Total timesteps to clean
-    count = 0
-    anim = workshop3_visualize.RobotVisualization(num_robots, width, height, 0.2)
-    # Loops over the number of trials. Count +1 if the min_coverage isn't reach and break if done
-    for i in range(num_trials):
-        anim.update(room, robots)
-        if (float(room.getNumCleanedTiles()) / room.getNumTiles()) < min_coverage:
-            count += 1
-        else:
-            count += 1
-            break
-        # Loops over all robots, so they will update and clean
-        for j in range(len(robots)):
-            robots[j].updatePositionAndClean()
-    anim.done()
-    return count
-
-# === Problem 4
-
-class RandomWalkRobot(Robot):
-    """
-    A RandomWalkRobot is a robot with the "random walk" movement strategy: it
-    chooses a new direction at random after each time-step.
-    """
-    def updatePositionAndClean(self):
-        # Same as StandardRobot
-        new_pos = self.position.getNewPosition(self.direction, self.speed)
-        if self.room.isPositionInRoom(new_pos):
-            self.setRobotPosition(new_pos)
-            x = int(new_pos.getX())
-            y = int(new_pos.getY())
-            if self.room.isTileCleaned(x, y) == False:
-                self.room.cleanTileAtPosition(self.position)
-        else:
-            self.setRobotDirection((random.random() * 360))
-        # Change direction random
-        self.setRobotDirection((random.random() * 360))
-
-avg1 = runSimulation(5, 1.0, 10, 10, 0.8, 200, StandardRobot)
-print avg1
-avg2 = runSimulation(5, 1.0, 10, 10, 0.8, 200, RandomWalkRobot)
-print avg2
+# import numpy as np
+# import matplotlib
+# import matplotlib.pyplot as plt
+# import random
+# import math
+# import time
+#
+# #define constant iron
+# k = 1.381*(10**(-23))
+# e = 2.72*k/4
+#
+# def ronde_flip(veld,kolommen,rijen,T):
+#     for u in range(kolommen):
+#         j = random.randint(0,rijen-1)
+#         i = random.randint(0,kolommen-1)
+#         tot_spin = veld[(j+1)%rijen][i] + veld[(j-1)%rijen][i] + veld[j][(i+1)%kolommen] + veld[j][(i-1)%kolommen]
+#         delta_u = veld[j][i]*2*tot_spin * e
+#
+#         if delta_u <= 0:
+#             veld[j][i] = - veld[j][i]
+#
+#         elif delta_u > 0:
+#             randomgetal = random.random()
+#             kansgetal = math.e**(-delta_u/(k*T))
+#             if randomgetal <= kansgetal:
+#                 veld[j][i] = -veld[j][i]
+#
+#
+# def veld_simulatie(rijen,kolommen, aantal_stappen,T,T_string):
+#     veld = [[0 for i in range(kolommen)] for i in range(rijen)]
+#     down_punten = [[],[]]
+#     up_punten = [[],[]]
+#
+#     for j in range(rijen):
+#         for i in range(kolommen):
+#             kans = random.random()
+#             if kans < 0.5:
+#                 veld[j][i] = -1
+#                 down_punten[0].append(j)
+#                 down_punten[1].append(i)
+#             else:
+#                 veld[j][i] = 1
+#                 up_punten[0].append(j)
+#                 up_punten[1].append(i)
+#
+#     plt.figure('Ising model (%s bij %s) en %s'%(rijen,kolommen,T_string))
+#     plt.plot(down_punten[0],down_punten[1],'.',color='orange')
+#     plt.plot(up_punten[0],up_punten[1],'.',color='blue')
+#     for x in range(aantal_stappen*5):
+#         plt.clf()
+#         ronde_flip(veld,rijen,kolommen,T)
+#         down_punten = [[],[]]
+#         up_punten = [[],[]]
+#         plt.tick_params(
+#                 axis='both',
+#                 which='both',
+#                 bottom='off',
+#                 top='off',
+#                 labelbottom='off',
+#                 labelleft='off')
+#         plt.axis([-1, kolommen, -1, rijen])
+#
+#         for j in range(rijen):
+#             for i in range(kolommen):
+#                 if veld[j][i] < 0:
+#                     down_punten[0].append(j)
+#                     down_punten[1].append(i)
+#                 else:
+#                     up_punten[0].append(j)
+#                     up_punten[1].append(i)
+#         plt.title("Na %s stappen \n Aantal up = %s, aantal down = %s" % (x *kolommen,len(up_punten[0]),len(down_punten[0])))
+#         plt.plot(down_punten[0],down_punten[1],'s',color='orange',markeredgecolor='orange',markeredgewidth=1)
+#         plt.plot(up_punten[0],up_punten[1],'s',color='blue',markeredgecolor='blue',markeredgewidth=1)
+#         plt.pause(0.01)
+#
+# veld_simulatie(50,50,100,0.01,'T < Tc')
+# veld_simulatie(50,50,20,2.72,'T = Tc')
+# veld_simulatie(50,50,20,5,'T > Tc')
