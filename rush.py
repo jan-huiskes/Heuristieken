@@ -6,7 +6,7 @@
 import math
 import random
 
-import workshop3_visualize
+# import workshop3_visualize
 import pylab
 
 
@@ -22,13 +22,13 @@ class RectangularRoom(object):
 
         for i in range(width):
             for j in range(height):
-                self.tiles.append([i, j]])
+                self.tiles.append([i, j])
 
     def isPositionInRoom(self, pos):
 
         x = pos[0]
         y = pos[1]
-        if x <= self.width and x >= 0 and y <= self.height and y >= 0:
+        if x < self.width and x >= 0 and y < self.height and y >= 0:
             return True
         else:
             return False
@@ -42,41 +42,94 @@ class RectangularRoom(object):
 
 
 class Car(object):
-
-    def __init__(self, room, direction, length, startpos):
-
+    list_cars = []
+    def __init__(self, room,  length, startpos):
         self.room = room
-        self.direction = direction
         self.pos = []
-        self.x = startpos[0]
-        self.y = startpos[1]
         self.length = length
-        if self.direction == 0:
-            for i in range(self.length):
-                self.pos.append([self.x + i, self.y])
-        else:
-            for i in range(self.length):
-                self.pos.append([self.x, self.y + i])
+
+class HorCar(Car):
+    def __init__(self, room,  length, startpos):
+        Car.__init__(self, room,  length, startpos)
+        x = startpos[0]
+        y = startpos[1]
+        for i in range(self.length):
+            self.pos.append([x + i, y])
+        self.list_cars.append(self.pos)
+
+    def setCarPosition(self, position):
+        self.list_cars.remove(self.pos)
+        self.pos = []
+        x = position[0]
+        y = position[1]
+        for i in range(self.length):
+            self.pos.append([x + i, y])
+        self.list_cars.append(self.pos)
+
+    def updatePosition(self, steps):
+        new_poss = []
+        for pos in self.pos:
+            new_pos = [pos[0] + steps, pos[1]]
+            new_poss.append(new_pos)
+        for new_pos in new_poss:
+            if self.room.isPositionInRoom(new_pos):
+                for car in self.list_cars:
+                    if car != self.pos:
+                        if new_pos in car:
+                            return 'Auto in de weg'
+            else:
+                return 'Niet in de kamer'
+        self.setCarPosition(new_poss[0])
+        return 'done'
 
 
 
+class VerCar(Car):
+    def __init__(self, room,  length, startpos):
+        Car.__init__(self, room,  length, startpos)
+        x = startpos[0]
+        y = startpos[1]
+        for i in range(self.length):
+            self.pos.append([x, y + i])
+        self.list_cars.append(self.pos)
 
-    def setRobotPosition(self, position):
+    def setCarPosition(self, position):
+        self.list_cars.remove(self.pos)
+        self.pos = []
+        x = position[0]
+        y = position[1]
+        for i in range(self.length):
+            self.pos.append([x, y + i])
+        self.list_cars.append(self.pos)
 
-        self.position = position
+    def updatePosition(self, steps):
+        new_poss = []
+        for pos in self.pos:
+            new_pos = [pos[0], pos[1] + steps]
+            new_poss.append(new_pos)
+        for new_pos in new_poss:
+            if self.room.isPositionInRoom(new_pos):
+                for car in self.list_cars:
+                    if car != self.pos:
+                        if new_pos in car:
+                            return 'Auto in de weg'
+            else:
+                return 'Niet in de kamer'
+        self.setCarPosition(new_poss[0])
+        return 'done'
 
 
-    def updatePositionAndClean(self):
 
-        # For a robot that keeps going in the same direction
-        new_pos = self.position.getNewPosition(self.direction, self.speed)
-        setRobotPosition(new_pos)
-        x = int(new_pos.getX())
-        y = int(new_pos.getY())
-        # The tile must be dirty in order to clean
-        if self.room.isTileCleaned(x, y) == False:
-                self.room.cleanTileAtPosition(self.position)
-
+room = RectangularRoom(5, 5)
+car1 = VerCar(room, 2, [0, 0])
+car2 = HorCar(room, 2, [3, 3])
+print car1.list_cars
+print car1.updatePosition(2)
+print car1.list_cars
+print car1.updatePosition(2)
+print car1.list_cars
+print car2.updatePosition(-2)
+print car1.list_cars
 
 
 # import numpy as np
