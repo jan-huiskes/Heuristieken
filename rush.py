@@ -147,11 +147,14 @@ while (True):
     print ''
     num = int(raw_input('+car_num = up/right, -car_num = down/left: '))
     print ''
-    if num > 0:
-        print list_cars[num - 1].updatePosition(1)
-    if num < 0:
-        num = -num
-        print list_cars[num - 1].updatePosition(-1)
+    if abs(num) >= len(list_cars):
+        print 'Invalid move'
+    else:
+        if num > 0:
+            print list_cars[num - 1].updatePosition(1)
+        if num < 0:
+            num = -num
+            print list_cars[num - 1].updatePosition(-1)
     print''
 
 
