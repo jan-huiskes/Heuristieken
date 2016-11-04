@@ -66,10 +66,12 @@ class HorCar(Car):
             self.pos.append([x + i, y])
         self.list_cars.append(self.pos)
 
-    def updatePosition(self, steps):
+    def updatePosition(self, step):
+        if step > 1 or step < -1:
+            return 'Invalid move'
         new_poss = []
         for pos in self.pos:
-            new_pos = [pos[0] + steps, pos[1]]
+            new_pos = [pos[0] + step, pos[1]]
             new_poss.append(new_pos)
         for new_pos in new_poss:
             if self.room.isPositionInRoom(new_pos):
@@ -102,10 +104,13 @@ class VerCar(Car):
             self.pos.append([x, y + i])
         self.list_cars.append(self.pos)
 
-    def updatePosition(self, steps):
+    def updatePosition(self, step):
+        if step > 1 or step < -1:
+            return 'Invalid move'
+
         new_poss = []
         for pos in self.pos:
-            new_pos = [pos[0], pos[1] + steps]
+            new_pos = [pos[0], pos[1] + step]
             new_poss.append(new_pos)
         for new_pos in new_poss:
             if self.room.isPositionInRoom(new_pos):
@@ -119,17 +124,31 @@ class VerCar(Car):
         return 'done'
 
 
-
 room = RectangularRoom(5, 5)
 car1 = VerCar(room, 2, [0, 0])
 car2 = HorCar(room, 2, [3, 3])
-print car1.list_cars
-print car1.updatePosition(2)
-print car1.list_cars
-print car1.updatePosition(2)
-print car1.list_cars
-print car2.updatePosition(-2)
-print car1.list_cars
+
+def printboard():
+    for i in range(4, -1, -1):
+        for j in range(5):
+            check = True
+            for car in car1.list_cars:
+                if [j, i] in car:
+                    print '#',
+                    check = False
+            if (check):
+                print '_',
+        print''
+
+while (True):
+    printboard()
+    print ''
+    num = int(raw_input('1 = up/right, -1 = down/left: '))
+    print ''
+    print car1.updatePosition(num)
+    print''
+
+
 
 
 # import numpy as np
