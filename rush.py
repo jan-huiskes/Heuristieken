@@ -57,24 +57,28 @@ class HorCar(Car):
         for i in range(self.length):
             self.pos.append([x + i, y])
 
+    def noCar(self, pos):
+        for car in list_cars:
+            if car.pos != self.pos:
+                if pos in car.pos:
+                    return False
+        return True
+
     def updatePosition(self, step):
-        if step > 1 or step < -1:
+        if step > 1 or step < -1 or step == 0:
             return 'Invalid move'
 
         new_poss = []
         for pos in self.pos:
             new_pos = [pos[0] + step, pos[1]]
             new_poss.append(new_pos)
-        for new_pos in new_poss:
-            if self.room.isPositionInRoom(new_pos):
-                for car in list_cars:
-                    if car.pos != self.pos:
-                        if new_pos in car.pos:
-                            return 'Auto in de weg'
-            else:
-                return 'Niet in de kamer'
-        self.setCarPosition(new_poss[0])
-        return 'Done'
+        if step == 1:
+            step = 0
+        if self.room.isPositionInRoom(new_pos) and self.noCar(new_poss[step]):
+            self.setCarPosition(new_poss[0])
+            return 'Done'
+
+        return 'Invalid move'
 
 
 
@@ -94,24 +98,28 @@ class VerCar(Car):
         for i in range(self.length):
             self.pos.append([x, y + i])
 
+    def noCar(self, pos):
+        for car in list_cars:
+            if car.pos != self.pos:
+                if pos in car.pos:
+                    return False
+        return True
+
     def updatePosition(self, step):
-        if step > 1 or step < -1:
+        if step > 1 or step < -1 or step == 0:
             return 'Invalid move'
 
         new_poss = []
         for pos in self.pos:
             new_pos = [pos[0], pos[1] + step]
             new_poss.append(new_pos)
-        for new_pos in new_poss:
-            if self.room.isPositionInRoom(new_pos):
-                for car in list_cars:
-                    if car.pos != self.pos:
-                        if new_pos in car.pos:
-                            return 'Auto in de weg'
-            else:
-                return 'Niet in de kamer'
-        self.setCarPosition(new_poss[0])
-        return 'done'
+        if step == 1:
+            step = 0
+        if self.room.isPositionInRoom(new_pos) and self.noCar(new_poss[step]):
+            self.setCarPosition(new_poss[0])
+            return 'Done'
+
+        return 'Invalid move'
 
 
 room = RectangularRoom(5, 5)
@@ -120,23 +128,7 @@ car2 = HorCar(room, 2, [3, 3])
 list_cars.append(car1)
 list_cars.append(car2)
 
-# def update(car):
-#     if step > 1 or step < -1:
-#         return 'Invalid move'
-#     new_poss = []
-#     for pos in self.pos:
-#         new_pos = [pos[0], pos[1] + step]
-#         new_poss.append(new_pos)
-#     for new_pos in new_poss:
-#         if self.room.isPositionInRoom(new_pos):
-#             for car in self.list_cars:
-#                 if car != self.pos:
-#                     if new_pos in car:
-#                         return 'Auto in de weg'
-#         else:
-#             return 'Niet in de kamer'
-#     self.setCarPosition(new_poss[0])
-#             return 'done'
+
 
 def printboard():
     for i in range(4, -1, -1):
