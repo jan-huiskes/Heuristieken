@@ -72,9 +72,9 @@ class HorCar(Car):
         for pos in self.pos:
             new_pos = [pos[0] + step, pos[1]]
             new_poss.append(new_pos)
-        if step == 1:
+        if step == -1:
             step = 0
-        if self.room.isPositionInRoom(new_pos) and self.noCar(new_poss[step]):
+        if self.room.isPositionInRoom(new_pos) and self.noCar(new_poss[-step]):
             self.setCarPosition(new_poss[0])
             return 'Done'
 
@@ -113,9 +113,9 @@ class VerCar(Car):
         for pos in self.pos:
             new_pos = [pos[0], pos[1] + step]
             new_poss.append(new_pos)
-        if step == 1:
+        if step == -1:
             step = 0
-        if self.room.isPositionInRoom(new_pos) and self.noCar(new_poss[step]):
+        if self.room.isPositionInRoom(new_pos) and self.noCar(new_poss[-step]):
             self.setCarPosition(new_poss[0])
             return 'Done'
 
