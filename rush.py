@@ -8,7 +8,7 @@ import random
 
 # import workshop3_visualize
 import pylab
-
+import os
 
 
 
@@ -74,7 +74,7 @@ class HorCar(Car):
             new_poss.append(new_pos)
         if step == -1:
             step = 0
-        if self.room.isPositionInRoom(new_pos) and self.noCar(new_poss[-step]):
+        if self.room.isPositionInRoom(new_poss[-step]) and self.noCar(new_poss[-step]):
             self.setCarPosition(new_poss[0])
             return 'Done'
 
@@ -115,24 +115,45 @@ class VerCar(Car):
             new_poss.append(new_pos)
         if step == -1:
             step = 0
-        if self.room.isPositionInRoom(new_pos) and self.noCar(new_poss[-step]):
+        if self.room.isPositionInRoom(new_poss[-step]) and self.noCar(new_poss[-step]):
             self.setCarPosition(new_poss[0])
             return 'Done'
 
         return 'Invalid move'
 
 
-room = RectangularRoom(5, 5)
-car1 = VerCar(room, 2, [0, 0])
-car2 = HorCar(room, 2, [3, 3])
+room = RectangularRoom(6, 6)
+car1 = HorCar(room, 2, [3, room.winningRow()])
+car2 = VerCar(room, 2, [0, 0])
+car3 = HorCar(room, 2, [1, 1])
+car4 = HorCar(room, 2, [4, 0])
+car5 = HorCar(room, 2, [4, 2])
+car6 = HorCar(room, 2, [3, 5])
+car7 = VerCar(room, 3, [3, 0])
+car8 = VerCar(room, 3, [2, 3])
+car9 = VerCar(room, 3, [5, 3])
 list_cars.append(car1)
 list_cars.append(car2)
+list_cars.append(car3)
+list_cars.append(car4)
+list_cars.append(car5)
+list_cars.append(car6)
+list_cars.append(car7)
+list_cars.append(car8)
+list_cars.append(car9)
 
+
+def won():
+    for i in range(1, len(list_cars)):
+        for j in range(len(list_cars[i].pos)):
+            if list_cars[0].pos[1][0] < list_cars[i].pos[j][0] and list_cars[0].pos[1][1] == list_cars[i].pos[j][1]:
+                return False
+    return True
 
 
 def printboard():
-    for i in range(4, -1, -1):
-        for j in range(5):
+    for i in range(room.height - 1, -1, -1):
+        for j in range(room.width):
             check = True
             for k in range(len(list_cars)):
                 if [j, i] in list_cars[k].pos:
@@ -144,10 +165,14 @@ def printboard():
 
 while (True):
     printboard()
+    if (won()):
+        print 'You won'
+        break
     print ''
     num = int(raw_input('+car_num = up/right, -car_num = down/left: '))
     print ''
-    if abs(num) >= len(list_cars):
+    os.system('cls')
+    if abs(num) > len(list_cars):
         print 'Invalid move'
     else:
         if num > 0:
@@ -156,6 +181,7 @@ while (True):
             num = -num
             print list_cars[num - 1].updatePosition(-1)
     print''
+
 
 
 
