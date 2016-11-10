@@ -135,7 +135,7 @@ class Queue:
             self.queue.pop(0)
             return m
         else:
-            return 'empty queue'
+            return False
 
 size = 6
 room = RectangularRoom(size, size)
@@ -145,40 +145,40 @@ room = RectangularRoom(size, size)
 ## Comment this whole block out for testing the first configuration
 ## You have to probably wait a few weeks though
 ###############################################################################
-# car1 = HorCar(room, 2, [3, 3])
-# car2 = VerCar(room, 2, [0, 0])
-# car3 = HorCar(room, 2, [1, 1])
-# car4 = HorCar(room, 2, [4, 0])
-# car5 = HorCar(room, 2, [4, 2])
-# car6 = HorCar(room, 2, [3, 5])
-# car7 = VerCar(room, 3, [3, 0])
-# car8 = VerCar(room, 3, [2, 3])
-# car9 = VerCar(room, 3, [5, 3])
-#
-# cars_objects.append(car1)
-# cars_objects.append(car2)
-# cars_objects.append(car3)
-# cars_objects.append(car4)
-# cars_objects.append(car5)
-# cars_objects.append(car6)
-# cars_objects.append(car7)
-# cars_objects.append(car8)
-# cars_objects.append(car9)
-###############################################################################
-
-## This is the test case for iterative_deepening, this works well, but
-# configuration are easy solvable
-car1 = HorCar(room, 2, [0, 3])
-car2 = VerCar(room, 2, [1, 1])
-car3 = VerCar(room, 3, [3, 3])
-car4 = VerCar(room, 3, [5, 3])
-car5 = HorCar(room, 3, [3, 2])
+car1 = HorCar(room, 2, [3, 3])
+car2 = VerCar(room, 2, [0, 0])
+car3 = HorCar(room, 2, [1, 1])
+car4 = HorCar(room, 2, [4, 0])
+car5 = HorCar(room, 2, [4, 2])
+car6 = HorCar(room, 2, [3, 5])
+car7 = VerCar(room, 3, [3, 0])
+car8 = VerCar(room, 3, [2, 3])
+car9 = VerCar(room, 3, [5, 3])
 
 cars_objects.append(car1)
 cars_objects.append(car2)
 cars_objects.append(car3)
 cars_objects.append(car4)
 cars_objects.append(car5)
+cars_objects.append(car6)
+cars_objects.append(car7)
+cars_objects.append(car8)
+cars_objects.append(car9)
+###############################################################################
+
+## This is the test case for iterative_deepening, this works well, but
+# configuration are easy solvable
+# car1 = HorCar(room, 2, [0, 3])
+# car2 = VerCar(room, 2, [1, 1])
+# car3 = VerCar(room, 3, [3, 3])
+# car4 = VerCar(room, 3, [5, 3])
+# car5 = HorCar(room, 3, [3, 2])
+#
+# cars_objects.append(car1)
+# cars_objects.append(car2)
+# cars_objects.append(car3)
+# cars_objects.append(car4)
+# cars_objects.append(car5)
 
 
 def won(lis):
@@ -238,28 +238,31 @@ def solve():
     lis = board()
     q1.insert(lis)
     check = True
+    archive.append(lis)
     while check:
-        check2 = True
         for item in q1.queue:
             if won(item):
                 check = False
-                check2 = False
                 break
         config = q1.remove()
-        archive.append(config)
+        if config == False:
+            return False
+            break
         makeBoard(config)
-        printboard()
-        print ''
+        # printboard()
+        # print ''
         for car in cars_objects:
-            if car.updatePosition(1) and check2:
+            if car.updatePosition(1) and check:
                 lis = board()
                 if lis not in archive:
                     q1.insert(lis)
+                    archive.append(lis)
                 car.updatePosition(-1)
-            if car.updatePosition(-1) and check2:
+            if car.updatePosition(-1) and check:
                 lis = board()
                 if lis not in archive:
                     q1.insert(lis)
+                    archive.append(lis)
                 car.updatePosition(1)
 
     return True
@@ -309,6 +312,8 @@ while (1):
             end = time.time()
             print "Time elapsed:", (end - start)
             print "Amount cars:", len(cars_objects)
+        else:
+            print 'No solution'
         break
 
 
