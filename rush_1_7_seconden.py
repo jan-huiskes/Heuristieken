@@ -11,7 +11,7 @@ import Queue
 import hashlib
 
 """
-Snelste tijd tot nu toe: 1.77 seconden
+Snelste tijd tot nu toe: 1.7 seconden (op mijn laptop)
 Veranderingen:
     - archive is een dictionary
     - Queue is geimporteerd
@@ -36,7 +36,7 @@ een auto bij te houden in dat auto object zelf. En voor de noCar functie hoef je
 alleen een if statement te plaatsen van: if board[newstart_y][newstart_x] == 0: return True.
 
 En misschien is het niet nodig om elke auto dat volledige room object mee te geven.
-Dat moet er eigenlijk los van af staan. Om onder die 1.77 seconden te komen zal
+Dat moet er eigenlijk los van af staan. Om onder die 1.7 seconden te komen zal
 structuur van de code gwn anders moeten vrees ik :( (niet drastisch hoor)
 """
 
@@ -69,11 +69,11 @@ class HorCar(Car):
 
         self.all_positions_of_car = []
 
-        for i in range(self.length):
+        for i in xrange(self.length):
             self.all_positions_of_car.append([x + i, y])
 
     def setCarPosition(self, x, y):
-        for i in range(self.length):
+        for i in xrange(self.length):
             self.all_positions_of_car[i][0] = x + i
             self.all_positions_of_car[i][1] = y
 
@@ -117,11 +117,11 @@ class VerCar(Car):
 
         self.all_positions_of_car = []
 
-        for i in range(self.length):
+        for i in xrange(self.length):
             self.all_positions_of_car.append([x, y + i])
 
     def setCarPosition(self, x, y):
-        for i in range(self.length):
+        for i in xrange(self.length):
             self.all_positions_of_car[i][0] = x
             self.all_positions_of_car[i][1] = y + i
 
@@ -206,12 +206,12 @@ def won(lis):
     boolie = True
     index = 0
 
-    for i in range(len(row)):
+    for i in xrange(len(row)):
         if row[i] == 1:
             index = i
             break
 
-    for i in range(index, len(row)):
+    for i in xrange(index, len(row)):
         if row[i] > 1:
             boolie = False
             break
@@ -235,13 +235,13 @@ def board():
         if cars.direction == 'h':
             x = cars.all_positions_of_car[0][0]
             y = cars.all_positions_of_car[0][1]
-            for i in range(cars.length):
+            for i in xrange(cars.length):
                 board[y][x + i] = count
 
         else:
             x = cars.all_positions_of_car[0][0]
             y = cars.all_positions_of_car[0][1]
-            for i in range(cars.length):
+            for i in xrange(cars.length):
                 board[y + i][x] = count
         count += 1
 
@@ -249,8 +249,8 @@ def board():
 
 def makeBoard(lis):
     check_lis = []
-    for i in range(size - 1, -1, -1):
-        for j in range(size):
+    for i in xrange(size - 1, -1, -1):
+        for j in xrange(size):
             if lis[i][j] > 0 and lis[i][j] not in check_lis:
                 check_lis.append(lis[i][j])
                 cars_objects[lis[i][j] - 1].setCarPosition(j, size - 1 - i)
@@ -266,7 +266,7 @@ def solve():
     check = True
 
     # size = 6, but now hardcoded
-    tmp_list = [lis[i][j] for i in range(6) for j in range(6)]
+    tmp_list = [lis[i][j] for i in xrange(6) for j in xrange(6)]
 
     archive[tuple(tmp_list)] = 1
 
@@ -283,7 +283,7 @@ def solve():
                 lis = board()
 
 
-                tmp_list = [lis[i][j] for i in range(6) for j in range(6)]
+                tmp_list = [lis[i][j] for i in xrange(6) for j in xrange(6)]
 
 
                 tupletje = tuple(tmp_list)
@@ -300,7 +300,7 @@ def solve():
             if car.updatePosition(-1) and check:
                 lis = board()
 
-                tmp_list = [lis[i][j] for i in range(6) for j in range(6)]
+                tmp_list = [lis[i][j] for i in xrange(6) for j in xrange(6)]
 
                 tupletje = tuple(tmp_list)
                 if tupletje not in archive:
@@ -321,10 +321,10 @@ def printboard():
     for cars in cars_objects:
         all_positions.append(cars.all_positions_of_car)
 
-    for j in range(size - 1, -1, -1):
-        for i in range(size):
+    for j in xrange(size - 1, -1, -1):
+        for i in xrange(size):
             check = True
-            for k in range(len(all_positions)):
+            for k in xrange(len(all_positions)):
                 if [i, j] in all_positions[k]:
                     print (k + 1),
                     check = False
