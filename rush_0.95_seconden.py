@@ -9,6 +9,7 @@ import os
 import time
 import Queue
 import hashlib
+import matplotlib.pyplot as plt
 
 """
 Snelste tijd tot nu toe: 1.7 seconden (op mijn laptop)
@@ -56,13 +57,14 @@ class RectangularRoom(object):
 cars_objects = []
 
 class Car(object):
-    def __init__(self, room, length):
+    def __init__(self, room, length, color):
         self.room = room
         self.length = length
+        self.color = color
 
 class HorCar(Car):
-    def __init__(self, room, length, x, y):
-        Car.__init__(self, room, length)
+    def __init__(self, room, length, color, x, y):
+        Car.__init__(self, room, length, color)
         self.direction = 'h'
         #x = startpos[0]
     #    y = startpos[1]
@@ -108,8 +110,8 @@ class HorCar(Car):
         return False
 
 class VerCar(Car):
-    def __init__(self, room, length, x, y):
-        Car.__init__(self, room, length)
+    def __init__(self, room, length, color, x, y):
+        Car.__init__(self, room, length, color)
         self.direction = 'v'
 
     #    x = startpos[0]
@@ -162,15 +164,15 @@ room = RectangularRoom(size, size)
 ## Comment this whole block out for testing the first configuration
 ## You have to probably wait a few weeks though
 ###############################################################################
-car1 = HorCar(room, 2, 3, 3)
-car2 = VerCar(room, 2, 0, 0)
-car3 = HorCar(room, 2, 1, 1)
-car4 = HorCar(room, 2, 4, 0)
-car5 = HorCar(room, 2, 4, 2)
-car6 = HorCar(room, 2, 3, 5)
-car7 = VerCar(room, 3, 3, 0)
-car8 = VerCar(room, 3, 2, 3)
-car9 = VerCar(room, 3, 5, 3)
+car1 = HorCar(room, 2, 'red', 3, 3)
+car2 = VerCar(room, 2, 'brown', 0, 0)
+car3 = HorCar(room, 2, 'blue', 1, 1)
+car4 = HorCar(room, 2, 'green', 4, 0)
+car5 = HorCar(room, 2, 'orange', 4, 2)
+car6 = HorCar(room, 2, 'blue', 3, 5)
+car7 = VerCar(room, 3, 'yellow', 3, 0)
+car8 = VerCar(room, 3, 'purple', 2, 3)
+car9 = VerCar(room, 3, 'brown', 5, 3)
 
 cars_objects.append(car1)
 cars_objects.append(car2)
@@ -317,21 +319,37 @@ def solve():
     return True
 
 def printboard():
-    all_positions = []
-    for cars in cars_objects:
-        all_positions.append(cars.all_positions_of_car)
+    # all_positions = []
+    # for cars in cars_objects:
+    #     all_positions.append(cars.all_positions_of_car)
+    #
+    # for j in xrange(size - 1, -1, -1):
+    #     for i in xrange(size):
+    #         check = True
+    #         for k in xrange(len(all_positions)):
+    #             if [i, j] in all_positions[k]:
+    #                 print (k + 1),
+    #                 check = False
+    #                 break
+    #         if check:
+    #             print '_',
+    #     print ''
+    plt.close()
+    plt.figure('Rush Hour')
+    plotboard = [[], []]
+    for i in range(size + 1):
+        plotboard[0].append([i] * (size + 1))
+        plotboard[1].append(i)
+    for i in range(size):
+        plt.plot(plotboard[0][i],plotboard[1],  color='black')
+        plt.plot(plotboard[1], plotboard[0][i], color='black')
+    for i in range(len(cars_objects)):
+        for elem in cars_objects[i].all_positions_of_car:
+            plt.plot(elem[0] + 0.5, elem[1] + 0.5, 's',color=cars_objects[i].color, markersize = 50)
+    plt.show()
 
-    for j in xrange(size - 1, -1, -1):
-        for i in xrange(size):
-            check = True
-            for k in xrange(len(all_positions)):
-                if [i, j] in all_positions[k]:
-                    print (k + 1),
-                    check = False
-                    break
-            if check:
-                print '_',
-        print ''
+
+
 
 if __name__ == "__main__":
     while (1):
@@ -361,6 +379,8 @@ if __name__ == "__main__":
                 print "Amount cars:", len(cars_objects)
 
                 win = winning_config[0]
+                makeBoard(win)
+                printboard()
                 for i in win:
                     print i, "\n"
             else:
