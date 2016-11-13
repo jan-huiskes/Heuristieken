@@ -14,7 +14,7 @@ Snelste tijd tot nu toe: 0.95 seconden (op mijn laptop)
 Veranderingen:
     - Room object is aparte object
     - Bij vorige code steeds opnieuw een room aanmaken, nu alleen elementen aanpassen als auto wordt verplaatst
-    
+
 """
 # saving every car object of the board
 cars_objects = []
