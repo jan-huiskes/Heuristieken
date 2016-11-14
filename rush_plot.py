@@ -11,6 +11,7 @@ import Queue
 import hashlib
 import matplotlib.pyplot as plt
 
+
 """
 Snelste tijd tot nu toe: 1.7 seconden (op mijn laptop)
 Veranderingen:
@@ -258,26 +259,38 @@ def makeBoard(lis):
                 cars_objects[lis[i][j] - 1].setCarPosition(j, size - 1 - i)
 
 
-winning_config = []
+def find_path(graph, start, end, path=[]):
+    path = path + [start]
+    if start == end:
+        return path
+    if not graph.has_key(start):
+        return False
+    for node in graph[start]:
+        if node not in path:
+            newpath = find_path(graph, node, end, path)
+            if newpath:
+                return newpath
+    return False
+
+
+
 def solve():
+
     archive = {}
 
     q1 = Queue.Queue()
-    lis = board()
-    q1.put(lis)
+    begin_lis = board()
+    q1.put(begin_lis)
     check = True
-
-    # size = 6, but now hardcoded
-    tmp_list = [lis[i][j] for i in xrange(6) for j in xrange(6)]
-
-    archive[tuple(tmp_list)] = 1
-
+    tmp_blis = [begin_lis[i][j] for i in xrange(6) for j in xrange(6)]
+    starter = tuple(tmp_blis)
+    archive[starter] = []
     while check:
 
         config = q1.get()
 
         makeBoard(config)
-
+        tmp_conf = [config[i][j] for i in xrange(6) for j in xrange(6)]
 
         for car in cars_objects:
 
@@ -292,11 +305,15 @@ def solve():
                 if tupletje not in archive:
 
                     if (won(lis)):
-                        winning_config.append(lis)
+                        makeBoard(lis)
+                        archive[tuple(tmp_conf)].append(tupletje)
+                        ender = tupletje
+                        print find_path(archive, starter, ender)
                         check = False
                         break
 
-                    archive[tupletje] = None
+                    archive[tuple(tmp_conf)].append(tupletje)
+                    archive[tupletje] = []
                     q1.put(lis)
                 car.updatePosition(-1)
             if car.updatePosition(-1) and check:
@@ -308,15 +325,20 @@ def solve():
                 if tupletje not in archive:
 
                     if (won(lis)):
-                        winning_config.append(lis)
+                        makeBoard(lis)
+                        archive[tuple(tmp_conf)].append(tupletje)
+                        ender = tupletje
+                        print find_path(archive, starter, ender)
                         check = False
                         break
 
                     q1.put(lis)
-                    archive[tupletje] = None
+                    archive[tuple(tmp_conf)].append(tupletje)
+                    archive[tupletje] = []
                 car.updatePosition(1)
 
     return True
+
 
 def printboard():
     # all_positions = []
@@ -358,7 +380,7 @@ if __name__ == "__main__":
         if won(lis):
             break
 
-        printboard()
+        #printboard()
         print ''
         num = raw_input('+car_num = up/right, -car_num = down/left: ')
         os.system('cls')
@@ -378,11 +400,8 @@ if __name__ == "__main__":
                 print "Time elapsed:", (end - start)
                 print "Amount cars:", len(cars_objects)
 
-                win = winning_config[0]
-                makeBoard(win)
                 printboard()
-                for i in win:
-                    print i, "\n"
+
             else:
                 print 'No solution'
             break

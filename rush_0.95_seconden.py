@@ -7,6 +7,7 @@
 import os
 import time
 import Queue
+import matplotlib.pyplot as plt
 
 
 """
@@ -109,14 +110,15 @@ class RectangularRoom(object):
 
 
 class Car(object):
-    def __init__(self, index, length):
+    def __init__(self, index, length, color):
 
         self.index = index
         self.length = length
+        self.color = color
 
 class HorCar(Car):
-    def __init__(self, index, length, x, y):
-        Car.__init__(self, index, length)
+    def __init__(self, index, length, color, x, y):
+        Car.__init__(self, index, length, color)
         self.direction = 'h'
         self.startx = x
         self.starty = y
@@ -153,8 +155,8 @@ class HorCar(Car):
         return False
 
 class VerCar(Car):
-    def __init__(self, index, length, x, y):
-        Car.__init__(self, index, length)
+    def __init__(self, index, length, color, x, y):
+        Car.__init__(self, index, length, color)
         self.direction = 'v'
         self.startx = x
         self.starty = y
@@ -194,15 +196,15 @@ class VerCar(Car):
 ## Comment this whole block out for testing the first configuration
 ## You have to probably wait a few weeks though
 ###############################################################################
-car1 = HorCar(1, 2, 3, 3)
-car2 = VerCar(2, 2, 0, 0)
-car3 = HorCar(3, 2, 1, 1)
-car4 = HorCar(4, 2, 4, 0)
-car5 = HorCar(5, 2, 4, 2)
-car6 = HorCar(6, 2, 3, 5)
-car7 = VerCar(7, 3, 3, 0)
-car8 = VerCar(8, 3, 2, 3)
-car9 = VerCar(9, 3, 5, 3)
+car1 = HorCar(1, 2, 'red', 3, 3)
+car2 = VerCar(2, 2, 'brown', 0, 0)
+car3 = HorCar(3, 2, 'blue', 1, 1)
+car4 = HorCar(4, 2, 'green', 4, 0)
+car5 = HorCar(5, 2, 'orange', 4, 2)
+car6 = HorCar(6, 2, 'blue', 3, 5)
+car7 = VerCar(7, 3, 'yellow', 3, 0)
+car8 = VerCar(8, 3, 'purple', 2, 3)
+car9 = VerCar(9, 3, 'brown', 5, 3)
 
 cars_objects.append(car1)
 cars_objects.append(car2)
@@ -256,8 +258,20 @@ def won(lis):
     return boolie
 
 
+def find_path(graph, start, end, path=[]):
+    path = path + [start]
+    if start == end:
+        return path
+    if not graph.has_key(start):
+        return False
+    for node in graph[start]:
+        if node not in path:
+            newpath = find_path(graph, node, end, path)
+            if newpath:
+                return newpath
+    return False
 
-winning_config = []
+
 def solve():
     archive = {}
     q1 = Queue.Queue()
@@ -268,11 +282,9 @@ def solve():
 
     q1.put(one_d_list)
     check = True
+    starter = tuple(one_d_list)
 
-    # size = 6, but now hardcoded
-    #tmp_list = [lis[i][j] for i in xrange(6) for j in xrange(6)]
-
-    archive[tuple(one_d_list)] = 1
+    archive[starter] = []
 
     while check:
 
@@ -285,28 +297,25 @@ def solve():
 
         room.set_board(config_1d)
 
-
-
         for car in cars_objects:
 
             if car.updatePosition(1) and check:
 
                 one_d_list = room.board()
 
-
-                #tmp_list = [lis[i][j] for i in xrange(6) for j in xrange(6)]
-
-
                 tupletje = tuple(one_d_list)
                 if tupletje not in archive:
 
                     if (won(one_d_list)):
-
-                        winning_config.append(one_d_list)
+                        room.set_board(one_d_list)
+                        archive[tuple(config_1d)].append(tupletje)
+                        ender = tupletje
+                        return find_path(archive, starter, ender)
                         check = False
                         break
 
-                    archive[tupletje] = None
+                    archive[tuple(config_1d)].append(tupletje)
+                    archive[tupletje] = []
                     q1.put(one_d_list)
 
                 car.updatePosition(-1)
@@ -319,13 +328,16 @@ def solve():
                 if tupletje not in archive:
 
                     if (won(one_d_list)):
-
-                        winning_config.append(one_d_list)
+                        room.set_board(one_d_list)
+                        archive[tuple(config_1d)].append(tupletje)
+                        ender = tupletje
+                        return find_path(archive, starter, ender)
                         check = False
                         break
 
+                    archive[tuple(config_1d)].append(tupletje)
+                    archive[tupletje] = []
                     q1.put(one_d_list)
-                    archive[tupletje] = None
                 car.updatePosition(1)
 
 
@@ -333,12 +345,12 @@ def solve():
     return True
 
 def printboard():
-
+    os.system('cls')
     for i in range(6):
         for j in range(6):
             print room.board_configuration[i][j],
         print "\n"
-
+   
 
 
 
@@ -363,27 +375,17 @@ if __name__ == "__main__":
             # start timer (wall clock time)
             start = time.time()
             print "Solving..."
-            boolie = solve()
-            if boolie == True:
-                end = time.time()
-                print "Time elapsed:", (end - start)
-                print "Amount cars:", len(cars_objects)
+            lijst = solve()
+            end = time.time()
+            print "Time elapsed:", (end - start)
+            print "Amount steps:", len(lijst)
 
-                win = winning_config[0]
-
-                lijstjes = []
-                lijstjes.append(win[0:6])
-                lijstjes.append(win[6:12])
-                lijstjes.append(win[12:18])
-                lijstjes.append(win[18:24])
-                lijstjes.append(win[24:30])
-                lijstjes.append(win[30:36])
-
-                print "winning configuration"
-                for i in lijstjes:
-                    print i, "\n"
-            else:
-                print 'No solution'
+            print "winning configuration"
+            for item in lijst:
+                x = item
+                room.set_board(x)
+                printboard()
+                time.sleep(1)
             break
 
 
