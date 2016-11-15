@@ -345,12 +345,24 @@ def solve():
     return True
 
 def printboard():
-    os.system('cls')
-    for i in range(6):
-        for j in range(6):
-            print room.board_configuration[i][j],
-        print "\n"
-   
+    # os.system('cls')
+    # for i in range(size):
+    #     for j in range(size):
+    #         print room.board_configuration[i][j],
+    #     print "\n"
+    fig = plt.figure('Rush Hour')
+    plotboard = [[], []]
+    for i in range(size + 1):
+        plotboard[0].append([i] * (size + 1))
+        plotboard[1].append(i)
+    for i in range(size):
+        plt.plot(plotboard[0][i],plotboard[1],  color='black')
+        plt.plot(plotboard[1], plotboard[0][i], color='black')
+    for i in range(size):
+        for j in range(size):
+            num = room.board_configuration[i][j]
+            if num > 0:
+                plt.plot(j + 0.5, size - 1 - i + 0.5, 's',color=cars_objects[num - 1].color, markersize = 50)
 
 
 
@@ -360,8 +372,9 @@ if __name__ == "__main__":
 
         if won(one_d_list):
             break
-
         printboard()
+        plt.show()
+        # printboard()
         print ''
         num = raw_input('+car_num = up/right, -car_num = down/left: ')
         os.system('cls')
@@ -381,11 +394,13 @@ if __name__ == "__main__":
             print "Amount steps:", len(lijst)
 
             print "winning configuration"
-            for item in lijst:
-                x = item
+            for k in range(len(lijst)):
+                x = lijst[k]
                 room.set_board(x)
                 printboard()
-                time.sleep(1)
+                plt.draw()
+                plt.pause(0.01)
+                plt.clf()
             break
 
 
@@ -398,5 +413,6 @@ if __name__ == "__main__":
                 cars_objects[num * -1 - 1].updatePosition(-1)
 
         print''
-
+    printboard()
+    plt.show()
     print "You win !!!!!!!!!!!!!!!"
