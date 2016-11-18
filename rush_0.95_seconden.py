@@ -192,19 +192,77 @@ class VerCar(Car):
         return False
 
 
-# first configuration
-## Comment this whole block out for testing the first configuration
-## You have to probably wait a few weeks though
+# First configuration
+## 0.95 seconds so far
 ###############################################################################
-car1 = HorCar(1, 2, 'red', 3, 3)
+# car1 = HorCar(1, 2, 'red', 3, 3)
+# car2 = VerCar(2, 2, 'brown', 0, 0)
+# car3 = HorCar(3, 2, 'blue', 1, 1)
+# car4 = HorCar(4, 2, 'green', 4, 0)
+# car5 = HorCar(5, 2, 'orange', 4, 2)
+# car6 = HorCar(6, 2, 'blue', 3, 5)
+# car7 = VerCar(7, 3, 'yellow', 3, 0)
+# car8 = VerCar(8, 3, 'purple', 2, 3)
+# car9 = VerCar(9, 3, 'brown', 5, 3)
+#
+# cars_objects.append(car1)
+# cars_objects.append(car2)
+# cars_objects.append(car3)
+# cars_objects.append(car4)
+# cars_objects.append(car5)
+# cars_objects.append(car6)
+# cars_objects.append(car7)
+# cars_objects.append(car8)
+# cars_objects.append(car9)
+
+# Second configuration
+## Takes 0.96 seconds on my computer
+###############################################################################
+# car1 = HorCar(1, 2, 'red', 2, 3)
+# car2 = VerCar(2, 2, 'brown', 0, 0)
+# car3 = HorCar(3, 2, 'green', 0, 2)
+# car4 = HorCar(4, 2, 'blue', 2, 2)
+# car5 = VerCar(5, 2, 'pink', 3, 0)
+# car6 = HorCar(6, 2, 'orange', 4, 0)
+# car7 = HorCar(7, 2, 'yellow', 4, 1)
+# car8 = VerCar(8, 2, 'purple', 4, 2)
+# car9 = VerCar(9, 3, 'brown', 5, 2)
+# car10 = HorCar(10, 2, 'green', 1, 4)
+# car11 = HorCar(11, 2, 'blue', 3, 4)
+# car12 = HorCar(12, 2, 'yellow', 2, 5)
+# car13 = HorCar(13, 2, 'orange', 4, 5)
+#
+# cars_objects.append(car1)
+# cars_objects.append(car2)
+# cars_objects.append(car3)
+# cars_objects.append(car4)
+# cars_objects.append(car5)
+# cars_objects.append(car6)
+# cars_objects.append(car7)
+# cars_objects.append(car8)
+# cars_objects.append(car9)
+# cars_objects.append(car10)
+# cars_objects.append(car11)
+# cars_objects.append(car12)
+# cars_objects.append(car13)
+###############################################################################
+
+# Third configuration
+## Mijn computer zegt 0.07?? Kan bijna niet zoveel sneller zijn toch?
+###############################################################################
+car1 = HorCar(1, 2, 'red', 0, 3)
 car2 = VerCar(2, 2, 'brown', 0, 0)
-car3 = HorCar(3, 2, 'blue', 1, 1)
-car4 = HorCar(4, 2, 'green', 4, 0)
-car5 = HorCar(5, 2, 'orange', 4, 2)
-car6 = HorCar(6, 2, 'blue', 3, 5)
-car7 = VerCar(7, 3, 'yellow', 3, 0)
-car8 = VerCar(8, 3, 'purple', 2, 3)
-car9 = VerCar(9, 3, 'brown', 5, 3)
+car3 = HorCar(3, 2, 'green', 0, 2)
+car4 = VerCar(4, 2, 'blue', 2, 0)
+car5 = VerCar(5, 2, 'pink', 2, 2)
+car6 = HorCar(6, 2, 'purple', 1, 4)
+car7 = HorCar(7, 2, 'blue', 1, 5)
+car8 = HorCar(8, 2, 'purple', 4, 1)
+car9 = HorCar(9, 2, 'orange', 3, 2)
+car10 = VerCar(10, 2, 'pink', 5, 2)
+car11 = VerCar(11, 2, 'yellow', 3, 3)
+car12 = HorCar(12, 2, 'green', 4, 4)
+car13 = HorCar(13, 3, 'orange', 3, 5)
 
 cars_objects.append(car1)
 cars_objects.append(car2)
@@ -215,7 +273,10 @@ cars_objects.append(car6)
 cars_objects.append(car7)
 cars_objects.append(car8)
 cars_objects.append(car9)
-###############################################################################
+cars_objects.append(car10)
+cars_objects.append(car11)
+cars_objects.append(car12)
+cars_objects.append(car13)
 
 ## This is a simple test case, configuration are easy solvable
 # car1 = HorCar(1, 2, 0, 3)
