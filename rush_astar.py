@@ -456,7 +456,7 @@ def solve():
         #     return False
         #     break
 
-        # unpack the queue, it is a tuple
+        # unpack the queue, it is a tuple, because it is a PriorityQueue it gets an element with lowest cost first
         cost, config_1d = q1.get()
 
         room.set_board(config_1d)
