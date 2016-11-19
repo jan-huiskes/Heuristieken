@@ -9,14 +9,14 @@ import time
 import Queue
 import matplotlib.pyplot as plt
 import numpy as np
-size = 6
+size = 9
 
 """
-Snelste tijd tot nu toe: 0.95 seconden (op mijn laptop)
+Snelste tijd tot nu toe voor 9x9: 11.5 seconden
 Veranderingen:
-    - Room object is aparte object
-    - Bij vorige code steeds opnieuw een room aanmaken, nu alleen elementen aanpassen als auto wordt verplaatst
-
+    - 9x9 bord van Saartje erin gedaan
+    - simpele a star met priorityqueue
+    - zover het kon de 6 (vd 6x6 board) ge-unhardcoded
 """
 # saving every car object of the board
 cars_objects = []
@@ -31,7 +31,7 @@ class RectangularRoom(object):
 
         #board_configuration = [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]
         board_configuration = [[0 for x in xrange(size)] for x in xrange(size)]
-    
+
         count = 1
         for cars in cars_objects:
             if cars.direction == 'h':
@@ -75,29 +75,43 @@ class RectangularRoom(object):
 
 
     def update_board_horizontal(self, x, y, length, index, step):
+        """
+        Determines which values of the board should be changed when a car is moved
+        """
 
+        # first fill the row with a car_index from the starting position (now the car length in the board is longer than actual car length!)
         for i in xrange(length):
             self.board_configuration[size -1 - y][x + i] = index
 
+        # if the car moves to the right in horizontal direction, the first element of the total car length in the board should be 0
         if step == 1:
             self.board_configuration[size -1 - y][x - step] = 0
+
+        # if the car moves to the left in the horizontal direction, the last element of the total car length in the board should be 0
         else:
             self.board_configuration[size -1 - y][x + length] = 0
 
     def update_board_vertical(self, x, y, length, index, step):
+        """
+        Determines which values of the board should be changed when a car is moved
+        """
 
+        # first fill the column with a car_index from the starting position (now the car length in the board is longer than actual car length!)
         for i in xrange(length):
             self.board_configuration[size -1 -(y + i)][x] = index
 
+        # if the car moves up in vertical direction, the first element of the total car length in the board should be 0
         if step == 1:
             self.board_configuration[size -1 - (y - step)][x] = 0
+
+        # if the car moves down in vertical direction, the last element of the total car length in the board should be 0
         else:
             self.board_configuration[size -1 - (y + length)][x] = 0
 
     def set_board(self, set_configuration):
 
-        lijstjes = [set_configuration[0:6], set_configuration[6:12], set_configuration[12:18], set_configuration[18:24], set_configuration[24:30], set_configuration[30:36]]
-    #    lijstjes = [set_configuration[0:9], set_configuration[9:18], set_configuration[18:27], set_configuration[27:36], set_configuration[36:45], set_configuration[45:54], set_configuration[54:63], set_configuration[63:72], set_configuration[72:81]]
+        #lijstjes = [set_configuration[0:6], set_configuration[6:12], set_configuration[12:18], set_configuration[18:24], set_configuration[24:30], set_configuration[30:36]]
+        lijstjes = [set_configuration[0:9], set_configuration[9:18], set_configuration[18:27], set_configuration[27:36], set_configuration[36:45], set_configuration[45:54], set_configuration[54:63], set_configuration[63:72], set_configuration[72:81]]
 
         for j in xrange(size):
             for i in xrange(size):
@@ -132,8 +146,11 @@ class HorCar(Car):
         self.starty = y
 
     def noCar(self, x, y):
+        """
+        Determine if there is no car blocked in front of the car to be moved
+        """
 
-
+        # if the next tile of the board is empty or the next tile has same index as the car to be moved -> car can be moved
         return room.board_configuration[size - 1 - y][x] == 0 or room.board_configuration[size - 1 - y][x] == self.index
 
 
@@ -169,7 +186,11 @@ class VerCar(Car):
         self.starty = y
 
     def noCar(self, x, y):
+        """
+        Determine if there is no car blocked in front of the car to be moved
+        """
 
+        # if the next tile of the board is empty or the next tile has same index as the car to be moved -> car can be moved
         return room.board_configuration[size - 1 - y][x] == 0 or room.board_configuration[size - 1 - y][x] == self.index
 
 
@@ -198,25 +219,25 @@ class VerCar(Car):
 # First configuration
 ## 0.95 seconds so far
 ###############################################################################
-car1 = HorCar(1, 2, 'red', 3, 3)
-car2 = VerCar(2, 2, 'brown', 0, 0)
-car3 = HorCar(3, 2, 'blue', 1, 1)
-car4 = HorCar(4, 2, 'green', 4, 0)
-car5 = HorCar(5, 2, 'orange', 4, 2)
-car6 = HorCar(6, 2, 'blue', 3, 5)
-car7 = VerCar(7, 3, 'yellow', 3, 0)
-car8 = VerCar(8, 3, 'purple', 2, 3)
-car9 = VerCar(9, 3, 'brown', 5, 3)
-
-cars_objects.append(car1)
-cars_objects.append(car2)
-cars_objects.append(car3)
-cars_objects.append(car4)
-cars_objects.append(car5)
-cars_objects.append(car6)
-cars_objects.append(car7)
-cars_objects.append(car8)
-cars_objects.append(car9)
+# car1 = HorCar(1, 2, 'red', 3, 3)
+# car2 = VerCar(2, 2, 'brown', 0, 0)
+# car3 = HorCar(3, 2, 'blue', 1, 1)
+# car4 = HorCar(4, 2, 'green', 4, 0)
+# car5 = HorCar(5, 2, 'orange', 4, 2)
+# car6 = HorCar(6, 2, 'blue', 3, 5)
+# car7 = VerCar(7, 3, 'yellow', 3, 0)
+# car8 = VerCar(8, 3, 'purple', 2, 3)
+# car9 = VerCar(9, 3, 'brown', 5, 3)
+#
+# cars_objects.append(car1)
+# cars_objects.append(car2)
+# cars_objects.append(car3)
+# cars_objects.append(car4)
+# cars_objects.append(car5)
+# cars_objects.append(car6)
+# cars_objects.append(car7)
+# cars_objects.append(car8)
+# cars_objects.append(car9)
 
 # Second configuration
 ## Takes 0.96 seconds on my computer
@@ -284,50 +305,50 @@ cars_objects.append(car9)
 ###############################################################################
 # The first 9x9 board configuration
 ##############################################################################
-# car1 = HorCar(1, 2, 'red', 1, 4)
-# car2 = VerCar(2, 2, 'green', 0, 7)
-# car3 = HorCar(3, 3, 'yellow', 1, 8)
-# car4 = VerCar(4, 3, 'gray', 5, 6)
-# car5 = HorCar(5, 3, 'pink', 6, 7)
-# car6 = HorCar(6, 2, 'blue', 0, 5)
-# car7 = VerCar(7, 3, 'orange', 3, 5)
-# car8 = HorCar(8, 3, 'purple', 5, 5)
-# car9 = VerCar(9, 3, 'yellow', 8, 4)
-# car10 = VerCar(10, 2, 'pink', 0, 3)
-# car11 = VerCar(11, 2, 'green', 3, 3)
-# car12 = HorCar(12, 3, 'brown', 5, 3)
-# car13 = VerCar(13, 3, 'orange', 8, 1)
-# car14 = HorCar(14, 2, 'black', 0, 2)
-# car15 = VerCar(15, 2, 'blue', 0, 0)
-# car16 = VerCar(16, 3, 'yellow', 2, 1)
-# car17 = HorCar(17, 3, 'gray', 1, 0)
-# car18 = VerCar(18, 2, 'blue', 3, 1)
-# car19 = VerCar(19, 2, 'black', 4, 0)
-# car20 = HorCar(20, 2, 'brown', 4, 2)
-# car21 = HorCar(21, 2, 'pink', 5, 0)
-# car22 = HorCar(22, 2, 'green', 7, 0)
-# cars_objects.append(car1)
-# cars_objects.append(car2)
-# cars_objects.append(car3)
-# cars_objects.append(car4)
-# cars_objects.append(car5)
-# cars_objects.append(car6)
-# cars_objects.append(car7)
-# cars_objects.append(car8)
-# cars_objects.append(car9)
-# cars_objects.append(car10)
-# cars_objects.append(car11)
-# cars_objects.append(car12)
-# cars_objects.append(car13)
-# cars_objects.append(car14)
-# cars_objects.append(car15)
-# cars_objects.append(car16)
-# cars_objects.append(car17)
-# cars_objects.append(car18)
-# cars_objects.append(car19)
-# cars_objects.append(car20)
-# cars_objects.append(car21)
-# cars_objects.append(car22)
+car1 = HorCar(1, 2, 'red', 1, 4)
+car2 = VerCar(2, 2, 'green', 0, 7)
+car3 = HorCar(3, 3, 'yellow', 1, 8)
+car4 = VerCar(4, 3, 'gray', 5, 6)
+car5 = HorCar(5, 3, 'pink', 6, 7)
+car6 = HorCar(6, 2, 'blue', 0, 5)
+car7 = VerCar(7, 3, 'orange', 3, 5)
+car8 = HorCar(8, 3, 'purple', 5, 5)
+car9 = VerCar(9, 3, 'yellow', 8, 4)
+car10 = VerCar(10, 2, 'pink', 0, 3)
+car11 = VerCar(11, 2, 'green', 3, 3)
+car12 = HorCar(12, 3, 'brown', 5, 3)
+car13 = VerCar(13, 3, 'orange', 8, 1)
+car14 = HorCar(14, 2, 'black', 0, 2)
+car15 = VerCar(15, 2, 'blue', 0, 0)
+car16 = VerCar(16, 3, 'yellow', 2, 1)
+car17 = HorCar(17, 3, 'gray', 1, 0)
+car18 = VerCar(18, 2, 'blue', 3, 1)
+car19 = VerCar(19, 2, 'black', 4, 0)
+car20 = HorCar(20, 2, 'brown', 4, 2)
+car21 = HorCar(21, 2, 'pink', 5, 0)
+car22 = HorCar(22, 2, 'green', 7, 0)
+cars_objects.append(car1)
+cars_objects.append(car2)
+cars_objects.append(car3)
+cars_objects.append(car4)
+cars_objects.append(car5)
+cars_objects.append(car6)
+cars_objects.append(car7)
+cars_objects.append(car8)
+cars_objects.append(car9)
+cars_objects.append(car10)
+cars_objects.append(car11)
+cars_objects.append(car12)
+cars_objects.append(car13)
+cars_objects.append(car14)
+cars_objects.append(car15)
+cars_objects.append(car16)
+cars_objects.append(car17)
+cars_objects.append(car18)
+cars_objects.append(car19)
+cars_objects.append(car20)
+cars_objects.append(car21)
+cars_objects.append(car22)
 
 ## This is a simple test case, configuration are easy solvable
 # car1 = HorCar(1, 2, 0, 3)
@@ -351,8 +372,8 @@ def won(lis):
     #row = lis[int(round(room.height / 2 - 1))]
 
     # Have to do this because lis is now a 1d array
-    row = lis[12:18]
-    #row = lis[36:45]
+    #row = lis[12:18]
+    row = lis[36:45]
 
     boolie = True
     index = 0
@@ -384,29 +405,59 @@ def find_path(graph, start, end, path=[]):
                 return newpath
     return False
 
+def a_star(lis):
+    """
+    Very simple a star function. The cost is a value dependent on how many cars
+    are in front of the red car. If there are no cars in front of the red car,
+    the cost is equal to 0. If there is one car in front of red, cost = 1, etc.
+    """
+
+    #row = lis[12:18] # <-- this is for 6x6
+    row = lis[36:45] # <-- this is for 9x9
+    place_of_red = 0
+
+    # determine where red car is placed
+    for i in xrange(len(row)):
+        if row[i] == 1:
+            place_of_red = i
+            break
+
+    # determine how many cars are in front of red
+    check_lis = []
+    for i in xrange(place_of_red, len(row)):
+        if row[i] > 1:
+            if row[i] not in check_lis:
+                check_lis.append(row[i])
+
+    # cost is simply amount cars in front of red
+    cost = len(check_lis)
+
+    return cost
 
 def solve():
     archive = {}
-    q1 = Queue.Queue()
+
+    # creating a PriorityQueue
+    q1 = Queue.PriorityQueue()
 
     # returns a 1d list of the board, I thought this would be faster
     one_d_list = room.board()
 
-
-    q1.put(one_d_list)
+    # In the PriorityQueue a tuple would be placed, first element of this tuple is the cost(calculated by a_star),
+    # second element is the configuration, for the first configuration I just gave it a cost of 0
+    q1.put((0,one_d_list))
     check = True
     starter = tuple(one_d_list)
 
     archive[starter] = []
 
     while check:
-
-
-
         # if q1.qsize() == 0:
         #     return False
         #     break
-        config_1d = q1.get()
+
+        # unpack the queue, it is a tuple
+        cost, config_1d = q1.get()
 
         room.set_board(config_1d)
 
@@ -429,7 +480,10 @@ def solve():
 
                     archive[tuple(config_1d)].append(tupletje)
                     archive[tupletje] = []
-                    q1.put(one_d_list)
+
+                    # put the tuple element in the queue, wehere first element is the cost of the configuration
+                    q1.put((a_star(one_d_list), one_d_list))
+
 
                 car.updatePosition(-1)
             if car.updatePosition(-1) and check:
@@ -450,7 +504,10 @@ def solve():
 
                     archive[tuple(config_1d)].append(tupletje)
                     archive[tupletje] = []
-                    q1.put(one_d_list)
+
+                    # put the tuple element in the queue, wehere first element is the cost of the configuration
+                    q1.put((a_star(one_d_list), one_d_list))
+
                 car.updatePosition(1)
 
 
