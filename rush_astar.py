@@ -110,8 +110,11 @@ class RectangularRoom(object):
 
     def set_board(self, set_configuration):
 
-        #lijstjes = [set_configuration[0:6], set_configuration[6:12], set_configuration[12:18], set_configuration[18:24], set_configuration[24:30], set_configuration[30:36]]
-        lijstjes = [set_configuration[0:9], set_configuration[9:18], set_configuration[18:27], set_configuration[27:36], set_configuration[36:45], set_configuration[45:54], set_configuration[54:63], set_configuration[63:72], set_configuration[72:81]]
+        if size == 6:
+            lijstjes = [set_configuration[0:6], set_configuration[6:12], set_configuration[12:18], set_configuration[18:24], set_configuration[24:30], set_configuration[30:36]]
+
+        elif size == 9:
+            lijstjes = [set_configuration[0:9], set_configuration[9:18], set_configuration[18:27], set_configuration[27:36], set_configuration[36:45], set_configuration[45:54], set_configuration[54:63], set_configuration[63:72], set_configuration[72:81]]
 
         for j in xrange(size):
             for i in xrange(size):
@@ -127,19 +130,13 @@ class RectangularRoom(object):
 
 
 class Car(object):
-    def __init__(self, index, length, color):
+    def __init__(self, index, length, color, x, y):
 
         self.index = index
         self.length = length
         self.color = color
-
-class HorCar(Car):
-    def __init__(self, index, length, color, x, y):
-        Car.__init__(self, index, length, color)
-        self.direction = 'h'
         self.startx = x
         self.starty = y
-
 
     def setCarPosition(self, x, y):
         self.startx = x
@@ -153,6 +150,11 @@ class HorCar(Car):
         # if the next tile of the board is empty or the next tile has same index as the car to be moved -> car can be moved
         return room.board_configuration[size - 1 - y][x] == 0 or room.board_configuration[size - 1 - y][x] == self.index
 
+
+class HorCar(Car):
+    def __init__(self, index, length, color, x, y):
+        Car.__init__(self, index, length, color, x, y)
+        self.direction = 'h'
 
 
     def updatePosition(self, step):
@@ -174,25 +176,11 @@ class HorCar(Car):
 
         return False
 
+
 class VerCar(Car):
     def __init__(self, index, length, color, x, y):
-        Car.__init__(self, index, length, color)
+        Car.__init__(self, index, length, color, x, y)
         self.direction = 'v'
-        self.startx = x
-        self.starty = y
-
-    def setCarPosition(self, x, y):
-        self.startx = x
-        self.starty = y
-
-    def noCar(self, x, y):
-        """
-        Determine if there is no car blocked in front of the car to be moved
-        """
-
-        # if the next tile of the board is empty or the next tile has same index as the car to be moved -> car can be moved
-        return room.board_configuration[size - 1 - y][x] == 0 or room.board_configuration[size - 1 - y][x] == self.index
-
 
     def updatePosition(self, step):
 
@@ -369,11 +357,11 @@ def won(lis):
     """
     Argument is a board configuration
     """
-    #row = lis[int(round(room.height / 2 - 1))]
 
-    # Have to do this because lis is now a 1d array
-    #row = lis[12:18]
-    row = lis[36:45]
+    if size == 6:
+        row = lis[12:18]
+    elif size == 9:
+        row = lis[36:45]
 
     boolie = True
     index = 0
@@ -411,9 +399,10 @@ def a_star(lis):
     are in front of the red car. If there are no cars in front of the red car,
     the cost is equal to 0. If there is one car in front of red, cost = 1, etc.
     """
-
-    #row = lis[12:18] # <-- this is for 6x6
-    row = lis[36:45] # <-- this is for 9x9
+    if size == 6:
+        row = lis[12:18]
+    elif size == 9:
+        row = lis[36:45]
     place_of_red = 0
 
     # determine where red car is placed
@@ -434,7 +423,7 @@ def a_star(lis):
 
     return cost
 
-def solve():
+def astar_solve():
     archive = {}
 
     # creating a PriorityQueue
@@ -445,16 +434,16 @@ def solve():
 
     # In the PriorityQueue a tuple would be placed, first element of this tuple is the cost(calculated by a_star),
     # second element is the configuration, for the first configuration I just gave it a cost of 0
-    q1.put((0,one_d_list))
+    q1.put((0, one_d_list))
     check = True
     starter = tuple(one_d_list)
 
     archive[starter] = []
 
     while check:
-        # if q1.qsize() == 0:
-        #     return False
-        #     break
+        if q1.qsize() == 0:
+            return False
+            break
 
         # unpack the queue, it is a tuple, because it is a PriorityQueue it gets an element with lowest cost first
         cost, config_1d = q1.get()
@@ -489,8 +478,6 @@ def solve():
             if car.updatePosition(-1) and check:
                 one_d_list = room.board()
 
-                #tmp_list = [lis[i][j] for i in xrange(6) for j in xrange(6)]
-
                 tupletje = tuple(one_d_list)
                 if tupletje not in archive:
 
@@ -507,11 +494,67 @@ def solve():
 
                     # put the tuple element in the queue, wehere first element is the cost of the configuration
                     q1.put((a_star(one_d_list), one_d_list))
-
                 car.updatePosition(1)
+    return True
 
 
+def breadth_solve():
+    archive = {}
+    q1 = Queue.Queue()
+    one_d_list = room.board()
+    q1.put(one_d_list)
+    check = True
+    starter = tuple(one_d_list)
+    archive[starter] = []
 
+    while check:
+
+
+        config_1d = q1.get()
+
+        room.set_board(config_1d)
+
+        for car in cars_objects:
+
+            if car.updatePosition(1) and check:
+
+                one_d_list = room.board()
+
+                tupletje = tuple(one_d_list)
+
+                if tupletje not in archive:
+
+                    if (won(one_d_list)):
+                        room.set_board(one_d_list)
+                        archive[tuple(config_1d)].append(tupletje)
+                        ender = tupletje
+                        return find_path(archive, starter, ender)
+                        check = False
+                        break
+
+                    archive[tuple(config_1d)].append(tupletje)
+                    archive[tupletje] = []
+                    q1.put(one_d_list)
+                car.updatePosition(-1)
+
+            if car.updatePosition(-1) and check:
+                one_d_list = room.board()
+
+                tupletje = tuple(one_d_list)
+                if tupletje not in archive:
+
+                    if (won(one_d_list)):
+                        room.set_board(one_d_list)
+                        archive[tuple(config_1d)].append(tupletje)
+                        ender = tupletje
+                        return find_path(archive, starter, ender)
+                        check = False
+                        break
+
+                    q1.put(one_d_list)
+                    archive[tuple(config_1d)].append(tupletje)
+                    archive[tupletje] = []
+                car.updatePosition(1)
     return True
 
 def printboard():
@@ -532,33 +575,24 @@ def printboard():
         for j in range(size):
             num = room.board_configuration[i][j]
             if num > 0:
-                plt.plot(j + 0.5, size - 1 - i + 0.5, 's',color=cars_objects[num - 1].color, markersize = 50)
-
+                plt.plot(j + 0.5, size - 1 - i + 0.5, 's',color=cars_objects[num - 1].color, markersize = 300/size)
 
 
 if __name__ == "__main__":
+    printboard()
+    plt.show()
     while (1):
-        one_d_list = room.board()
-
-        if won(one_d_list):
-            break
-        printboard()
-        plt.show()
-        # printboard()
         print ''
-        num = raw_input('+car_num = up/right, -car_num = down/left: ')
+        num = raw_input('code: ')
         os.system('cls')
         print ''
 
-        # GOD has three characters..so I was assuming everything else is a number
-        if len(num) < 3:
-            num = int(num)
         # if user types in God for auto solver
-        if num == 'GOD':
+        if num == 'astar':
             # start timer (wall clock time)
             start = time.time()
             print "Solving..."
-            lijst = solve()
+            lijst = astar_solve()
             end = time.time()
             print "Time elapsed:", (end - start)
             print "Amount steps:", len(lijst)
@@ -573,16 +607,25 @@ if __name__ == "__main__":
                 plt.clf()
             break
 
+        elif num == 'breadth':
+            # start timer (wall clock time)
+            start = time.time()
+            print "Solving..."
+            lijst = breadth_solve()
+            end = time.time()
+            print "Time elapsed:", (end - start)
+            print "Amount steps:", len(lijst)
 
-        elif abs(num) > len(cars_objects):
-            print 'Invalid move'
-        else:
-            if num > 0:
-                cars_objects[num - 1].updatePosition(1)
-            if num < 0:
-                cars_objects[num * -1 - 1].updatePosition(-1)
-
+            print "winning configuration"
+            for k in range(len(lijst)):
+                x = lijst[k]
+                room.set_board(x)
+                printboard()
+                plt.draw()
+                plt.pause(0.01)
+                plt.clf()
+            break
         print''
+
     printboard()
     plt.show()
-    print "You win !!!!!!!!!!!!!!!"
