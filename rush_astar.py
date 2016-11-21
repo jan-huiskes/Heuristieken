@@ -17,6 +17,8 @@ Veranderingen:
     - 9x9 bord van Saartje erin gedaan
     - simpele a star met priorityqueue
     - zover het kon de 6 (vd 6x6 board) ge-unhardcoded
+    
+    - Alle borden ingevoegd! Erboven kunnnen we snelste tijd aangeven (lijkt me net)
 """
 # saving every car object of the board
 cars_objects = []
@@ -204,9 +206,10 @@ class VerCar(Car):
         return False
 
 
-# First configuration
-## 0.95 seconds so far
-###############################################################################
+##############################################################################
+# The first 6x6 board configuration
+# Fastest time so far: 0.3 sec
+##############################################################################
 # car1 = HorCar(1, 2, 'red', 3, 3)
 # car2 = VerCar(2, 2, 'brown', 0, 0)
 # car3 = HorCar(3, 2, 'blue', 1, 1)
@@ -227,9 +230,10 @@ class VerCar(Car):
 # cars_objects.append(car8)
 # cars_objects.append(car9)
 
-# Second configuration
-## Takes 0.96 seconds on my computer
-###############################################################################
+##############################################################################
+# The second 6x6 board configuration
+# Fastest time so far: 0.3 sec
+##############################################################################
 # car1 = HorCar(1, 2, 'red', 2, 3)
 # car2 = VerCar(2, 2, 'brown', 0, 0)
 # car3 = HorCar(3, 2, 'green', 0, 2)
@@ -257,11 +261,11 @@ class VerCar(Car):
 # cars_objects.append(car11)
 # cars_objects.append(car12)
 # cars_objects.append(car13)
-###############################################################################
 
-# Third configuration
-## Mijn computer zegt 0.07?? Kan bijna niet zoveel sneller zijn toch?
-###############################################################################
+##############################################################################
+# The third 6x6 board configuration
+# Fastest time so far: 0.07 sec
+##############################################################################
 # car1 = HorCar(1, 2, 'red', 0, 3)
 # car2 = VerCar(2, 2, 'brown', 0, 0)
 # car3 = HorCar(3, 2, 'green', 0, 2)
@@ -290,31 +294,83 @@ class VerCar(Car):
 # cars_objects.append(car12)
 # cars_objects.append(car13)
 
-###############################################################################
-# The first 9x9 board configuration
 ##############################################################################
-car1 = HorCar(1, 2, 'red', 1, 4)
-car2 = VerCar(2, 2, 'green', 0, 7)
-car3 = HorCar(3, 3, 'yellow', 1, 8)
-car4 = VerCar(4, 3, 'gray', 5, 6)
-car5 = HorCar(5, 3, 'pink', 6, 7)
-car6 = HorCar(6, 2, 'blue', 0, 5)
-car7 = VerCar(7, 3, 'orange', 3, 5)
-car8 = HorCar(8, 3, 'purple', 5, 5)
-car9 = VerCar(9, 3, 'yellow', 8, 4)
-car10 = VerCar(10, 2, 'pink', 0, 3)
-car11 = VerCar(11, 2, 'green', 3, 3)
-car12 = HorCar(12, 3, 'brown', 5, 3)
-car13 = VerCar(13, 3, 'orange', 8, 1)
-car14 = HorCar(14, 2, 'black', 0, 2)
-car15 = VerCar(15, 2, 'blue', 0, 0)
-car16 = VerCar(16, 3, 'yellow', 2, 1)
-car17 = HorCar(17, 3, 'gray', 1, 0)
-car18 = VerCar(18, 2, 'blue', 3, 1)
-car19 = VerCar(19, 2, 'black', 4, 0)
-car20 = HorCar(20, 2, 'brown', 4, 2)
-car21 = HorCar(21, 2, 'pink', 5, 0)
-car22 = HorCar(22, 2, 'green', 7, 0)
+# The first 9x9 board configuration
+# Fastest time so far: 11 sec
+##############################################################################
+# car1 = HorCar(1, 2, 'red', 1, 4)
+# car2 = VerCar(2, 2, 'green', 0, 7)
+# car3 = HorCar(3, 3, 'yellow', 1, 8)
+# car4 = VerCar(4, 3, 'gray', 5, 6)
+# car5 = HorCar(5, 3, 'pink', 6, 7)
+# car6 = HorCar(6, 2, 'blue', 0, 5)
+# car7 = VerCar(7, 3, 'orange', 3, 5)
+# car8 = HorCar(8, 3, 'purple', 5, 5)
+# car9 = VerCar(9, 3, 'yellow', 8, 4)
+# car10 = VerCar(10, 2, 'pink', 0, 3)
+# car11 = VerCar(11, 2, 'green', 3, 3)
+# car12 = HorCar(12, 3, 'brown', 5, 3)
+# car13 = VerCar(13, 3, 'orange', 8, 1)
+# car14 = HorCar(14, 2, 'black', 0, 2)
+# car15 = VerCar(15, 2, 'blue', 0, 0)
+# car16 = VerCar(16, 3, 'yellow', 2, 1)
+# car17 = HorCar(17, 3, 'gray', 1, 0)
+# car18 = VerCar(18, 2, 'blue', 3, 1)
+# car19 = VerCar(19, 2, 'black', 4, 0)
+# car20 = HorCar(20, 2, 'brown', 4, 2)
+# car21 = HorCar(21, 2, 'pink', 5, 0)
+# car22 = HorCar(22, 2, 'green', 7, 0)
+# cars_objects.append(car1)
+# cars_objects.append(car2)
+# cars_objects.append(car3)
+# cars_objects.append(car4)
+# cars_objects.append(car5)
+# cars_objects.append(car6)
+# cars_objects.append(car7)
+# cars_objects.append(car8)
+# cars_objects.append(car9)
+# cars_objects.append(car10)
+# cars_objects.append(car11)
+# cars_objects.append(car12)
+# cars_objects.append(car13)
+# cars_objects.append(car14)
+# cars_objects.append(car15)
+# cars_objects.append(car16)
+# cars_objects.append(car17)
+# cars_objects.append(car18)
+# cars_objects.append(car19)
+# cars_objects.append(car20)
+# cars_objects.append(car21)
+# cars_objects.append(car22)
+
+##############################################################################
+# The second 9x9 board configuration
+# Fastest time so far: 
+##############################################################################
+car1 = HorCar(1, 2, 'red', 6, 4)
+car2 = VerCar(2, 2, 'pink', 0, 0)
+car3 = VerCar(3, 2, 'blue', 0, 2)
+car4 = VerCar(4, 2, 'green', 1, 0)
+car5 = HorCar(5, 3, 'yellow', 0, 8)
+car6 = HorCar(6, 2, 'gray', 2, 0)
+car7 = HorCar(7, 2, 'black', 2, 1)
+car8 = VerCar(8, 2, 'orange', 4, 0)
+car9 = HorCar(9, 3, 'gray', 5, 1)
+car10 = VerCar(10, 2, 'pink', 8, 0)
+car11 = VerCar(11, 2, 'orange', 2, 2)
+car12 = HorCar(12, 2, 'brown', 3, 2)
+car13 = VerCar(13, 3, 'purple', 5, 2)
+car14 = HorCar(14, 2, 'green', 6, 2)
+car15 = VerCar(15, 3, 'yellow', 8, 2)
+car16 = HorCar(16, 3, 'blue', 2, 4)
+car17 = HorCar(17, 2, 'gray', 4, 5)
+car18 = VerCar(18, 2, 'pink', 6, 5)
+car19 = HorCar(19, 2, 'black', 7, 5)
+car20 = VerCar(20, 3, 'purple', 3, 6)
+car21 = HorCar(21, 2, 'orange', 4, 6)
+car22 = VerCar(22, 2, 'green', 5, 7)
+car23 = VerCar(23, 2, 'blue', 6, 7)
+car24 = HorCar(24, 2, 'yellow', 7, 7)
 cars_objects.append(car1)
 cars_objects.append(car2)
 cars_objects.append(car3)
@@ -337,8 +393,163 @@ cars_objects.append(car19)
 cars_objects.append(car20)
 cars_objects.append(car21)
 cars_objects.append(car22)
+cars_objects.append(car23)
+cars_objects.append(car24)
 
-## This is a simple test case, configuration are easy solvable
+##############################################################################
+# The third 9x9 configuration
+# Fastest time so far:
+##############################################################################
+# car1 = HorCar(1, 2, 'red', 0, 4)
+# car2 = VerCar(2, 3, 'purple', 0, 0)
+# car3 = HorCar(3, 3, 'yellow', 1, 0)
+# car4 = VerCar(4, 3, 'gray', 4, 0)
+# car5 = HorCar(5, 2, 'blue', 2, 1)
+# car6 = HorCar(6, 2, 'green', 5, 1)
+# car7 = VerCar(7, 2, 'orange', 1, 2)
+# car8 = HorCar(8, 2, 'black', 2, 2)
+# car9 = HorCar(9, 3, 'yellow', 5, 2)
+# car10 = VerCar(10, 3, 'yellow', 3, 3)
+# car11 = HorCar(11, 2, 'pink', 4, 3)
+# car12 = HorCar(12, 2, 'brown', 6, 3)
+# car13 = VerCar(13, 2, 'blue', 2, 4)
+# car14 = VerCar(14, 2, 'orange', 4, 5)
+# car15 = VerCar(15, 2, 'pink', 5, 5)
+# car16 = HorCar(16, 3, 'gray', 6, 5)
+# car17 = VerCar(17, 2, 'black', 0, 6)
+# car18 = HorCar(18, 2, 'green', 2, 6)
+# car19 = HorCar(19, 2, 'purple', 7, 6)
+# car20 = HorCar(20, 3, 'yellow', 1, 7)
+# car21 = VerCar(21, 2, 'green', 4, 7)
+# car22 = HorCar(22, 2, 'orange', 5, 7)
+# car23 = VerCar(23, 2, 'blue', 7, 7)
+# car24 = HorCar(24, 2, 'blue', 0, 8)
+# car25 = HorCar(25, 2, 'pink', 2, 8)
+# car26 = VerCar(26, 3, 'purple', 8, 1)
+# cars_objects.append(car1)
+# cars_objects.append(car2)
+# cars_objects.append(car3)
+# cars_objects.append(car4)
+# cars_objects.append(car5)
+# cars_objects.append(car6)
+# cars_objects.append(car7)
+# cars_objects.append(car8)
+# cars_objects.append(car9)
+# cars_objects.append(car10)
+# cars_objects.append(car11)
+# cars_objects.append(car12)
+# cars_objects.append(car13)
+# cars_objects.append(car14)
+# cars_objects.append(car15)
+# cars_objects.append(car16)
+# cars_objects.append(car17)
+# cars_objects.append(car18)
+# cars_objects.append(car19)
+# cars_objects.append(car20)
+# cars_objects.append(car21)
+# cars_objects.append(car22)
+# cars_objects.append(car23)
+# cars_objects.append(car24)
+# cars_objects.append(car25)
+# cars_objects.append(car26)
+
+##############################################################################
+# The 12x12 configuration
+# Fastest time so far:
+##############################################################################
+# car1 = HorCar(1, 2, 'red', 2, 6)
+# car2 = HorCar(2, 2, 'green', 1, 0)
+# car3 = HorCar(3, 3, 'yellow', 3, 0)
+# car4 = VerCar(4, 3, 'gray', 6, 0)
+# car5 = HorCar(5, 2, 'blue', 7, 0)
+# car6 = VerCar(6, 2, 'pink', 9, 0)
+# car7 = VerCar(7, 3, 'purple', 10, 0)
+# car8 = VerCar(8, 2, 'pink', 11, 0)
+# car9 = VerCar(9, 2, 'blue', 2, 2)
+# car10 = HorCar(10, 3, 'yellow', 3, 2)
+# car11 = HorCar(11, 2, 'green', 8, 2)
+# car12 = VerCar(12, 2, 'black', 11, 2)
+# car13 = HorCar(13, 2, 'orange', 0, 3)
+# car14 = HorCar(14, 3, 'purple', 3, 3)
+# car15 = VerCar(15, 3, 'black', 6, 3)
+# car16 = HorCar(16, 3, 'pink', 7, 3)
+# car17 = HorCar(17, 3, 'yellow', 0, 4)
+# car18 = VerCar(18, 2, 'pink', 3, 4)
+# car19 = HorCar(19, 2, 'green', 4, 4)
+# car20 = VerCar(20, 3, 'blue', 7, 4)
+# car21 = VerCar(21, 2, 'gray', 9, 4)
+# car22 = HorCar(22, 2, 'orange', 10, 4)
+# car23 = HorCar(23, 3, 'brown', 0, 5)
+# car24 = VerCar(24, 2, 'orange', 4, 5)
+# car25 = VerCar(25, 2, 'pink', 5, 5)
+# car26 = HorCar(26, 2, 'green', 10, 5)
+# car27 = VerCar(27, 3, 'purple', 0, 6)
+# car28 = VerCar(28, 3, 'yellow', 1, 6)
+# car29 = HorCar(29, 3, 'brown', 2, 7)
+# car30 = VerCar(30, 2, 'green', 5, 7)
+# car31 = VerCar(31, 3, 'yellow', 6, 7)
+# car32 = HorCar(32, 3, 'purple', 7, 7)
+# car33 = HorCar(33, 2, 'orange', 7, 8)
+# car34 = HorCar(34, 2, 'pink', 9, 8)
+# car35 = HorCar(35, 3, 'gray', 0, 9)
+# car36 = HorCar(36, 2, 'orange', 3, 9)
+# car37 = VerCar(37, 2, 'pink', 5, 9)
+# car38 = HorCar(38, 2, 'green', 7, 9)
+# car39 = VerCar(39, 2, 'orange', 10, 9)
+# car40 = VerCar(40, 2, 'blue', 11, 9)
+# car41 = VerCar(41, 2, 'green', 0, 10)
+# car42 = VerCar(42, 2, 'blue', 6, 10)
+# car43 = HorCar(43, 3, 'purple', 7, 11)
+# car44 = HorCar(44, 2, 'pink', 10, 11)
+# cars_objects.append(car1)
+# cars_objects.append(car2)
+# cars_objects.append(car3)
+# cars_objects.append(car4)
+# cars_objects.append(car5)
+# cars_objects.append(car6)
+# cars_objects.append(car7)
+# cars_objects.append(car8)
+# cars_objects.append(car9)
+# cars_objects.append(car10)
+# cars_objects.append(car11)
+# cars_objects.append(car12)
+# cars_objects.append(car13)
+# cars_objects.append(car14)
+# cars_objects.append(car15)
+# cars_objects.append(car16)
+# cars_objects.append(car17)
+# cars_objects.append(car18)
+# cars_objects.append(car19)
+# cars_objects.append(car20)
+# cars_objects.append(car21)
+# cars_objects.append(car22)
+# cars_objects.append(car23)
+# cars_objects.append(car24)
+# cars_objects.append(car25)
+# cars_objects.append(car26)
+# cars_objects.append(car27)
+# cars_objects.append(car28)
+# cars_objects.append(car29)
+# cars_objects.append(car30)
+# cars_objects.append(car31)
+# cars_objects.append(car32)
+# cars_objects.append(car33)
+# cars_objects.append(car34)
+# cars_objects.append(car35)
+# cars_objects.append(car36)
+# cars_objects.append(car37)
+# cars_objects.append(car38)
+# cars_objects.append(car39)
+# cars_objects.append(car40)
+# cars_objects.append(car41)
+# cars_objects.append(car42)
+# cars_objects.append(car43)
+# cars_objects.append(car44)
+
+##############################################################################
+# Our first simple test case
+# Configuration is easily solvable
+##############################################################################
 # car1 = HorCar(1, 2, 0, 3)
 # car2 = VerCar(2, 2, 1, 1)
 # car3 = VerCar(3, 3, 3, 3)
@@ -395,9 +606,9 @@ def find_path(graph, start, end, path=[]):
 
 def a_star(lis):
     """
-    Very simple a star function. The cost is a value dependent on how many cars
-    are in front of the red car. If there are no cars in front of the red car,
-    the cost is equal to 0. If there is one car in front of red, cost = 1, etc.
+    Very simple A-Star function. Cost is a value calculated by the amount of cars in front
+    of the red one. If there are no cars in front of the red car, cost = 0.
+    If there is one car in front of red, cost = 1, etc.
     """
     if size == 6:
         row = lis[12:18]
@@ -597,7 +808,7 @@ if __name__ == "__main__":
             print "Time elapsed:", (end - start)
             print "Amount steps:", len(lijst)
 
-            print "winning configuration"
+            print "Winning Configuration"
             for k in range(len(lijst)):
                 x = lijst[k]
                 room.set_board(x)
@@ -616,7 +827,7 @@ if __name__ == "__main__":
             print "Time elapsed:", (end - start)
             print "Amount steps:", len(lijst)
 
-            print "winning configuration"
+            print "Winning Configuration"
             for k in range(len(lijst)):
                 x = lijst[k]
                 room.set_board(x)
