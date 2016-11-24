@@ -9,7 +9,7 @@ import time
 import Queue
 import matplotlib.pyplot as plt
 import numpy as np
-size = 9
+size = 6
 
 """
 Snelste tijd tot nu toe voor 9x9: 11.5 seconden
@@ -207,25 +207,25 @@ class VerCar(Car):
 # First configuration
 ## 0.95 seconds so far
 ###############################################################################
-# car1 = HorCar(1, 2, 'red', 3, 3)
-# car2 = VerCar(2, 2, 'brown', 0, 0)
-# car3 = HorCar(3, 2, 'blue', 1, 1)
-# car4 = HorCar(4, 2, 'green', 4, 0)
-# car5 = HorCar(5, 2, 'orange', 4, 2)
-# car6 = HorCar(6, 2, 'blue', 3, 5)
-# car7 = VerCar(7, 3, 'yellow', 3, 0)
-# car8 = VerCar(8, 3, 'purple', 2, 3)
-# car9 = VerCar(9, 3, 'brown', 5, 3)
-#
-# cars_objects.append(car1)
-# cars_objects.append(car2)
-# cars_objects.append(car3)
-# cars_objects.append(car4)
-# cars_objects.append(car5)
-# cars_objects.append(car6)
-# cars_objects.append(car7)
-# cars_objects.append(car8)
-# cars_objects.append(car9)
+car1 = HorCar(1, 2, 'red', 3, 3)
+car2 = VerCar(2, 2, 'brown', 0, 0)
+car3 = HorCar(3, 2, 'blue', 1, 1)
+car4 = HorCar(4, 2, 'green', 4, 0)
+car5 = HorCar(5, 2, 'orange', 4, 2)
+car6 = HorCar(6, 2, 'blue', 3, 5)
+car7 = VerCar(7, 3, 'yellow', 3, 0)
+car8 = VerCar(8, 3, 'purple', 2, 3)
+car9 = VerCar(9, 3, 'brown', 5, 3)
+
+cars_objects.append(car1)
+cars_objects.append(car2)
+cars_objects.append(car3)
+cars_objects.append(car4)
+cars_objects.append(car5)
+cars_objects.append(car6)
+cars_objects.append(car7)
+cars_objects.append(car8)
+cars_objects.append(car9)
 
 # Second configuration
 ## Takes 0.96 seconds on my computer
@@ -293,50 +293,50 @@ class VerCar(Car):
 ###############################################################################
 # The first 9x9 board configuration
 ##############################################################################
-car1 = HorCar(1, 2, 'red', 1, 4)
-car2 = VerCar(2, 2, 'green', 0, 7)
-car3 = HorCar(3, 3, 'yellow', 1, 8)
-car4 = VerCar(4, 3, 'gray', 5, 6)
-car5 = HorCar(5, 3, 'pink', 6, 7)
-car6 = HorCar(6, 2, 'blue', 0, 5)
-car7 = VerCar(7, 3, 'orange', 3, 5)
-car8 = HorCar(8, 3, 'purple', 5, 5)
-car9 = VerCar(9, 3, 'yellow', 8, 4)
-car10 = VerCar(10, 2, 'pink', 0, 3)
-car11 = VerCar(11, 2, 'green', 3, 3)
-car12 = HorCar(12, 3, 'brown', 5, 3)
-car13 = VerCar(13, 3, 'orange', 8, 1)
-car14 = HorCar(14, 2, 'black', 0, 2)
-car15 = VerCar(15, 2, 'blue', 0, 0)
-car16 = VerCar(16, 3, 'yellow', 2, 1)
-car17 = HorCar(17, 3, 'gray', 1, 0)
-car18 = VerCar(18, 2, 'blue', 3, 1)
-car19 = VerCar(19, 2, 'black', 4, 0)
-car20 = HorCar(20, 2, 'brown', 4, 2)
-car21 = HorCar(21, 2, 'pink', 5, 0)
-car22 = HorCar(22, 2, 'green', 7, 0)
-cars_objects.append(car1)
-cars_objects.append(car2)
-cars_objects.append(car3)
-cars_objects.append(car4)
-cars_objects.append(car5)
-cars_objects.append(car6)
-cars_objects.append(car7)
-cars_objects.append(car8)
-cars_objects.append(car9)
-cars_objects.append(car10)
-cars_objects.append(car11)
-cars_objects.append(car12)
-cars_objects.append(car13)
-cars_objects.append(car14)
-cars_objects.append(car15)
-cars_objects.append(car16)
-cars_objects.append(car17)
-cars_objects.append(car18)
-cars_objects.append(car19)
-cars_objects.append(car20)
-cars_objects.append(car21)
-cars_objects.append(car22)
+# car1 = HorCar(1, 2, 'red', 1, 4)
+# car2 = VerCar(2, 2, 'green', 0, 7)
+# car3 = HorCar(3, 3, 'yellow', 1, 8)
+# car4 = VerCar(4, 3, 'gray', 5, 6)
+# car5 = HorCar(5, 3, 'pink', 6, 7)
+# car6 = HorCar(6, 2, 'blue', 0, 5)
+# car7 = VerCar(7, 3, 'orange', 3, 5)
+# car8 = HorCar(8, 3, 'purple', 5, 5)
+# car9 = VerCar(9, 3, 'yellow', 8, 4)
+# car10 = VerCar(10, 2, 'pink', 0, 3)
+# car11 = VerCar(11, 2, 'green', 3, 3)
+# car12 = HorCar(12, 3, 'brown', 5, 3)
+# car13 = VerCar(13, 3, 'orange', 8, 1)
+# car14 = HorCar(14, 2, 'black', 0, 2)
+# car15 = VerCar(15, 2, 'blue', 0, 0)
+# car16 = VerCar(16, 3, 'yellow', 2, 1)
+# car17 = HorCar(17, 3, 'gray', 1, 0)
+# car18 = VerCar(18, 2, 'blue', 3, 1)
+# car19 = VerCar(19, 2, 'black', 4, 0)
+# car20 = HorCar(20, 2, 'brown', 4, 2)
+# car21 = HorCar(21, 2, 'pink', 5, 0)
+# car22 = HorCar(22, 2, 'green', 7, 0)
+# cars_objects.append(car1)
+# cars_objects.append(car2)
+# cars_objects.append(car3)
+# cars_objects.append(car4)
+# cars_objects.append(car5)
+# cars_objects.append(car6)
+# cars_objects.append(car7)
+# cars_objects.append(car8)
+# cars_objects.append(car9)
+# cars_objects.append(car10)
+# cars_objects.append(car11)
+# cars_objects.append(car12)
+# cars_objects.append(car13)
+# cars_objects.append(car14)
+# cars_objects.append(car15)
+# cars_objects.append(car16)
+# cars_objects.append(car17)
+# cars_objects.append(car18)
+# cars_objects.append(car19)
+# cars_objects.append(car20)
+# cars_objects.append(car21)
+# cars_objects.append(car22)
 
 ## This is a simple test case, configuration are easy solvable
 # car1 = HorCar(1, 2, 0, 3)
@@ -419,7 +419,7 @@ def a_star(lis):
                 check_lis.append(row[i])
 
     # cost is simply amount cars in front of red
-    cost = len(check_lis)
+    cost = len(check_lis) + 1
 
     return cost
 
@@ -431,13 +431,13 @@ def astar_solve():
 
     # returns a 1d list of the board, I thought this would be faster
     one_d_list = room.board()
+    depth = 0
 
     # In the PriorityQueue a tuple would be placed, first element of this tuple is the cost(calculated by a_star),
     # second element is the configuration, for the first configuration I just gave it a cost of 0
-    q1.put((0, one_d_list))
+    q1.put((0, one_d_list, depth))
     check = True
     starter = tuple(one_d_list)
-
     archive[starter] = []
 
     while check:
@@ -446,7 +446,7 @@ def astar_solve():
             break
 
         # unpack the queue, it is a tuple, because it is a PriorityQueue it gets an element with lowest cost first
-        cost, config_1d = q1.get()
+        cost, config_1d, depth = q1.get()
 
         room.set_board(config_1d)
 
@@ -469,9 +469,11 @@ def astar_solve():
 
                     archive[tuple(config_1d)].append(tupletje)
                     archive[tupletje] = []
+                    depth += 1
+                    costs = a_star(one_d_list) + depth
 
                     # put the tuple element in the queue, wehere first element is the cost of the configuration
-                    q1.put((a_star(one_d_list), one_d_list))
+                    q1.put((costs, one_d_list, depth))
 
 
                 car.updatePosition(-1)
@@ -491,9 +493,10 @@ def astar_solve():
 
                     archive[tuple(config_1d)].append(tupletje)
                     archive[tupletje] = []
-
+                    depth += 1
+                    costs = a_star(one_d_list) + depth
                     # put the tuple element in the queue, wehere first element is the cost of the configuration
-                    q1.put((a_star(one_d_list), one_d_list))
+                    q1.put((costs, one_d_list, depth))
                 car.updatePosition(1)
     return True
 
