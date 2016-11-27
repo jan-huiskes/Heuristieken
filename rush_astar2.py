@@ -9,7 +9,7 @@ import time
 import Queue
 import matplotlib.pyplot as plt
 import numpy as np
-size = 6
+size = 9
 
 """
 Snelste tijd tot nu toe voor 9x9: 11.5 seconden
@@ -207,25 +207,25 @@ class VerCar(Car):
 # First configuration
 ## 0.95 seconds so far
 ###############################################################################
-car1 = HorCar(1, 2, 'red', 3, 3)
-car2 = VerCar(2, 2, 'brown', 0, 0)
-car3 = HorCar(3, 2, 'blue', 1, 1)
-car4 = HorCar(4, 2, 'green', 4, 0)
-car5 = HorCar(5, 2, 'orange', 4, 2)
-car6 = HorCar(6, 2, 'blue', 3, 5)
-car7 = VerCar(7, 3, 'yellow', 3, 0)
-car8 = VerCar(8, 3, 'purple', 2, 3)
-car9 = VerCar(9, 3, 'brown', 5, 3)
-
-cars_objects.append(car1)
-cars_objects.append(car2)
-cars_objects.append(car3)
-cars_objects.append(car4)
-cars_objects.append(car5)
-cars_objects.append(car6)
-cars_objects.append(car7)
-cars_objects.append(car8)
-cars_objects.append(car9)
+# car1 = HorCar(1, 2, 'red', 3, 3)
+# car2 = VerCar(2, 2, 'brown', 0, 0)
+# car3 = HorCar(3, 2, 'blue', 1, 1)
+# car4 = HorCar(4, 2, 'green', 4, 0)
+# car5 = HorCar(5, 2, 'orange', 4, 2)
+# car6 = HorCar(6, 2, 'blue', 3, 5)
+# car7 = VerCar(7, 3, 'yellow', 3, 0)
+# car8 = VerCar(8, 3, 'purple', 2, 3)
+# car9 = VerCar(9, 3, 'brown', 5, 3)
+#
+# cars_objects.append(car1)
+# cars_objects.append(car2)
+# cars_objects.append(car3)
+# cars_objects.append(car4)
+# cars_objects.append(car5)
+# cars_objects.append(car6)
+# cars_objects.append(car7)
+# cars_objects.append(car8)
+# cars_objects.append(car9)
 
 # Second configuration
 ## Takes 0.96 seconds on my computer
