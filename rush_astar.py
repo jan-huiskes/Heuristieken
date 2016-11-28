@@ -3,43 +3,35 @@
 #
 # Solving any Rush Hour configuration
 
-
 import os
 import time
 import Queue
 import matplotlib.pyplot as plt
 import numpy as np
-size = 9
+size = 6
 
-"""
-Snelste tijd tot nu toe voor 9x9: 11.5 seconden
-Veranderingen:
-    - 9x9 bord van Saartje erin gedaan
-    - simpele a star met priorityqueue
-    - zover het kon de 6 (vd 6x6 board) ge-unhardcoded
-"""
-# saving every car object of the board
+# Saving every car object of the board
 cars_objects = []
 
-
-class RectangularRoom(object):
-
+class Board(object):
     def __init__(self, width, height):
-
+        """
+        Initializes the board with right dimensions and putting the cars in it
+        """
         self.height = height
         self.width = width
 
-        #board_configuration = [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]
+        # Obtaining a 2d board
         board_configuration = [[0 for x in xrange(size)] for x in xrange(size)]
 
+        # Putting the cars into the board
         count = 1
         for cars in cars_objects:
-            if cars.direction == 'h':
+            if type(cars) is HorCar:
                 x = cars.startx
                 y = cars.starty
                 for i in xrange(cars.length):
                     board_configuration[size - 1 - y][x + i] = count
-
             else:
                 x = cars.startx
                 y = cars.starty
@@ -47,47 +39,77 @@ class RectangularRoom(object):
                     board_configuration[size - 1 -(y + i)][x] = count
             count += 1
 
+        # Setting the board into object
         self.board_configuration = board_configuration
 
-
-    def isPositionInRoom(self, x, y):
-
+    def isPositionOnBoard(self, x, y):
+        """
+        Determines if a car is still on the board after a move has done
+        """
+        # Returns True if car on board, False otherwise
         return x < self.width and x >= 0 and y < self.height and y >= 0
 
-    def board(self):
-
+    def getboard(self, car, step, board_from_queue):
         """
-        first I worked with 2d array, over copying everything in board_configuration
+        Makes a partial copied board of board_from_queue
         """
-        #board_configuration = [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]
-    #    for i in range(6):
-    #        for j in range(6):
-    #            board_configuration[i][j] = self.board_configuration[i][j]
+        # Data of car object
+        x = car.startx
+        y = car.starty
+        length = car.length
+        index = car.index
 
-        #return board_configuration
+        board_configuration_copied = board_from_queue[:]
+        if type(car) is VerCar:
 
+            # Copies all the rows in vertical direction
+            for i in xrange(length):
+                board_configuration_copied[size -1 -(y + i)] = board_from_queue[size -1 -(y + i)][:]
 
-        """
-        Now working with 1d array, perhaps faster. The self.board_configuration is still a 2d array however!
-        """
+            # Now index can be altered without altering board_from_queue
+            for i in xrange(length):
+                board_configuration_copied[size -1 -(y + i)][x] = index
 
-        return [self.board_configuration[i][j] for i in xrange(size) for j in xrange(size)]
+            # If the car moves up, first element should be 0
+            if step == 1:
+                board_configuration_copied[size -1 - (y - step)] = board_from_queue[size -1 - (y - step)][:]
+                board_configuration_copied[size -1 - (y - step)][x] = 0
 
+            # If the car moves down, last element should be 0
+            else:
+                board_configuration_copied[size -1 - (y + length)] = board_from_queue[size -1 - (y + length)][:]
+                board_configuration_copied[size -1 - (y + length)][x] = 0
+        else:
+            # Copies whole row of the car to be moved
+            board_configuration_copied[size -1 - y] = board_from_queue[size -1 - y][:]
+
+            # Now index can be altered without altering board_from_queue
+            for i in xrange(length):
+                board_configuration_copied[size -1 - y][x + i] = index
+
+            # If the car moves right, first element should be 0
+            if step == 1:
+                board_configuration_copied[size -1 - y][x - step] = 0
+
+            # If the car moves left, last element should be 0
+            else:
+                board_configuration_copied[size -1 - y][x + length] = 0
+
+        return board_configuration_copied
 
     def update_board_horizontal(self, x, y, length, index, step):
         """
         Determines which values of the board should be changed when a car is moved
         """
-
-        # first fill the row with a car_index from the starting position (now the car length in the board is longer than actual car length!)
+        # Draws the car in horizontal direction
         for i in xrange(length):
             self.board_configuration[size -1 - y][x + i] = index
 
-        # if the car moves to the right in horizontal direction, the first element of the total car length in the board should be 0
+        # If the car moves right, first element should be 0
         if step == 1:
             self.board_configuration[size -1 - y][x - step] = 0
 
-        # if the car moves to the left in the horizontal direction, the last element of the total car length in the board should be 0
+        # If the car moves left, last element should be 0
         else:
             self.board_configuration[size -1 - y][x + length] = 0
 
@@ -96,50 +118,47 @@ class RectangularRoom(object):
         Determines which values of the board should be changed when a car is moved
         """
 
-        # first fill the column with a car_index from the starting position (now the car length in the board is longer than actual car length!)
+        # Draws the car in vertical direction
         for i in xrange(length):
             self.board_configuration[size -1 -(y + i)][x] = index
 
-        # if the car moves up in vertical direction, the first element of the total car length in the board should be 0
+        # If the car moves up, first element should be 0
         if step == 1:
             self.board_configuration[size -1 - (y - step)][x] = 0
 
-        # if the car moves down in vertical direction, the last element of the total car length in the board should be 0
+        # If the car moves down, last element should be 0
         else:
             self.board_configuration[size -1 - (y + length)][x] = 0
 
     def set_board(self, set_configuration):
+        """
+        Sets board.board_configuration according to set_configuration, also
+        the positions of the car objects alter according to set_configuration
+        """
 
-        #lijstjes = [set_configuration[0:6], set_configuration[6:12], set_configuration[12:18], set_configuration[18:24], set_configuration[24:30], set_configuration[30:36]]
-        lijstjes = [set_configuration[0:9], set_configuration[9:18], set_configuration[18:27], set_configuration[27:36], set_configuration[36:45], set_configuration[45:54], set_configuration[54:63], set_configuration[63:72], set_configuration[72:81]]
-
+        # Alter board object
         for j in xrange(size):
             for i in xrange(size):
-                self.board_configuration[j][i] = lijstjes[j][i]
+                self.board_configuration[j][i] = set_configuration[j][i]
 
+        # Alter the positions inside car objects
         check_lis = []
         for i in xrange(size - 1, -1, -1):
             for j in xrange(size):
-                if lijstjes[i][j] > 0 and lijstjes[i][j] not in check_lis:
-                    check_lis.append(lijstjes[i][j])
-                    cars_objects[lijstjes[i][j] - 1].setCarPosition(j, size - 1 - i)
+                if set_configuration[i][j] > 0 and set_configuration[i][j] not in check_lis:
+                    check_lis.append(set_configuration[i][j])
+                    cars_objects[set_configuration[i][j] - 1].setCarPosition(j, size - 1 - i)
 
 
 
 class Car(object):
-    def __init__(self, index, length, color):
+    def __init__(self, index, length, color, x, y):
 
         self.index = index
         self.length = length
         self.color = color
-
-class HorCar(Car):
-    def __init__(self, index, length, color, x, y):
-        Car.__init__(self, index, length, color)
-        self.direction = 'h'
         self.startx = x
         self.starty = y
-
 
     def setCarPosition(self, x, y):
         self.startx = x
@@ -150,10 +169,13 @@ class HorCar(Car):
         Determine if there is no car blocked in front of the car to be moved
         """
 
-        # if the next tile of the board is empty or the next tile has same index as the car to be moved -> car can be moved
-        return room.board_configuration[size - 1 - y][x] == 0 or room.board_configuration[size - 1 - y][x] == self.index
+        # Return True if car can be moved, False otherwise
+        return board.board_configuration[size - 1 - y][x] == 0 or board.board_configuration[size - 1 - y][x] == self.index
 
 
+class HorCar(Car):
+    def __init__(self, index, length, color, x, y):
+        Car.__init__(self, index, length, color, x, y)
 
     def updatePosition(self, step):
 
@@ -163,36 +185,21 @@ class HorCar(Car):
         new_xend = new_xstart + self.length - 1
         new_yend = new_ystart
 
-        if room.isPositionInRoom(new_xstart, new_ystart):
-            if room.isPositionInRoom(new_xend, new_yend):
-                if self.noCar(new_xstart, new_ystart):
-                    if self.noCar(new_xend, new_yend):
-                        self.setCarPosition(new_xstart, new_ystart)
-                        room.update_board_horizontal(new_xstart, new_ystart, self.length, self.index, step)
+        if (board.isPositionOnBoard(new_xstart, new_ystart) and
+            board.isPositionOnBoard(new_xend, new_yend) and
+            self.noCar(new_xstart, new_ystart) and
+            self.noCar(new_xend, new_yend)):
 
-                        return True
+            self.setCarPosition(new_xstart, new_ystart)
+            board.update_board_horizontal(new_xstart, new_ystart, self.length, self.index, step)
+            return True
 
         return False
 
+
 class VerCar(Car):
     def __init__(self, index, length, color, x, y):
-        Car.__init__(self, index, length, color)
-        self.direction = 'v'
-        self.startx = x
-        self.starty = y
-
-    def setCarPosition(self, x, y):
-        self.startx = x
-        self.starty = y
-
-    def noCar(self, x, y):
-        """
-        Determine if there is no car blocked in front of the car to be moved
-        """
-
-        # if the next tile of the board is empty or the next tile has same index as the car to be moved -> car can be moved
-        return room.board_configuration[size - 1 - y][x] == 0 or room.board_configuration[size - 1 - y][x] == self.index
-
+        Car.__init__(self, index, length, color, x, y)
 
     def updatePosition(self, step):
 
@@ -202,180 +209,225 @@ class VerCar(Car):
         new_xend = new_xstart
         new_yend = new_ystart + self.length - 1
 
+        if (board.isPositionOnBoard(new_xstart, new_ystart) and
+            board.isPositionOnBoard(new_xend, new_yend) and
+            self.noCar(new_xstart, new_ystart) and
+            self.noCar(new_xend, new_yend)):
 
-        if room.isPositionInRoom(new_xstart, new_ystart):
-            if room.isPositionInRoom(new_xend, new_yend):
-                if self.noCar(new_xstart, new_ystart):
-                    if self.noCar(new_xend, new_yend):
-                        self.setCarPosition(new_xstart, new_ystart)
+            self.setCarPosition(new_xstart, new_ystart)
 
-                        room.update_board_vertical(new_xstart, new_ystart, self.length, self.index, step)
-
-                        return True
+            board.update_board_vertical(new_xstart, new_ystart, self.length, self.index, step)
+            return True
 
         return False
 
 
+#<<<<<<< HEAD
 # First configuration
 ## 0.95 seconds so far
 ###############################################################################
-# car1 = HorCar(1, 2, 'red', 3, 3)
-# car2 = VerCar(2, 2, 'brown', 0, 0)
-# car3 = HorCar(3, 2, 'blue', 1, 1)
-# car4 = HorCar(4, 2, 'green', 4, 0)
-# car5 = HorCar(5, 2, 'orange', 4, 2)
-# car6 = HorCar(6, 2, 'blue', 3, 5)
-# car7 = VerCar(7, 3, 'yellow', 3, 0)
-# car8 = VerCar(8, 3, 'purple', 2, 3)
-# car9 = VerCar(9, 3, 'brown', 5, 3)
-#
-# cars_objects.append(car1)
-# cars_objects.append(car2)
-# cars_objects.append(car3)
-# cars_objects.append(car4)
-# cars_objects.append(car5)
-# cars_objects.append(car6)
-# cars_objects.append(car7)
-# cars_objects.append(car8)
-# cars_objects.append(car9)
 
-# Second configuration
-## Takes 0.96 seconds on my computer
-###############################################################################
-# car1 = HorCar(1, 2, 'red', 2, 3)
-# car2 = VerCar(2, 2, 'brown', 0, 0)
-# car3 = HorCar(3, 2, 'green', 0, 2)
-# car4 = HorCar(4, 2, 'blue', 2, 2)
-# car5 = VerCar(5, 2, 'pink', 3, 0)
-# car6 = HorCar(6, 2, 'orange', 4, 0)
-# car7 = HorCar(7, 2, 'yellow', 4, 1)
-# car8 = VerCar(8, 2, 'purple', 4, 2)
-# car9 = VerCar(9, 3, 'brown', 5, 2)
-# car10 = HorCar(10, 2, 'green', 1, 4)
-# car11 = HorCar(11, 2, 'blue', 3, 4)
-# car12 = HorCar(12, 2, 'yellow', 2, 5)
-# car13 = HorCar(13, 2, 'orange', 4, 5)
-#
-# cars_objects.append(car1)
-# cars_objects.append(car2)
-# cars_objects.append(car3)
-# cars_objects.append(car4)
-# cars_objects.append(car5)
-# cars_objects.append(car6)
-# cars_objects.append(car7)
-# cars_objects.append(car8)
-# cars_objects.append(car9)
-# cars_objects.append(car10)
-# cars_objects.append(car11)
-# cars_objects.append(car12)
-# cars_objects.append(car13)
-###############################################################################
-
-# Third configuration
-## Mijn computer zegt 0.07?? Kan bijna niet zoveel sneller zijn toch?
-###############################################################################
-# car1 = HorCar(1, 2, 'red', 0, 3)
-# car2 = VerCar(2, 2, 'brown', 0, 0)
-# car3 = HorCar(3, 2, 'green', 0, 2)
-# car4 = VerCar(4, 2, 'blue', 2, 0)
-# car5 = VerCar(5, 2, 'pink', 2, 2)
-# car6 = HorCar(6, 2, 'purple', 1, 4)
-# car7 = HorCar(7, 2, 'blue', 1, 5)
-# car8 = HorCar(8, 2, 'purple', 4, 1)
-# car9 = HorCar(9, 2, 'orange', 3, 2)
-# car10 = VerCar(10, 2, 'pink', 5, 2)
-# car11 = VerCar(11, 2, 'yellow', 3, 3)
-# car12 = HorCar(12, 2, 'green', 4, 4)
-# car13 = HorCar(13, 3, 'orange', 3, 5)
-#
-# cars_objects.append(car1)
-# cars_objects.append(car2)
-# cars_objects.append(car3)
-# cars_objects.append(car4)
-# cars_objects.append(car5)
-# cars_objects.append(car6)
-# cars_objects.append(car7)
-# cars_objects.append(car8)
-# cars_objects.append(car9)
-# cars_objects.append(car10)
-# cars_objects.append(car11)
-# cars_objects.append(car12)
-# cars_objects.append(car13)
-
-###############################################################################
-# The first 9x9 board configuration
 ##############################################################################
-car1 = HorCar(1, 2, 'red', 1, 4)
-car2 = VerCar(2, 2, 'green', 0, 7)
-car3 = HorCar(3, 3, 'yellow', 1, 8)
-car4 = VerCar(4, 3, 'gray', 5, 6)
-car5 = HorCar(5, 3, 'pink', 6, 7)
-car6 = HorCar(6, 2, 'blue', 0, 5)
-car7 = VerCar(7, 3, 'orange', 3, 5)
-car8 = HorCar(8, 3, 'purple', 5, 5)
-car9 = VerCar(9, 3, 'yellow', 8, 4)
-car10 = VerCar(10, 2, 'pink', 0, 3)
-car11 = VerCar(11, 2, 'green', 3, 3)
-car12 = HorCar(12, 3, 'brown', 5, 3)
-car13 = VerCar(13, 3, 'orange', 8, 1)
-car14 = HorCar(14, 2, 'black', 0, 2)
-car15 = VerCar(15, 2, 'blue', 0, 0)
-car16 = VerCar(16, 3, 'yellow', 2, 1)
-car17 = HorCar(17, 3, 'gray', 1, 0)
-car18 = VerCar(18, 2, 'blue', 3, 1)
-car19 = VerCar(19, 2, 'black', 4, 0)
-car20 = HorCar(20, 2, 'brown', 4, 2)
-car21 = HorCar(21, 2, 'pink', 5, 0)
-car22 = HorCar(22, 2, 'green', 7, 0)
-cars_objects.append(car1)
-cars_objects.append(car2)
-cars_objects.append(car3)
-cars_objects.append(car4)
-cars_objects.append(car5)
-cars_objects.append(car6)
-cars_objects.append(car7)
-cars_objects.append(car8)
-cars_objects.append(car9)
-cars_objects.append(car10)
-cars_objects.append(car11)
-cars_objects.append(car12)
-cars_objects.append(car13)
-cars_objects.append(car14)
-cars_objects.append(car15)
-cars_objects.append(car16)
-cars_objects.append(car17)
-cars_objects.append(car18)
-cars_objects.append(car19)
-cars_objects.append(car20)
-cars_objects.append(car21)
-cars_objects.append(car22)
+# The first 6x6 board configuration
+# Fastest time so far: 0.3 sec
+##############################################################################
+# cars_objects.append(HorCar(1, 2, 'red', 3, 3))
+# cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
+# cars_objects.append(HorCar(3, 2, 'blue', 1, 1))
+# cars_objects.append(HorCar(4, 2, 'green', 4, 0))
+# cars_objects.append(HorCar(5, 2, 'orange', 4, 2))
+# cars_objects.append(HorCar(6, 2, 'blue', 3, 5))
+# cars_objects.append(VerCar(7, 3, 'yellow', 3, 0))
+# cars_objects.append(VerCar(8, 3, 'purple', 2, 3))
+# cars_objects.append(VerCar(9, 3, 'brown', 5, 3))
+#>>>>>>> 94957157922f1b514cc2501f3d9d90dad6c254d7
 
-## This is a simple test case, configuration are easy solvable
-# car1 = HorCar(1, 2, 0, 3)
-# car2 = VerCar(2, 2, 1, 1)
-# car3 = VerCar(3, 3, 3, 3)
-# car4 = VerCar(4, 3, 5, 3)
-# car5 = HorCar(5, 3, 3, 2)
-#
-# cars_objects.append(car1)
-# cars_objects.append(car2)
-# cars_objects.append(car3)
-# cars_objects.append(car4)
-# cars_objects.append(car5)
+##############################################################################
+# The second 6x6 board configuration
+# Fastest time so far: 0.3 sec
+##############################################################################
+# cars_objects.append(HorCar(1, 2, 'red', 2, 3))
+# cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
+# cars_objects.append(HorCar(3, 2, 'green', 0, 2))
+# cars_objects.append(HorCar(4, 2, 'blue', 2, 2))
+# cars_objects.append(VerCar(5, 2, 'pink', 3, 0))
+# cars_objects.append(HorCar(6, 2, 'orange', 4, 0))
+# cars_objects.append(HorCar(7, 2, 'yellow', 4, 1))
+# cars_objects.append(VerCar(8, 2, 'purple', 4, 2))
+# cars_objects.append(VerCar(9, 3, 'brown', 5, 2))
+# cars_objects.append(HorCar(10, 2, 'green', 1, 4))
+# cars_objects.append(HorCar(11, 2, 'blue', 3, 4))
+# cars_objects.append(HorCar(12, 2, 'yellow', 2, 5))
+# cars_objects.append(HorCar(13, 2, 'orange', 4, 5))
 
+##############################################################################
+# The third 6x6 board configuration
+# Fastest time so far: 0.07 sec
+##############################################################################
+cars_objects.append(HorCar(1, 2, 'red', 0, 3))
+cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
+cars_objects.append(HorCar(3, 2, 'green', 0, 2))
+cars_objects.append(VerCar(4, 2, 'blue', 2, 0))
+cars_objects.append(VerCar(5, 2, 'pink', 2, 2))
+cars_objects.append(HorCar(6, 2, 'purple', 1, 4))
+cars_objects.append(HorCar(7, 2, 'blue', 1, 5))
+cars_objects.append(HorCar(8, 2, 'purple', 4, 1))
+cars_objects.append(HorCar(9, 2, 'orange', 3, 2))
+cars_objects.append(VerCar(10, 2, 'pink', 5, 2))
+cars_objects.append(VerCar(11, 2, 'yellow', 3, 3))
+cars_objects.append(HorCar(12, 2, 'green', 4, 4))
+cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 
-room = RectangularRoom(size, size)
+##############################################################################
+# The first 9x9 board configuration
+# Fastest time so far: 11 sec
+##############################################################################
+# cars_objects.append(HorCar(1, 2, 'red', 1, 4))
+# cars_objects.append(VerCar(2, 2, 'green', 0, 7))
+# cars_objects.append(HorCar(3, 3, 'yellow', 1, 8))
+# cars_objects.append(VerCar(4, 3, 'gray', 5, 6))
+# cars_objects.append(HorCar(5, 3, 'pink', 6, 7))
+# cars_objects.append(HorCar(6, 2, 'blue', 0, 5))
+# cars_objects.append(VerCar(7, 3, 'orange', 3, 5))
+# cars_objects.append(HorCar(8, 3, 'purple', 5, 5))
+# cars_objects.append(VerCar(9, 3, 'yellow', 8, 4))
+# cars_objects.append(VerCar(10, 2, 'pink', 0, 3))
+# cars_objects.append(VerCar(11, 2, 'green', 3, 3))
+# cars_objects.append(HorCar(12, 3, 'brown', 5, 3))
+# cars_objects.append(VerCar(13, 3, 'orange', 8, 1))
+# cars_objects.append(HorCar(14, 2, 'black', 0, 2))
+# cars_objects.append(VerCar(15, 2, 'blue', 0, 0))
+# cars_objects.append(VerCar(16, 3, 'yellow', 2, 1))
+# cars_objects.append(HorCar(17, 3, 'gray', 1, 0))
+# cars_objects.append(VerCar(18, 2, 'blue', 3, 1))
+# cars_objects.append(VerCar(19, 2, 'black', 4, 0))
+# cars_objects.append(HorCar(20, 2, 'brown', 4, 2))
+# cars_objects.append(HorCar(21, 2, 'pink', 5, 0))
+# cars_objects.append(HorCar(22, 2, 'green', 7, 0))
+#<<<<<<< HEAD
+#=======
+
+##############################################################################
+# The second 9x9 board configuration
+# Fastest time so far:
+##############################################################################
+# cars_objects.append(HorCar(1, 2, 'red', 6, 4))
+# cars_objects.append(VerCar(2, 2, 'pink', 0, 0))
+# cars_objects.append(VerCar(3, 2, 'blue', 0, 2))
+# cars_objects.append(VerCar(4, 2, 'green', 1, 0))
+# cars_objects.append(HorCar(5, 3, 'yellow', 0, 8))
+# cars_objects.append(HorCar(6, 2, 'gray', 2, 0))
+# cars_objects.append(HorCar(7, 2, 'black', 2, 1))
+# cars_objects.append(VerCar(8, 2, 'orange', 4, 0))
+# cars_objects.append(HorCar(9, 3, 'gray', 5, 1))
+# cars_objects.append(VerCar(10, 2, 'pink', 8, 0))
+# cars_objects.append(VerCar(11, 2, 'orange', 2, 2))
+# cars_objects.append(HorCar(12, 2, 'brown', 3, 2))
+# cars_objects.append(VerCar(13, 3, 'purple', 5, 2))
+# cars_objects.append(HorCar(14, 2, 'green', 6, 2))
+# cars_objects.append(VerCar(15, 3, 'yellow', 8, 2))
+# cars_objects.append(HorCar(16, 3, 'blue', 2, 4))
+# cars_objects.append(HorCar(17, 2, 'gray', 4, 5))
+# cars_objects.append(VerCar(18, 2, 'pink', 6, 5))
+# cars_objects.append(HorCar(19, 2, 'black', 7, 5))
+# cars_objects.append(VerCar(20, 3, 'purple', 3, 6))
+# cars_objects.append(HorCar(21, 2, 'orange', 4, 6))
+# cars_objects.append(VerCar(22, 2, 'green', 5, 7))
+# cars_objects.append(VerCar(23, 2, 'blue', 6, 7))
+# cars_objects.append(HorCar(24, 2, 'yellow', 7, 7))
+#>>>>>>> 94957157922f1b514cc2501f3d9d90dad6c254d7
+
+##############################################################################
+# The third 9x9 configuration
+# Fastest time so far:
+##############################################################################
+# cars_objects.append(HorCar(1, 2, 'red', 0, 4))
+# cars_objects.append(VerCar(2, 3, 'purple', 0, 0))
+# cars_objects.append(HorCar(3, 3, 'yellow', 1, 0))
+# cars_objects.append(VerCar(4, 3, 'gray', 4, 0))
+# cars_objects.append(HorCar(5, 2, 'blue', 2, 1))
+# cars_objects.append(HorCar(6, 2, 'green', 5, 1))
+# cars_objects.append(VerCar(7, 2, 'orange', 1, 2))
+# cars_objects.append(HorCar(8, 2, 'black', 2, 2))
+# cars_objects.append(HorCar(9, 3, 'yellow', 5, 2))
+# cars_objects.append(VerCar(10, 3, 'yellow', 3, 3))
+# cars_objects.append(HorCar(11, 2, 'pink', 4, 3))
+# cars_objects.append(HorCar(12, 2, 'brown', 6, 3))
+# cars_objects.append(VerCar(13, 2, 'blue', 2, 4))
+# cars_objects.append(VerCar(14, 2, 'orange', 4, 5))
+# cars_objects.append(VerCar(15, 2, 'pink', 5, 5))
+# cars_objects.append(HorCar(16, 3, 'gray', 6, 5))
+# cars_objects.append(VerCar(17, 2, 'black', 0, 6))
+# cars_objects.append(HorCar(18, 2, 'green', 2, 6))
+# cars_objects.append(HorCar(19, 2, 'purple', 7, 6))
+# cars_objects.append(HorCar(20, 3, 'yellow', 1, 7))
+# cars_objects.append(VerCar(21, 2, 'green', 4, 7))
+# cars_objects.append(HorCar(22, 2, 'orange', 5, 7))
+# cars_objects.append(VerCar(23, 2, 'blue', 7, 7))
+# cars_objects.append(HorCar(24, 2, 'blue', 0, 8))
+# cars_objects.append(HorCar(25, 2, 'pink', 2, 8))
+# cars_objects.append(VerCar(26, 3, 'purple', 8, 1))
+
+##############################################################################
+# The 12x12 configuration
+# Fastest time so far:
+##############################################################################
+# cars_objects.append(HorCar(1, 2, 'red', 2, 6))
+# cars_objects.append(HorCar(2, 2, 'green', 1, 0))
+# cars_objects.append(HorCar(3, 3, 'yellow', 3, 0))
+# cars_objects.append(VerCar(4, 3, 'gray', 6, 0))
+# cars_objects.append(HorCar(5, 2, 'blue', 7, 0))
+# cars_objects.append(VerCar(6, 2, 'pink', 9, 0))
+# cars_objects.append(VerCar(7, 3, 'purple', 10, 0))
+# cars_objects.append(VerCar(8, 2, 'pink', 11, 0))
+# cars_objects.append(VerCar(9, 2, 'blue', 2, 2))
+# cars_objects.append(HorCar(10, 3, 'yellow', 3, 2))
+# cars_objects.append(HorCar(11, 2, 'green', 8, 2))
+# cars_objects.append(VerCar(12, 2, 'black', 11, 2))
+# cars_objects.append(HorCar(13, 2, 'orange', 0, 3))
+# cars_objects.append(HorCar(14, 3, 'purple', 3, 3))
+# cars_objects.append(VerCar(15, 3, 'black', 6, 3))
+# cars_objects.append(HorCar(16, 3, 'pink', 7, 3))
+# cars_objects.append(HorCar(17, 3, 'yellow', 0, 4))
+# cars_objects.append(VerCar(18, 2, 'pink', 3, 4))
+# cars_objects.append(HorCar(19, 2, 'green', 4, 4))
+# cars_objects.append(VerCar(20, 3, 'blue', 7, 4))
+# cars_objects.append(VerCar(21, 2, 'gray', 9, 4))
+# cars_objects.append(HorCar(22, 2, 'orange', 10, 4))
+# cars_objects.append(HorCar(23, 3, 'brown', 0, 5))
+# cars_objects.append(VerCar(24, 2, 'orange', 4, 5))
+# cars_objects.append(VerCar(25, 2, 'pink', 5, 5))
+# cars_objects.append(HorCar(26, 2, 'green', 10, 5))
+# cars_objects.append(VerCar(27, 3, 'purple', 0, 6))
+# cars_objects.append(VerCar(28, 3, 'yellow', 1, 6))
+# cars_objects.append(HorCar(29, 3, 'brown', 2, 7))
+# cars_objects.append(VerCar(30, 2, 'green', 5, 7))
+# cars_objects.append(VerCar(31, 3, 'yellow', 6, 7))
+# cars_objects.append(HorCar(32, 3, 'purple', 7, 7))
+# cars_objects.append(HorCar(33, 2, 'orange', 7, 8))
+# cars_objects.append(HorCar(34, 2, 'pink', 9, 8))
+# cars_objects.append(HorCar(35, 3, 'gray', 0, 9))
+# cars_objects.append(HorCar(36, 2, 'orange', 3, 9))
+# cars_objects.append(VerCar(37, 2, 'pink', 5, 9))
+# cars_objects.append(HorCar(38, 2, 'green', 7, 9))
+# cars_objects.append(VerCar(39, 2, 'orange', 10, 9))
+# cars_objects.append(VerCar(40, 2, 'blue', 11, 9))
+# cars_objects.append(VerCar(41, 2, 'green', 0, 10))
+# cars_objects.append(VerCar(42, 2, 'blue', 6, 10))
+# cars_objects.append(HorCar(43, 3, 'purple', 7, 11))
+# cars_objects.append(HorCar(44, 2, 'pink', 10, 11))
+
+board = Board(size, size)
 def won(lis):
     """
     Argument is a board configuration
     """
-    #row = lis[int(round(room.height / 2 - 1))]
 
-    # Have to do this because lis is now a 1d array
-    #row = lis[12:18]
-    row = lis[36:45]
+    if size == 6:
+        row = lis[2]
+    elif size == 9:
+        row = lis[4]
 
-    boolie = True
     index = 0
 
     for i in xrange(len(row)):
@@ -383,13 +435,8 @@ def won(lis):
             index = i
             break
 
-    for i in xrange(index, len(row)):
-        if row[i] > 1:
-            boolie = False
-            break
 
-
-    return boolie
+    return all(row[i] <= 1 for i in range(index, len(row)))
 
 
 def find_path(graph, start, end, path=[]):
@@ -407,13 +454,14 @@ def find_path(graph, start, end, path=[]):
 
 def a_star(lis):
     """
-    Very simple a star function. The cost is a value dependent on how many cars
-    are in front of the red car. If there are no cars in front of the red car,
-    the cost is equal to 0. If there is one car in front of red, cost = 1, etc.
+    Very simple A-Star function. Cost is a value calculated by the amount of cars in front
+    of the red one. If there are no cars in front of the red car, cost = 0.
+    If there is one car in front of red, cost = 1, etc.
     """
-
-    #row = lis[12:18] # <-- this is for 6x6
-    row = lis[36:45] # <-- this is for 9x9
+    if size == 6:
+        row = lis[12:18]
+    elif size == 9:
+        row = lis[36:45]
     place_of_red = 0
 
     # determine where red car is placed
@@ -423,103 +471,223 @@ def a_star(lis):
             break
 
     # determine how many cars are in front of red
-    check_lis = []
+    check_amount_cars = 0
     for i in xrange(place_of_red, len(row)):
         if row[i] > 1:
-            if row[i] not in check_lis:
-                check_lis.append(row[i])
+            check_amount_cars += 1
 
     # cost is simply amount cars in front of red
-    cost = len(check_lis)
+    return check_amount_cars + 1
 
-    return cost
 
-def solve():
-    archive = {}
 
-    # creating a PriorityQueue
-    q1 = Queue.PriorityQueue()
+archive = {}
+queue_priority = Queue.PriorityQueue()
+def determine_in_archive_as(board_child, tuple_board_child, tuple_board_from_queue, depth):
 
-    # returns a 1d list of the board, I thought this would be faster
-    one_d_list = room.board()
+    if tuple_board_child not in archive:
 
-    # In the PriorityQueue a tuple would be placed, first element of this tuple is the cost(calculated by a_star),
-    # second element is the configuration, for the first configuration I just gave it a cost of 0
-    q1.put((0,one_d_list))
-    check = True
-    starter = tuple(one_d_list)
+        if (won(board_child)):
+            board.set_board(board_child)
+            archive[tuple_board_from_queue].append(tuple_board_child)
+            return True
 
-    archive[starter] = []
+        archive[tuple_board_from_queue].append(tuple_board_child)
+        archive[tuple_board_child] = []
+        queue_priority.put((a_star(board_child) + depth, board_child, depth))
 
-    while check:
-        # if q1.qsize() == 0:
-        #     return False
-        #     break
+    return
 
-        # unpack the queue, it is a tuple, because it is a PriorityQueue it gets an element with lowest cost first
-        cost, config_1d = q1.get()
 
-        room.set_board(config_1d)
+def astar_solve():
+    # Depth of a board
+    depth = 0
 
+    # Tuple consisting of (cost, first board, depth)
+    queue_priority.put((0, [[board.board_configuration[j][i] for i in xrange(size)] for j in xrange(size)], depth))
+
+    # Make a tuple for first node and put in archive
+    first_node = tuple([board.board_configuration[i][j] for i in xrange(size) for j in xrange(size)])
+    archive[first_node] = []
+
+    not_found = True
+    while not_found:
+
+        # Get first element for setting board and car objects
+        cost, board_from_queue, depth = queue_priority.get()
+        board.set_board(board_from_queue)
+
+        # Make tuple of board_from_queue
+        tuple_board_from_queue = tuple([board_from_queue[i][j] for i in xrange(size) for j in xrange(size)])
+
+        # Determine which car can be moved
         for car in cars_objects:
+            if car.updatePosition(1):
+                # Obtain partial copied board and tuple of it
+                board_child = board.getboard(car, 1, board_from_queue)
+                tuple_board_child = tuple([board_child[i][j] for i in xrange(size) for j in xrange(size)])
 
-            if car.updatePosition(1) and check:
+                # Determine if al ready in archive or if found final configuration
+                if determine_in_archive_as(board_child, tuple_board_child, tuple_board_from_queue, depth + 1):
 
-                one_d_list = room.board()
-
-                tupletje = tuple(one_d_list)
-                if tupletje not in archive:
-
-                    if (won(one_d_list)):
-                        room.set_board(one_d_list)
-                        archive[tuple(config_1d)].append(tupletje)
-                        ender = tupletje
-                        return find_path(archive, starter, ender)
-                        check = False
-                        break
-
-                    archive[tuple(config_1d)].append(tupletje)
-                    archive[tupletje] = []
-
-                    # put the tuple element in the queue, wehere first element is the cost of the configuration
-                    q1.put((a_star(one_d_list), one_d_list))
-
+                    # Return the path when puzzle solved
+                    return find_path(archive, first_node, tuple_board_child)
 
                 car.updatePosition(-1)
-            if car.updatePosition(-1) and check:
-                one_d_list = room.board()
 
-                #tmp_list = [lis[i][j] for i in xrange(6) for j in xrange(6)]
+            if car.updatePosition(-1):
+                # Obtain partial copied board and tuple of it
+                board_child = board.getboard(car, -1, board_from_queue)
+                tuple_board_child = tuple([board_child[i][j] for i in xrange(size) for j in xrange(size)])
 
-                tupletje = tuple(one_d_list)
-                if tupletje not in archive:
+                # Determine if al ready in archive or if found final configuration
+                if determine_in_archive_as(board_child, tuple_board_child, tuple_board_from_queue, depth + 1):
 
-                    if (won(one_d_list)):
-                        room.set_board(one_d_list)
-                        archive[tuple(config_1d)].append(tupletje)
-                        ender = tupletje
-                        return find_path(archive, starter, ender)
-                        check = False
-                        break
+                    # Return the path when puzzle solved
+                    return find_path(archive, first_node, tuple_board_child)
 
-                    archive[tuple(config_1d)].append(tupletje)
-                    archive[tupletje] = []
+                car.updatePosition(1)
+        depth += 1
 
-                    # put the tuple element in the queue, wehere first element is the cost of the configuration
-                    q1.put((a_star(one_d_list), one_d_list))
+
+archive = {}
+queue = Queue.Queue()
+def determine_in_archive(board_child, tuple_board_child, tuple_board_from_queue):
+
+    if tuple_board_child not in archive:
+
+        if (won(board_child)):
+            board.set_board(board_child)
+            archive[tuple_board_from_queue].append(tuple_board_child)
+            return True
+
+        archive[tuple_board_from_queue].append(tuple_board_child)
+        archive[tuple_board_child] = []
+        queue.put(board_child)
+
+    return
+
+def breadth_solve():
+    # Make a copy for the first node and put in queue
+    queue.put([[board.board_configuration[j][i] for i in xrange(size)] for j in xrange(size)])
+
+    # Make a tuple for first node and put in archive
+    first_node = tuple([board.board_configuration[i][j] for i in xrange(size) for j in xrange(size)])
+    archive[first_node] = []
+
+    not_found = True
+    while not_found:
+
+        # Get first element for setting board and car objects
+        board_from_queue = queue.get()
+        board.set_board(board_from_queue)
+
+        # Make tuple of board_from_queue
+        tuple_board_from_queue = tuple([board_from_queue[i][j] for i in xrange(size) for j in xrange(size)])
+
+        # Determine which car can be moved
+        for car in cars_objects:
+
+            if car.updatePosition(1):
+                # Obtain partial copied board and tuple of it
+                board_child = board.getboard(car, 1, board_from_queue)
+                tuple_board_child = tuple([board_child[i][j] for i in xrange(size) for j in xrange(size)])
+
+                # Determine if al ready in archive or if found final configuration
+                if determine_in_archive(board_child, tuple_board_child, tuple_board_from_queue):
+
+                    # Return the path when puzzle solved
+                    return find_path(archive, first_node, tuple_board_child)
+
+                car.updatePosition(-1)
+
+            if car.updatePosition(-1):
+                # Obtain partial copied board and tuple of it
+                board_child = board.getboard(car, -1, board_from_queue)
+                tuple_board_child = tuple([board_child[i][j] for i in xrange(size) for j in xrange(size)])
+
+                # Determine if al ready in archive or if found final configuration
+                if determine_in_archive(board_child, tuple_board_child, tuple_board_from_queue):
+
+                    # Return the path when puzzle solved
+                    return find_path(archive, first_node, tuple_board_child)
 
                 car.updatePosition(1)
 
+class Stack:
+    def __init__(self):
+        self.stack = []
+    def push(self, new_value, depth):
+        self.stack.append((new_value, depth))
+    def pop(self):
+        # removing last element (last in first out)
+        tmp_element = self.stack[-1]
+        del self.stack[-1]
+        return tmp_element
 
 
-    return True
+archive = {}
+stack = Stack()
+def id_solve(first_node, first_node_archive):
+    # Make a copy for the first node and put in queue
+    stack.push(first_node, 0)
+    archive[first_node_archive] = []
+    check = True
+    depth = 1
+
+    while len(stack.stack) and check == True:
+
+        board_from_stack, depth_of_configuration = stack.pop()
+
+        if depth_of_configuration < depth:
+
+            board.set_board(board_from_stack)
+
+            # Make tuple of board_from_stack
+            tuple_board_from_stack = tuple([board_from_stack[i][j] for i in xrange(size) for j in xrange(size)])
+
+            for car in cars_objects:
+                if car.updatePosition(1):
+                    # Obtain partial copied board and tuple of it
+                    board_child = board.getboard(car, 1, board_from_stack)
+                    tuple_board_child = tuple([board_child[i][j] for i in xrange(size) for j in xrange(size)])
+
+                    if tuple_board_child not in archive:
+                        archive[tuple_board_from_stack].append(tuple_board_child)
+                        archive[tuple_board_child] = []
+                        stack.push(board_child, depth_of_configuration + 1)
+
+                    car.updatePosition(-1)
+
+                if car.updatePosition(-1):
+                    # Obtain partial copied board and tuple of it
+                    board_child = board.getboard(car, -1, board_from_stack)
+                    tuple_board_child = tuple([board_child[i][j] for i in xrange(size) for j in xrange(size)])
+
+                    if tuple_board_child not in archive:
+                        archive[tuple_board_from_stack].append(tuple_board_child)
+                        archive[tuple_board_child] = []
+                        stack.push(board_child, depth_of_configuration + 1)
+                    car.updatePosition(1)
+
+        else:
+            if (won(board_child)):
+                board.set_board(board_child)
+                archive[tuple_board_from_stack].append(tuple_board_child)
+                return find_path(archive, first_node_archive, tuple_board_child)
+
+        if len(stack.stack) == 0:
+            stack.push(first_node, 0)
+            archive.clear()
+
+            # Make a tuple for first node and put in archive
+            archive[first_node_archive] = []
+
+            depth += 1
+
 
 def printboard():
-    # os.system('cls')
-    # for i in range(size):
-    #     for j in range(size):
-    #         print room.board_configuration[i][j],
-    #     print "\n"
+
     fig = plt.figure('Rush Hour')
     plotboard = [[], []]
     for i in range(size + 1):
@@ -530,59 +698,147 @@ def printboard():
         plt.plot(plotboard[1], plotboard[0][i], color='black')
     for i in range(size):
         for j in range(size):
-            num = room.board_configuration[i][j]
+            num = board.board_configuration[i][j]
             if num > 0:
-                plt.plot(j + 0.5, size - 1 - i + 0.5, 's',color=cars_objects[num - 1].color, markersize = 50)
+                plt.plot(j + 0.5, size - 1 - i + 0.5, 's',color=cars_objects[num - 1].color, markersize = 300/size)
 
 
 
 if __name__ == "__main__":
+    printboard()
+    plt.show()
     while (1):
-        one_d_list = room.board()
-
-        if won(one_d_list):
-            break
-        printboard()
-        plt.show()
-        # printboard()
         print ''
-        num = raw_input('+car_num = up/right, -car_num = down/left: ')
+        num = raw_input('code: ')
         os.system('cls')
         print ''
 
-        # GOD has three characters..so I was assuming everything else is a number
-        if len(num) < 3:
-            num = int(num)
         # if user types in God for auto solver
-        if num == 'GOD':
+        if num == 'astar':
             # start timer (wall clock time)
             start = time.time()
             print "Solving..."
-            lijst = solve()
+            lijst = breadth_solve()
             end = time.time()
             print "Time elapsed:", (end - start)
-            print "Amount steps:", len(lijst)
 
-            print "winning configuration"
+
+
+            print "stappen", len(lijst)
             for k in range(len(lijst)):
                 x = lijst[k]
-                room.set_board(x)
+
+                lijstjes = []
+                lijstjes.append(x[0:6])
+                lijstjes.append(x[6:12])
+                lijstjes.append(x[12:18])
+                lijstjes.append(x[18:24])
+                lijstjes.append(x[24:30])
+                lijstjes.append(x[30:36])
+
+                # lijstjes = []
+                # lijstjes.append(x[0:9])
+                # lijstjes.append(x[9:18])
+                # lijstjes.append(x[18:27])
+                # lijstjes.append(x[27:36])
+                # lijstjes.append(x[36:45])
+                # lijstjes.append(x[45:54])
+                # lijstjes.append(x[54:63])
+                # lijstjes.append(x[63:72])
+                # lijstjes.append(x[72:81])
+
+
+                board.set_board(lijstjes)
                 printboard()
                 plt.draw()
                 plt.pause(0.01)
                 plt.clf()
             break
 
+        elif num == 'breadth':
+            # start timer (wall clock time)
+            start = time.time()
+            print "Solving..."
+            lijst = breadth_solve()
+            end = time.time()
+            print "Time elapsed:", (end - start)
 
-        elif abs(num) > len(cars_objects):
-            print 'Invalid move'
-        else:
-            if num > 0:
-                cars_objects[num - 1].updatePosition(1)
-            if num < 0:
-                cars_objects[num * -1 - 1].updatePosition(-1)
 
+
+            print "stappen", len(lijst)
+            for k in range(len(lijst)):
+                x = lijst[k]
+
+                lijstjes = []
+                lijstjes.append(x[0:6])
+                lijstjes.append(x[6:12])
+                lijstjes.append(x[12:18])
+                lijstjes.append(x[18:24])
+                lijstjes.append(x[24:30])
+                lijstjes.append(x[30:36])
+
+                # lijstjes = []
+                # lijstjes.append(x[0:9])
+                # lijstjes.append(x[9:18])
+                # lijstjes.append(x[18:27])
+                # lijstjes.append(x[27:36])
+                # lijstjes.append(x[36:45])
+                # lijstjes.append(x[45:54])
+                # lijstjes.append(x[54:63])
+                # lijstjes.append(x[63:72])
+                # lijstjes.append(x[72:81])
+
+
+                board.set_board(lijstjes)
+                printboard()
+                plt.draw()
+                plt.pause(0.01)
+                plt.clf()
+            break
+
+        elif num == 'id':
+            # start timer (wall clock time)
+            start = time.time()
+            print "Solving..."
+            first_node = [[board.board_configuration[j][i] for i in xrange(size)] for j in xrange(size)]
+            first_node_archive = tuple([board.board_configuration[i][j] for i in xrange(size) for j in xrange(size)])
+            lijst = id_solve(first_node, first_node_archive)
+            end = time.time()
+            print "Time elapsed:", (end - start)
+
+
+
+            print "stappen", len(lijst)
+            for k in range(len(lijst)):
+                x = lijst[k]
+
+                lijstjes = []
+                lijstjes.append(x[0:6])
+                lijstjes.append(x[6:12])
+                lijstjes.append(x[12:18])
+                lijstjes.append(x[18:24])
+                lijstjes.append(x[24:30])
+                lijstjes.append(x[30:36])
+
+                # lijstjes = []
+                # lijstjes.append(x[0:9])
+                # lijstjes.append(x[9:18])
+                # lijstjes.append(x[18:27])
+                # lijstjes.append(x[27:36])
+                # lijstjes.append(x[36:45])
+                # lijstjes.append(x[45:54])
+                # lijstjes.append(x[54:63])
+                # lijstjes.append(x[63:72])
+                # lijstjes.append(x[72:81])
+
+
+                board.set_board(lijstjes)
+                printboard()
+                plt.draw()
+                plt.pause(0.01)
+                plt.clf()
+            break
         print''
-    printboard()
+
+    #printboard()
     plt.show()
-    print "You win !!!!!!!!!!!!!!!"
