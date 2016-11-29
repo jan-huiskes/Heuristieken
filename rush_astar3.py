@@ -9,7 +9,7 @@ import Queue
 from matplotlib import animation
 import matplotlib.pyplot as plt
 
-size = 6
+size = 9
 
 # Saving every car object of the board
 cars_objects = []
@@ -264,19 +264,19 @@ class VerCar(Car):
 ##############################################################################
 
 
-cars_objects.append(HorCar(1, 2, 'red', 0, 3))
-cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
-cars_objects.append(HorCar(3, 2, 'green', 0, 2))
-cars_objects.append(VerCar(4, 2, 'blue', 2, 0))
-cars_objects.append(VerCar(5, 2, 'pink', 2, 2))
-cars_objects.append(HorCar(6, 2, 'purple', 1, 4))
-cars_objects.append(HorCar(7, 2, 'blue', 1, 5))
-cars_objects.append(HorCar(8, 2, 'purple', 4, 1))
-cars_objects.append(HorCar(9, 2, 'orange', 3, 2))
-cars_objects.append(VerCar(10, 2, 'pink', 5, 2))
-cars_objects.append(VerCar(11, 2, 'yellow', 3, 3))
-cars_objects.append(HorCar(12, 2, 'green', 4, 4))
-cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
+# cars_objects.append(HorCar(1, 2, 'red', 0, 3))
+# cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
+# cars_objects.append(HorCar(3, 2, 'green', 0, 2))
+# cars_objects.append(VerCar(4, 2, 'blue', 2, 0))
+# cars_objects.append(VerCar(5, 2, 'pink', 2, 2))
+# cars_objects.append(HorCar(6, 2, 'purple', 1, 4))
+# cars_objects.append(HorCar(7, 2, 'blue', 1, 5))
+# cars_objects.append(HorCar(8, 2, 'purple', 4, 1))
+# cars_objects.append(HorCar(9, 2, 'orange', 3, 2))
+# cars_objects.append(VerCar(10, 2, 'pink', 5, 2))
+# cars_objects.append(VerCar(11, 2, 'yellow', 3, 3))
+# cars_objects.append(HorCar(12, 2, 'green', 4, 4))
+# cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 
 
 ##############################################################################
@@ -311,30 +311,30 @@ cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # ##############################################################################
 
 #
-# cars_objects.append(HorCar(1, 2, 'red', 6, 4))
-# cars_objects.append(VerCar(2, 2, 'pink', 0, 0))
-# cars_objects.append(VerCar(3, 2, 'blue', 0, 2))
-# cars_objects.append(VerCar(4, 2, 'green', 1, 0))
-# cars_objects.append(HorCar(5, 3, 'yellow', 0, 8))
-# cars_objects.append(HorCar(6, 2, 'gray', 2, 0))
-# cars_objects.append(HorCar(7, 2, 'black', 2, 1))
-# cars_objects.append(VerCar(8, 2, 'orange', 4, 0))
-# cars_objects.append(HorCar(9, 3, 'gray', 5, 1))
-# cars_objects.append(VerCar(10, 2, 'pink', 8, 0))
-# cars_objects.append(VerCar(11, 2, 'orange', 2, 2))
-# cars_objects.append(HorCar(12, 2, 'brown', 3, 2))
-# cars_objects.append(VerCar(13, 3, 'purple', 5, 2))
-# cars_objects.append(HorCar(14, 2, 'green', 6, 2))
-# cars_objects.append(VerCar(15, 3, 'yellow', 8, 2))
-# cars_objects.append(HorCar(16, 3, 'blue', 2, 4))
-# cars_objects.append(HorCar(17, 2, 'gray', 4, 5))
-# cars_objects.append(VerCar(18, 2, 'pink', 6, 5))
-# cars_objects.append(HorCar(19, 2, 'black', 7, 5))
-# cars_objects.append(VerCar(20, 3, 'purple', 3, 6))
-# cars_objects.append(HorCar(21, 2, 'orange', 4, 6))
-# cars_objects.append(VerCar(22, 2, 'green', 5, 7))
-# cars_objects.append(VerCar(23, 2, 'blue', 6, 7))
-# cars_objects.append(HorCar(24, 2, 'yellow', 7, 7))
+    # cars_objects.append(HorCar(1, 2, 'red', 6, 4))
+    # cars_objects.append(VerCar(2, 2, 'pink', 0, 0))
+    # cars_objects.append(VerCar(3, 2, 'blue', 0, 2))
+    # cars_objects.append(VerCar(4, 2, 'green', 1, 0))
+    # cars_objects.append(HorCar(5, 3, 'yellow', 0, 8))
+    # cars_objects.append(HorCar(6, 2, 'gray', 2, 0))
+    # cars_objects.append(HorCar(7, 2, 'black', 2, 1))
+    # cars_objects.append(VerCar(8, 2, 'orange', 4, 0))
+    # cars_objects.append(HorCar(9, 3, 'gray', 5, 1))
+    # cars_objects.append(VerCar(10, 2, 'pink', 8, 0))
+    # cars_objects.append(VerCar(11, 2, 'orange', 2, 2))
+    # cars_objects.append(HorCar(12, 2, 'brown', 3, 2))
+    # cars_objects.append(VerCar(13, 3, 'purple', 5, 2))
+    # cars_objects.append(HorCar(14, 2, 'green', 6, 2))
+    # cars_objects.append(VerCar(15, 3, 'yellow', 8, 2))
+    # cars_objects.append(HorCar(16, 3, 'blue', 2, 4))
+    # cars_objects.append(HorCar(17, 2, 'gray', 4, 5))
+    # cars_objects.append(VerCar(18, 2, 'pink', 6, 5))
+    # cars_objects.append(HorCar(19, 2, 'black', 7, 5))
+    # cars_objects.append(VerCar(20, 3, 'purple', 3, 6))
+    # cars_objects.append(HorCar(21, 2, 'orange', 4, 6))
+    # cars_objects.append(VerCar(22, 2, 'green', 5, 7))
+    # cars_objects.append(VerCar(23, 2, 'blue', 6, 7))
+    # cars_objects.append(HorCar(24, 2, 'yellow', 7, 7))
 
 #
 #
@@ -343,32 +343,32 @@ cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # ##############################################################################
 
 #
-# cars_objects.append(HorCar(1, 2, 'red', 0, 4))
-# cars_objects.append(VerCar(2, 3, 'purple', 0, 0))
-# cars_objects.append(HorCar(3, 3, 'yellow', 1, 0))
-# cars_objects.append(VerCar(4, 3, 'gray', 4, 0))
-# cars_objects.append(HorCar(5, 2, 'blue', 2, 1))
-# cars_objects.append(HorCar(6, 2, 'green', 5, 1))
-# cars_objects.append(VerCar(7, 2, 'orange', 1, 2))
-# cars_objects.append(HorCar(8, 2, 'black', 2, 2))
-# cars_objects.append(HorCar(9, 3, 'yellow', 5, 2))
-# cars_objects.append(VerCar(10, 3, 'yellow', 3, 3))
-# cars_objects.append(HorCar(11, 2, 'pink', 4, 3))
-# cars_objects.append(HorCar(12, 2, 'brown', 6, 3))
-# cars_objects.append(VerCar(13, 2, 'blue', 2, 4))
-# cars_objects.append(VerCar(14, 2, 'orange', 4, 5))
-# cars_objects.append(VerCar(15, 2, 'pink', 5, 5))
-# cars_objects.append(HorCar(16, 3, 'gray', 6, 5))
-# cars_objects.append(VerCar(17, 2, 'black', 0, 6))
-# cars_objects.append(HorCar(18, 2, 'green', 2, 6))
-# cars_objects.append(HorCar(19, 2, 'purple', 7, 6))
-# cars_objects.append(HorCar(20, 3, 'yellow', 1, 7))
-# cars_objects.append(VerCar(21, 2, 'green', 4, 7))
-# cars_objects.append(HorCar(22, 2, 'orange', 5, 7))
-# cars_objects.append(VerCar(23, 2, 'blue', 7, 7))
-# cars_objects.append(HorCar(24, 2, 'blue', 0, 8))
-# cars_objects.append(HorCar(25, 2, 'pink', 2, 8))
-# cars_objects.append(VerCar(26, 3, 'purple', 8, 1))
+cars_objects.append(HorCar(1, 2, 'red', 0, 4))
+cars_objects.append(VerCar(2, 3, 'purple', 0, 0))
+cars_objects.append(HorCar(3, 3, 'yellow', 1, 0))
+cars_objects.append(VerCar(4, 3, 'gray', 4, 0))
+cars_objects.append(HorCar(5, 2, 'blue', 2, 1))
+cars_objects.append(HorCar(6, 2, 'green', 5, 1))
+cars_objects.append(VerCar(7, 2, 'orange', 1, 2))
+cars_objects.append(HorCar(8, 2, 'black', 2, 2))
+cars_objects.append(HorCar(9, 3, 'yellow', 5, 2))
+cars_objects.append(VerCar(10, 3, 'yellow', 3, 3))
+cars_objects.append(HorCar(11, 2, 'pink', 4, 3))
+cars_objects.append(HorCar(12, 2, 'brown', 6, 3))
+cars_objects.append(VerCar(13, 2, 'blue', 2, 4))
+cars_objects.append(VerCar(14, 2, 'orange', 4, 5))
+cars_objects.append(VerCar(15, 2, 'pink', 5, 5))
+cars_objects.append(HorCar(16, 3, 'gray', 6, 5))
+cars_objects.append(VerCar(17, 2, 'black', 0, 6))
+cars_objects.append(HorCar(18, 2, 'green', 2, 6))
+cars_objects.append(HorCar(19, 2, 'purple', 7, 6))
+cars_objects.append(HorCar(20, 3, 'yellow', 1, 7))
+cars_objects.append(VerCar(21, 2, 'green', 4, 7))
+cars_objects.append(HorCar(22, 2, 'orange', 5, 7))
+cars_objects.append(VerCar(23, 2, 'blue', 7, 7))
+cars_objects.append(HorCar(24, 2, 'blue', 0, 8))
+cars_objects.append(HorCar(25, 2, 'pink', 2, 8))
+cars_objects.append(VerCar(26, 3, 'purple', 8, 1))
 
 #
 # ##############################################################################
@@ -470,24 +470,30 @@ def a_star(lis):
     """
     A-star function calculates cost by counting cars in front of red car
     """
-    start = size * win_row(size)
-    end = size * (win_row(size) + 1)
-    row = lis[start:end]
+    row = lis[win_row(size)]
 
     # determine where red car is placed
     for i in xrange(len(row)):
         if row[i] == 1:
             place_of_red = i
             break
-
-    # determine how many cars are in front of red
+    # determine how many cars are in front of red and how many in front of those
     check_amount_cars = 0
     for i in xrange(place_of_red, len(row)):
         if row[i] > 1:
+            diff = win_row(size) - cars_objects[row[i] - 1].starty
+            length = cars_objects[row[i] - 1].length
             check_amount_cars += 1
+            if win_row(size) - length + diff >= 0:
+                row_up = lis[win_row(size) - length + diff]
+                if row_up[i] > 1:
+                    check_amount_cars += 1
+            row_down = lis[win_row(size) + 1 + diff]
+            if row_down[i] > 1:
+                check_amount_cars += 1
 
     # cost is simply amount cars in front of red
-    return check_amount_cars + 1
+    return check_amount_cars
 
 
 
