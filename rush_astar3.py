@@ -423,15 +423,24 @@ cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 
 
 board = Board(size, size)
+def win_row(size):
+    """
+    Simple function to determine the winning row
+    """
+    # Counting from 0, so -1
+    # Unless board is uneven, because the .5 is disregarded
+    if size % 2 == 0:
+        return size/2 - 1
+    else:
+        return size/2
+
 def won(lis):
     """
     Argument is a board configuration
     """
-
-    if size == 6:
-        row = lis[2]
-    elif size == 9:
-        row = lis[4]
+    # Determining winning row
+    win = win_row(size)
+    row = lis[win]
 
     index = 0
 
@@ -461,11 +470,9 @@ def a_star(lis):
     """
     A-star function calculates cost by counting cars in front of red car
     """
-    if size == 6:
-        row = lis[12:18]
-    elif size == 9:
-        row = lis[36:45]
-    place_of_red = 0
+    start = size * win_row(size)
+    end = size * (win_row(size) + 1)
+    row = lis[start:end]
 
     # determine where red car is placed
     for i in xrange(len(row)):
