@@ -3,11 +3,12 @@
 #
 # Solving any Rush Hour configuration
 
-import os
+import sys
 import time
 import Queue
+from matplotlib import animation
 import matplotlib.pyplot as plt
-import numpy as np
+
 size = 6
 
 # Saving every car object of the board
@@ -222,15 +223,11 @@ class VerCar(Car):
         return False
 
 
-#<<<<<<< HEAD
-# First configuration
-## 0.95 seconds so far
-###############################################################################
-
 ##############################################################################
 # The first 6x6 board configuration
-# Fastest time so far: 0.3 sec
 ##############################################################################
+
+
 # cars_objects.append(HorCar(1, 2, 'red', 3, 3))
 # cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
 # cars_objects.append(HorCar(3, 2, 'blue', 1, 1))
@@ -240,12 +237,13 @@ class VerCar(Car):
 # cars_objects.append(VerCar(7, 3, 'yellow', 3, 0))
 # cars_objects.append(VerCar(8, 3, 'purple', 2, 3))
 # cars_objects.append(VerCar(9, 3, 'brown', 5, 3))
-#>>>>>>> 94957157922f1b514cc2501f3d9d90dad6c254d7
 
-##############################################################################
-# The second 6x6 board configuration
-# Fastest time so far: 0.3 sec
-##############################################################################
+
+# ##############################################################################
+# # The second 6x6 board configuration
+# ##############################################################################
+
+
 # cars_objects.append(HorCar(1, 2, 'red', 2, 3))
 # cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
 # cars_objects.append(HorCar(3, 2, 'green', 0, 2))
@@ -260,10 +258,12 @@ class VerCar(Car):
 # cars_objects.append(HorCar(12, 2, 'yellow', 2, 5))
 # cars_objects.append(HorCar(13, 2, 'orange', 4, 5))
 
+
 ##############################################################################
 # The third 6x6 board configuration
-# Fastest time so far: 0.07 sec
 ##############################################################################
+
+
 cars_objects.append(HorCar(1, 2, 'red', 0, 3))
 cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
 cars_objects.append(HorCar(3, 2, 'green', 0, 2))
@@ -278,10 +278,11 @@ cars_objects.append(VerCar(11, 2, 'yellow', 3, 3))
 cars_objects.append(HorCar(12, 2, 'green', 4, 4))
 cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 
+
 ##############################################################################
 # The first 9x9 board configuration
-# Fastest time so far: 11 sec
 ##############################################################################
+
 # cars_objects.append(HorCar(1, 2, 'red', 1, 4))
 # cars_objects.append(VerCar(2, 2, 'green', 0, 7))
 # cars_objects.append(HorCar(3, 3, 'yellow', 1, 8))
@@ -304,13 +305,12 @@ cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # cars_objects.append(HorCar(20, 2, 'brown', 4, 2))
 # cars_objects.append(HorCar(21, 2, 'pink', 5, 0))
 # cars_objects.append(HorCar(22, 2, 'green', 7, 0))
-#<<<<<<< HEAD
-#=======
 
-##############################################################################
-# The second 9x9 board configuration
-# Fastest time so far:
-##############################################################################
+# ##############################################################################
+# # The second 9x9 board configuration
+# ##############################################################################
+
+#
 # cars_objects.append(HorCar(1, 2, 'red', 6, 4))
 # cars_objects.append(VerCar(2, 2, 'pink', 0, 0))
 # cars_objects.append(VerCar(3, 2, 'blue', 0, 2))
@@ -335,12 +335,14 @@ cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # cars_objects.append(VerCar(22, 2, 'green', 5, 7))
 # cars_objects.append(VerCar(23, 2, 'blue', 6, 7))
 # cars_objects.append(HorCar(24, 2, 'yellow', 7, 7))
-#>>>>>>> 94957157922f1b514cc2501f3d9d90dad6c254d7
 
-##############################################################################
-# The third 9x9 configuration
-# Fastest time so far:
-##############################################################################
+#
+#
+# ##############################################################################
+# # The third 9x9 configuration
+# ##############################################################################
+
+#
 # cars_objects.append(HorCar(1, 2, 'red', 0, 4))
 # cars_objects.append(VerCar(2, 3, 'purple', 0, 0))
 # cars_objects.append(HorCar(3, 3, 'yellow', 1, 0))
@@ -368,10 +370,12 @@ cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # cars_objects.append(HorCar(25, 2, 'pink', 2, 8))
 # cars_objects.append(VerCar(26, 3, 'purple', 8, 1))
 
-##############################################################################
-# The 12x12 configuration
-# Fastest time so far:
-##############################################################################
+#
+# ##############################################################################
+# # The 12x12 configuration
+# ##############################################################################
+
+#
 # cars_objects.append(HorCar(1, 2, 'red', 2, 6))
 # cars_objects.append(HorCar(2, 2, 'green', 1, 0))
 # cars_objects.append(HorCar(3, 3, 'yellow', 3, 0))
@@ -417,6 +421,7 @@ cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # cars_objects.append(HorCar(43, 3, 'purple', 7, 11))
 # cars_objects.append(HorCar(44, 2, 'pink', 10, 11))
 
+
 board = Board(size, size)
 def won(lis):
     """
@@ -454,9 +459,7 @@ def find_path(graph, start, end, path=[]):
 
 def a_star(lis):
     """
-    Very simple A-Star function. Cost is a value calculated by the amount of cars in front
-    of the red one. If there are no cars in front of the red car, cost = 0.
-    If there is one car in front of red, cost = 1, etc.
+    A-star function calculates cost by counting cars in front of red car
     """
     if size == 6:
         row = lis[12:18]
@@ -497,7 +500,6 @@ def determine_in_archive_as(board_child, tuple_board_child, tuple_board_from_que
         queue_priority.put((a_star(board_child) + depth, board_child, depth))
 
     return
-
 
 def astar_solve():
     # Depth of a board
@@ -552,20 +554,24 @@ def astar_solve():
 
 archive = {}
 queue = Queue.Queue()
-def determine_in_archive(board_child, tuple_board_child, tuple_board_from_queue):
+def determine_in_archive(board_from_queue, tuple_board_from_queue, car, step):
+
+    # Obtain partial copied board and tuple of it
+    board_child = board.getboard(car, step, board_from_queue)
+    tuple_board_child = tuple([board_child[i][j] for i in xrange(size) for j in xrange(size)])
 
     if tuple_board_child not in archive:
 
         if (won(board_child)):
             board.set_board(board_child)
             archive[tuple_board_from_queue].append(tuple_board_child)
-            return True
+            return (True, tuple_board_child)
 
         archive[tuple_board_from_queue].append(tuple_board_child)
         archive[tuple_board_child] = []
         queue.put(board_child)
 
-    return
+    return (False, None)
 
 def breadth_solve():
     # Make a copy for the first node and put in queue
@@ -589,29 +595,21 @@ def breadth_solve():
         for car in cars_objects:
 
             if car.updatePosition(1):
-                # Obtain partial copied board and tuple of it
-                board_child = board.getboard(car, 1, board_from_queue)
-                tuple_board_child = tuple([board_child[i][j] for i in xrange(size) for j in xrange(size)])
-
                 # Determine if al ready in archive or if found final configuration
-                if determine_in_archive(board_child, tuple_board_child, tuple_board_from_queue):
-
+                found, tuple_board_child = determine_in_archive(board_from_queue,
+                                                    tuple_board_from_queue, car, 1)
+                if found:
                     # Return the path when puzzle solved
                     return find_path(archive, first_node, tuple_board_child)
-
                 car.updatePosition(-1)
 
             if car.updatePosition(-1):
-                # Obtain partial copied board and tuple of it
-                board_child = board.getboard(car, -1, board_from_queue)
-                tuple_board_child = tuple([board_child[i][j] for i in xrange(size) for j in xrange(size)])
-
                 # Determine if al ready in archive or if found final configuration
-                if determine_in_archive(board_child, tuple_board_child, tuple_board_from_queue):
-
+                found, tuple_board_child = determine_in_archive(board_from_queue,
+                                                    tuple_board_from_queue, car, -1)
+                if found:
                     # Return the path when puzzle solved
                     return find_path(archive, first_node, tuple_board_child)
-
                 car.updatePosition(1)
 
 class Stack:
@@ -685,160 +683,89 @@ def id_solve(first_node, first_node_archive):
 
             depth += 1
 
+def rush_hour_animation(animation_list):
+    """
+    Plot the animation of found path
+    """
 
-def printboard():
+    # Declare figure, gridlines, and dimensions of axes
+    fig = plt.figure(1, facecolor='white')
+    plt.rc('grid', linestyle="-", linewidth=1, color='black')
+    ax = plt.axes(xlim=(0, size), ylim=(0, size))
 
-    fig = plt.figure('Rush Hour')
-    plotboard = [[], []]
-    for i in range(size + 1):
-        plotboard[0].append([i] * (size + 1))
-        plotboard[1].append(i)
-    for i in range(size):
-        plt.plot(plotboard[0][i],plotboard[1],  color='black')
-        plt.plot(plotboard[1], plotboard[0][i], color='black')
-    for i in range(size):
-        for j in range(size):
-            num = board.board_configuration[i][j]
-            if num > 0:
-                plt.plot(j + 0.5, size - 1 - i + 0.5, 's',color=cars_objects[num - 1].color, markersize = 300/size)
+    # Append the draw objects with color attribute from car objects
+    cars = [plt.plot([], [], 's', c = car.color, ms = 300/size)[0] for car in cars_objects]
 
+    # Initializes the canvas
+    def init():
+        for car in cars:
+            car.set_data([], [])
+        return cars
 
+    # i_time is a variable that increments automatically
+    def animate(i_time):
 
+        # Obtain 1d board
+        board_1d = animation_list[i_time]
+
+        # Make from 1d board a 2d board
+        board = [board_1d[i : i + size] for i in range(0, size*size, size)]
+
+        # This is for maintaining the car positions
+        car_positions = [([],[]) for _ in range(len(cars_objects))]
+
+        # loops through the animation board and append the car positions of a
+        # specific car to the car_positions list
+        for i in range(size):
+            for j in range(size):
+                car_number = board[i][j]
+                if car_number > 0:
+                    x, y = car_positions[car_number - 1]
+                    x.append(j + 0.5)
+                    y.append(size - 1 -i + 0.5)
+
+        # Every car has all his positions which can be set to canvas
+        for i in range(len(car_positions)):
+            x, y = car_positions[i]
+            cars[i].set_data(x, y)
+
+        return cars
+
+    # Calling the main animation function
+    anim = animation.FuncAnimation(fig, animate, init_func=init,
+                           frames=len(animation_list), interval=200, blit=True, repeat = False)
+
+    # Turn off tick labels
+    ax.set_yticklabels([])
+    ax.set_xticklabels([])
+
+    plt.title('Rush hour')
+    plt.grid(True)
+    plt.show()
+
+# Main function
 if __name__ == "__main__":
-    printboard()
-    plt.show()
-    while (1):
-        print ''
-        num = raw_input('code: ')
-        os.system('cls')
-        print ''
 
-        # if user types in God for auto solver
-        if num == 'astar':
-            # start timer (wall clock time)
-            start = time.time()
-            print "Solving..."
-            lijst = breadth_solve()
-            end = time.time()
-            print "Time elapsed:", (end - start)
+    # Ensure proper usage
+    if len(sys.argv) != 2:
+        print "Usage example: python filename.py algorithm"
+        sys.exit(2)
 
+    start = time.time()
+    print "Solving..."
 
+    if sys.argv[1] == 'astar':
+        path = astar_solve()
+    elif sys.argv[1] == 'breadth':
+        path = breadth_solve()
+    elif sys.argv[1] == 'id':
+        first_node = [[board.board_configuration[j][i] for i in xrange(size)] for j in xrange(size)]
+        first_node_archive = tuple([board.board_configuration[i][j] for i in xrange(size) for j in xrange(size)])
+        path = id_solve(first_node, first_node_archive)
 
-            print "stappen", len(lijst)
-            for k in range(len(lijst)):
-                x = lijst[k]
-
-                lijstjes = []
-                lijstjes.append(x[0:6])
-                lijstjes.append(x[6:12])
-                lijstjes.append(x[12:18])
-                lijstjes.append(x[18:24])
-                lijstjes.append(x[24:30])
-                lijstjes.append(x[30:36])
-
-                # lijstjes = []
-                # lijstjes.append(x[0:9])
-                # lijstjes.append(x[9:18])
-                # lijstjes.append(x[18:27])
-                # lijstjes.append(x[27:36])
-                # lijstjes.append(x[36:45])
-                # lijstjes.append(x[45:54])
-                # lijstjes.append(x[54:63])
-                # lijstjes.append(x[63:72])
-                # lijstjes.append(x[72:81])
-
-
-                board.set_board(lijstjes)
-                printboard()
-                plt.draw()
-                plt.pause(0.01)
-                plt.clf()
-            break
-
-        elif num == 'breadth':
-            # start timer (wall clock time)
-            start = time.time()
-            print "Solving..."
-            lijst = breadth_solve()
-            end = time.time()
-            print "Time elapsed:", (end - start)
-
-
-
-            print "stappen", len(lijst)
-            for k in range(len(lijst)):
-                x = lijst[k]
-
-                lijstjes = []
-                lijstjes.append(x[0:6])
-                lijstjes.append(x[6:12])
-                lijstjes.append(x[12:18])
-                lijstjes.append(x[18:24])
-                lijstjes.append(x[24:30])
-                lijstjes.append(x[30:36])
-
-                # lijstjes = []
-                # lijstjes.append(x[0:9])
-                # lijstjes.append(x[9:18])
-                # lijstjes.append(x[18:27])
-                # lijstjes.append(x[27:36])
-                # lijstjes.append(x[36:45])
-                # lijstjes.append(x[45:54])
-                # lijstjes.append(x[54:63])
-                # lijstjes.append(x[63:72])
-                # lijstjes.append(x[72:81])
-
-
-                board.set_board(lijstjes)
-                printboard()
-                plt.draw()
-                plt.pause(0.01)
-                plt.clf()
-            break
-
-        elif num == 'id':
-            # start timer (wall clock time)
-            start = time.time()
-            print "Solving..."
-            first_node = [[board.board_configuration[j][i] for i in xrange(size)] for j in xrange(size)]
-            first_node_archive = tuple([board.board_configuration[i][j] for i in xrange(size) for j in xrange(size)])
-            lijst = id_solve(first_node, first_node_archive)
-            end = time.time()
-            print "Time elapsed:", (end - start)
-
-
-
-            print "stappen", len(lijst)
-            for k in range(len(lijst)):
-                x = lijst[k]
-
-                lijstjes = []
-                lijstjes.append(x[0:6])
-                lijstjes.append(x[6:12])
-                lijstjes.append(x[12:18])
-                lijstjes.append(x[18:24])
-                lijstjes.append(x[24:30])
-                lijstjes.append(x[30:36])
-
-                # lijstjes = []
-                # lijstjes.append(x[0:9])
-                # lijstjes.append(x[9:18])
-                # lijstjes.append(x[18:27])
-                # lijstjes.append(x[27:36])
-                # lijstjes.append(x[36:45])
-                # lijstjes.append(x[45:54])
-                # lijstjes.append(x[54:63])
-                # lijstjes.append(x[63:72])
-                # lijstjes.append(x[72:81])
-
-
-                board.set_board(lijstjes)
-                printboard()
-                plt.draw()
-                plt.pause(0.01)
-                plt.clf()
-            break
-        print''
-
-    #printboard()
-    plt.show()
+    end = time.time()
+    print "Time elapsed:", (end - start)
+    print "Steps", len(path)
+    print "Explored configurations per second", len(archive)*1. / (1.*(end - start))
+    print "Total configurations", len(archive)
+    rush_hour_animation(path)
