@@ -9,7 +9,7 @@ import Queue
 from matplotlib import animation
 import matplotlib.pyplot as plt
 
-size = 9
+size = 6
 
 # Saving every car object of the board
 cars_objects = []
@@ -228,15 +228,15 @@ class VerCar(Car):
 ##############################################################################
 
 
-# cars_objects.append(HorCar(1, 2, 'red', 3, 3))
-# cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
-# cars_objects.append(HorCar(3, 2, 'blue', 1, 1))
-# cars_objects.append(HorCar(4, 2, 'green', 4, 0))
-# cars_objects.append(HorCar(5, 2, 'orange', 4, 2))
-# cars_objects.append(HorCar(6, 2, 'blue', 3, 5))
-# cars_objects.append(VerCar(7, 3, 'yellow', 3, 0))
-# cars_objects.append(VerCar(8, 3, 'purple', 2, 3))
-# cars_objects.append(VerCar(9, 3, 'brown', 5, 3))
+cars_objects.append(HorCar(1, 2, 'red', 3, 3))
+cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
+cars_objects.append(HorCar(3, 2, 'blue', 1, 1))
+cars_objects.append(HorCar(4, 2, 'green', 4, 0))
+cars_objects.append(HorCar(5, 2, 'orange', 4, 2))
+cars_objects.append(HorCar(6, 2, 'blue', 3, 5))
+cars_objects.append(VerCar(7, 3, 'yellow', 3, 0))
+cars_objects.append(VerCar(8, 3, 'purple', 2, 3))
+cars_objects.append(VerCar(9, 3, 'brown', 5, 3))
 
 
 # ##############################################################################
@@ -343,32 +343,32 @@ class VerCar(Car):
 # ##############################################################################
 
 #
-cars_objects.append(HorCar(1, 2, 'red', 0, 4))
-cars_objects.append(VerCar(2, 3, 'purple', 0, 0))
-cars_objects.append(HorCar(3, 3, 'yellow', 1, 0))
-cars_objects.append(VerCar(4, 3, 'gray', 4, 0))
-cars_objects.append(HorCar(5, 2, 'blue', 2, 1))
-cars_objects.append(HorCar(6, 2, 'green', 5, 1))
-cars_objects.append(VerCar(7, 2, 'orange', 1, 2))
-cars_objects.append(HorCar(8, 2, 'black', 2, 2))
-cars_objects.append(HorCar(9, 3, 'yellow', 5, 2))
-cars_objects.append(VerCar(10, 3, 'yellow', 3, 3))
-cars_objects.append(HorCar(11, 2, 'pink', 4, 3))
-cars_objects.append(HorCar(12, 2, 'brown', 6, 3))
-cars_objects.append(VerCar(13, 2, 'blue', 2, 4))
-cars_objects.append(VerCar(14, 2, 'orange', 4, 5))
-cars_objects.append(VerCar(15, 2, 'pink', 5, 5))
-cars_objects.append(HorCar(16, 3, 'gray', 6, 5))
-cars_objects.append(VerCar(17, 2, 'black', 0, 6))
-cars_objects.append(HorCar(18, 2, 'green', 2, 6))
-cars_objects.append(HorCar(19, 2, 'purple', 7, 6))
-cars_objects.append(HorCar(20, 3, 'yellow', 1, 7))
-cars_objects.append(VerCar(21, 2, 'green', 4, 7))
-cars_objects.append(HorCar(22, 2, 'orange', 5, 7))
-cars_objects.append(VerCar(23, 2, 'blue', 7, 7))
-cars_objects.append(HorCar(24, 2, 'blue', 0, 8))
-cars_objects.append(HorCar(25, 2, 'pink', 2, 8))
-cars_objects.append(VerCar(26, 3, 'purple', 8, 1))
+# cars_objects.append(HorCar(1, 2, 'red', 0, 4))
+# cars_objects.append(VerCar(2, 3, 'purple', 0, 0))
+# cars_objects.append(HorCar(3, 3, 'yellow', 1, 0))
+# cars_objects.append(VerCar(4, 3, 'gray', 4, 0))
+# cars_objects.append(HorCar(5, 2, 'blue', 2, 1))
+# cars_objects.append(HorCar(6, 2, 'green', 5, 1))
+# cars_objects.append(VerCar(7, 2, 'orange', 1, 2))
+# cars_objects.append(HorCar(8, 2, 'black', 2, 2))
+# cars_objects.append(HorCar(9, 3, 'yellow', 5, 2))
+# cars_objects.append(VerCar(10, 3, 'yellow', 3, 3))
+# cars_objects.append(HorCar(11, 2, 'pink', 4, 3))
+# cars_objects.append(HorCar(12, 2, 'brown', 6, 3))
+# cars_objects.append(VerCar(13, 2, 'blue', 2, 4))
+# cars_objects.append(VerCar(14, 2, 'orange', 4, 5))
+# cars_objects.append(VerCar(15, 2, 'pink', 5, 5))
+# cars_objects.append(HorCar(16, 3, 'gray', 6, 5))
+# cars_objects.append(VerCar(17, 2, 'black', 0, 6))
+# cars_objects.append(HorCar(18, 2, 'green', 2, 6))
+# cars_objects.append(HorCar(19, 2, 'purple', 7, 6))
+# cars_objects.append(HorCar(20, 3, 'yellow', 1, 7))
+# cars_objects.append(VerCar(21, 2, 'green', 4, 7))
+# cars_objects.append(HorCar(22, 2, 'orange', 5, 7))
+# cars_objects.append(VerCar(23, 2, 'blue', 7, 7))
+# cars_objects.append(HorCar(24, 2, 'blue', 0, 8))
+# cars_objects.append(HorCar(25, 2, 'pink', 2, 8))
+# cars_objects.append(VerCar(26, 3, 'purple', 8, 1))
 
 #
 # ##############################################################################
@@ -420,7 +420,7 @@ cars_objects.append(VerCar(26, 3, 'purple', 8, 1))
 # cars_objects.append(VerCar(42, 2, 'blue', 6, 10))
 # cars_objects.append(HorCar(43, 3, 'purple', 7, 11))
 # cars_objects.append(HorCar(44, 2, 'pink', 10, 11))
-
+#
 
 board = Board(size, size)
 def win_row(size):
