@@ -8,8 +8,9 @@ import time
 import Queue
 from matplotlib import animation
 import matplotlib.pyplot as plt
+import pickle
 
-size = 6
+size = 12
 
 # Saving every car object of the board
 cars_objects = []
@@ -98,13 +99,13 @@ class Board(object):
 
         return board_configuration_copied
 
-    def update_board_horizontal(self, x, y, length, index, step):
+    def update_board_horizontal(self, car, x, y, step):
         """
         Determines which values of the board should be changed when a car is moved
         """
         # Draws the car in horizontal direction
-        for i in xrange(length):
-            self.board_configuration[size -1 - y][x + i] = index
+        for i in xrange(car.length):
+            self.board_configuration[size -1 - y][x + i] = car.index
 
         # If the car moves right, first element should be 0
         if step == 1:
@@ -112,16 +113,15 @@ class Board(object):
 
         # If the car moves left, last element should be 0
         else:
-            self.board_configuration[size -1 - y][x + length] = 0
+            self.board_configuration[size -1 - y][x + car.length] = 0
 
-    def update_board_vertical(self, x, y, length, index, step):
+    def update_board_vertical(self, car, x, y, step):
         """
         Determines which values of the board should be changed when a car is moved
         """
-
         # Draws the car in vertical direction
-        for i in xrange(length):
-            self.board_configuration[size -1 -(y + i)][x] = index
+        for i in xrange(car.length):
+            self.board_configuration[size -1 -(y + i)][x] = car.index
 
         # If the car moves up, first element should be 0
         if step == 1:
@@ -129,7 +129,7 @@ class Board(object):
 
         # If the car moves down, last element should be 0
         else:
-            self.board_configuration[size -1 - (y + length)][x] = 0
+            self.board_configuration[size -1 - (y + car.length)][x] = 0
 
     def set_board(self, set_configuration):
         """
@@ -192,7 +192,7 @@ class HorCar(Car):
             self.noCar(new_xend, new_yend)):
 
             self.setCarPosition(new_xstart, new_ystart)
-            board.update_board_horizontal(new_xstart, new_ystart, self.length, self.index, step)
+            board.update_board_horizontal(self, new_xstart, new_ystart, step)
             return True
 
         return False
@@ -217,7 +217,7 @@ class VerCar(Car):
 
             self.setCarPosition(new_xstart, new_ystart)
 
-            board.update_board_vertical(new_xstart, new_ystart, self.length, self.index, step)
+            board.update_board_vertical(self, new_xstart, new_ystart, step)
             return True
 
         return False
@@ -227,7 +227,7 @@ class VerCar(Car):
 # The first 6x6 board configuration
 ##############################################################################
 
-
+#
 # cars_objects.append(HorCar(1, 2, 'red', 3, 3))
 # cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
 # cars_objects.append(HorCar(3, 2, 'blue', 1, 1))
@@ -264,19 +264,19 @@ class VerCar(Car):
 ##############################################################################
 
 
-cars_objects.append(HorCar(1, 2, 'red', 0, 3))
-cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
-cars_objects.append(HorCar(3, 2, 'green', 0, 2))
-cars_objects.append(VerCar(4, 2, 'blue', 2, 0))
-cars_objects.append(VerCar(5, 2, 'pink', 2, 2))
-cars_objects.append(HorCar(6, 2, 'purple', 1, 4))
-cars_objects.append(HorCar(7, 2, 'blue', 1, 5))
-cars_objects.append(HorCar(8, 2, 'purple', 4, 1))
-cars_objects.append(HorCar(9, 2, 'orange', 3, 2))
-cars_objects.append(VerCar(10, 2, 'pink', 5, 2))
-cars_objects.append(VerCar(11, 2, 'yellow', 3, 3))
-cars_objects.append(HorCar(12, 2, 'green', 4, 4))
-cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
+# cars_objects.append(HorCar(1, 2, 'red', 0, 3))
+# cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
+# cars_objects.append(HorCar(3, 2, 'green', 0, 2))
+# cars_objects.append(VerCar(4, 2, 'blue', 2, 0))
+# cars_objects.append(VerCar(5, 2, 'pink', 2, 2))
+# cars_objects.append(HorCar(6, 2, 'purple', 1, 4))
+# cars_objects.append(HorCar(7, 2, 'blue', 1, 5))
+# cars_objects.append(HorCar(8, 2, 'purple', 4, 1))
+# cars_objects.append(HorCar(9, 2, 'orange', 3, 2))
+# cars_objects.append(VerCar(10, 2, 'pink', 5, 2))
+# cars_objects.append(VerCar(11, 2, 'yellow', 3, 3))
+# cars_objects.append(HorCar(12, 2, 'green', 4, 4))
+# cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 
 
 ##############################################################################
@@ -376,62 +376,68 @@ cars_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # ##############################################################################
 
 #
-# cars_objects.append(HorCar(1, 2, 'red', 2, 6))
-# cars_objects.append(HorCar(2, 2, 'green', 1, 0))
-# cars_objects.append(HorCar(3, 3, 'yellow', 3, 0))
-# cars_objects.append(VerCar(4, 3, 'gray', 6, 0))
-# cars_objects.append(HorCar(5, 2, 'blue', 7, 0))
-# cars_objects.append(VerCar(6, 2, 'pink', 9, 0))
-# cars_objects.append(VerCar(7, 3, 'purple', 10, 0))
-# cars_objects.append(VerCar(8, 2, 'pink', 11, 0))
-# cars_objects.append(VerCar(9, 2, 'blue', 2, 2))
-# cars_objects.append(HorCar(10, 3, 'yellow', 3, 2))
-# cars_objects.append(HorCar(11, 2, 'green', 8, 2))
-# cars_objects.append(VerCar(12, 2, 'black', 11, 2))
-# cars_objects.append(HorCar(13, 2, 'orange', 0, 3))
-# cars_objects.append(HorCar(14, 3, 'purple', 3, 3))
-# cars_objects.append(VerCar(15, 3, 'black', 6, 3))
-# cars_objects.append(HorCar(16, 3, 'pink', 7, 3))
-# cars_objects.append(HorCar(17, 3, 'yellow', 0, 4))
-# cars_objects.append(VerCar(18, 2, 'pink', 3, 4))
-# cars_objects.append(HorCar(19, 2, 'green', 4, 4))
-# cars_objects.append(VerCar(20, 3, 'blue', 7, 4))
-# cars_objects.append(VerCar(21, 2, 'gray', 9, 4))
-# cars_objects.append(HorCar(22, 2, 'orange', 10, 4))
-# cars_objects.append(HorCar(23, 3, 'brown', 0, 5))
-# cars_objects.append(VerCar(24, 2, 'orange', 4, 5))
-# cars_objects.append(VerCar(25, 2, 'pink', 5, 5))
-# cars_objects.append(HorCar(26, 2, 'green', 10, 5))
-# cars_objects.append(VerCar(27, 3, 'purple', 0, 6))
-# cars_objects.append(VerCar(28, 3, 'yellow', 1, 6))
-# cars_objects.append(HorCar(29, 3, 'brown', 2, 7))
-# cars_objects.append(VerCar(30, 2, 'green', 5, 7))
-# cars_objects.append(VerCar(31, 3, 'yellow', 6, 7))
-# cars_objects.append(HorCar(32, 3, 'purple', 7, 7))
-# cars_objects.append(HorCar(33, 2, 'orange', 7, 8))
-# cars_objects.append(HorCar(34, 2, 'pink', 9, 8))
-# cars_objects.append(HorCar(35, 3, 'gray', 0, 9))
-# cars_objects.append(HorCar(36, 2, 'orange', 3, 9))
-# cars_objects.append(VerCar(37, 2, 'pink', 5, 9))
-# cars_objects.append(HorCar(38, 2, 'green', 7, 9))
-# cars_objects.append(VerCar(39, 2, 'orange', 10, 9))
-# cars_objects.append(VerCar(40, 2, 'blue', 11, 9))
-# cars_objects.append(VerCar(41, 2, 'green', 0, 10))
-# cars_objects.append(VerCar(42, 2, 'blue', 6, 10))
-# cars_objects.append(HorCar(43, 3, 'purple', 7, 11))
-# cars_objects.append(HorCar(44, 2, 'pink', 10, 11))
+cars_objects.append(HorCar(1, 2, 'red', 2, 6))
+cars_objects.append(HorCar(2, 2, 'green', 1, 0))
+cars_objects.append(HorCar(3, 3, 'yellow', 3, 0))
+cars_objects.append(VerCar(4, 3, 'gray', 6, 0))
+cars_objects.append(HorCar(5, 2, 'blue', 7, 0))
+cars_objects.append(VerCar(6, 2, 'pink', 9, 0))
+cars_objects.append(VerCar(7, 3, 'purple', 10, 0))
+cars_objects.append(VerCar(8, 2, 'pink', 11, 0))
+cars_objects.append(VerCar(9, 2, 'blue', 2, 2))
+cars_objects.append(HorCar(10, 3, 'yellow', 3, 2))
+cars_objects.append(HorCar(11, 2, 'green', 8, 2))
+cars_objects.append(VerCar(12, 2, 'black', 11, 2))
+cars_objects.append(HorCar(13, 2, 'orange', 0, 3))
+cars_objects.append(HorCar(14, 3, 'purple', 3, 3))
+cars_objects.append(VerCar(15, 3, 'black', 6, 3))
+cars_objects.append(HorCar(16, 3, 'pink', 7, 3))
+cars_objects.append(HorCar(17, 3, 'yellow', 0, 4))
+cars_objects.append(VerCar(18, 2, 'pink', 3, 4))
+cars_objects.append(HorCar(19, 2, 'green', 4, 4))
+cars_objects.append(VerCar(20, 3, 'blue', 7, 4))
+cars_objects.append(VerCar(21, 2, 'gray', 9, 4))
+cars_objects.append(HorCar(22, 2, 'orange', 10, 4))
+cars_objects.append(HorCar(23, 3, 'brown', 0, 5))
+cars_objects.append(VerCar(24, 2, 'orange', 4, 5))
+cars_objects.append(VerCar(25, 2, 'pink', 5, 5))
+cars_objects.append(HorCar(26, 2, 'green', 10, 5))
+cars_objects.append(VerCar(27, 3, 'purple', 0, 6))
+cars_objects.append(VerCar(28, 3, 'yellow', 1, 6))
+cars_objects.append(HorCar(29, 3, 'brown', 2, 7))
+cars_objects.append(VerCar(30, 2, 'green', 5, 7))
+cars_objects.append(VerCar(31, 3, 'yellow', 6, 7))
+cars_objects.append(HorCar(32, 3, 'purple', 7, 7))
+cars_objects.append(HorCar(33, 2, 'orange', 7, 8))
+cars_objects.append(HorCar(34, 2, 'pink', 9, 8))
+cars_objects.append(HorCar(35, 3, 'gray', 0, 9))
+cars_objects.append(HorCar(36, 2, 'orange', 3, 9))
+cars_objects.append(VerCar(37, 2, 'pink', 5, 9))
+cars_objects.append(HorCar(38, 2, 'green', 7, 9))
+cars_objects.append(VerCar(39, 2, 'orange', 10, 9))
+cars_objects.append(VerCar(40, 2, 'blue', 11, 9))
+cars_objects.append(VerCar(41, 2, 'green', 0, 10))
+cars_objects.append(VerCar(42, 2, 'blue', 6, 10))
+cars_objects.append(HorCar(43, 3, 'purple', 7, 11))
+cars_objects.append(HorCar(44, 2, 'pink', 10, 11))
 
 
 board = Board(size, size)
-def won(lis):
+def win_row(size):
+    """
+    Simple function to determine the winning row
+    """
+    # Counting from 0, so -1
+    # Unless board is uneven, because the .5 is disregarded
+    return size/2 - 1 if size % 2 == 0 else size/2
+
+def won(board):
     """
     Argument is a board configuration
     """
-
-    if size == 6:
-        row = lis[2]
-    elif size == 9:
-        row = lis[4]
+    # Determining winning row
+    win = win_row(size)
+    row = board[win]
 
     index = 0
 
@@ -439,7 +445,6 @@ def won(lis):
         if row[i] == 1:
             index = i
             break
-
 
     return all(row[i] <= 1 for i in range(index, len(row)))
 
@@ -461,26 +466,30 @@ def a_star(lis):
     """
     A-star function calculates cost by counting cars in front of red car
     """
-    if size == 6:
-        row = lis[12:18]
-    elif size == 9:
-        row = lis[36:45]
-    place_of_red = 0
+    row = lis[win_row(size)]
 
     # determine where red car is placed
     for i in xrange(len(row)):
         if row[i] == 1:
             place_of_red = i
             break
-
-    # determine how many cars are in front of red
+    # determine how many cars are in front of red and how many in front of those
     check_amount_cars = 0
     for i in xrange(place_of_red, len(row)):
         if row[i] > 1:
+            diff = win_row(size) - cars_objects[row[i] - 1].starty
+            length = cars_objects[row[i] - 1].length
             check_amount_cars += 1
+            if win_row(size) - length + diff >= 0:
+                row_up = lis[win_row(size) - length + diff]
+                if row_up[i] > 1:
+                    check_amount_cars += 1
+            row_down = lis[win_row(size) + 1 + diff]
+            if row_down[i] > 1:
+                check_amount_cars += 1
 
     # cost is simply amount cars in front of red
-    return check_amount_cars + 1
+    return check_amount_cars
 
 
 
@@ -612,30 +621,19 @@ def breadth_solve():
                     return find_path(archive, first_node, tuple_board_child)
                 car.updatePosition(1)
 
-class Stack:
-    def __init__(self):
-        self.stack = []
-    def push(self, new_value, depth):
-        self.stack.append((new_value, depth))
-    def pop(self):
-        # removing last element (last in first out)
-        tmp_element = self.stack[-1]
-        del self.stack[-1]
-        return tmp_element
-
 
 archive = {}
-stack = Stack()
+stack = Queue.LifoQueue()
 def id_solve(first_node, first_node_archive):
     # Make a copy for the first node and put in queue
-    stack.push(first_node, 0)
+    stack.put((first_node, 0))
     archive[first_node_archive] = []
     check = True
     depth = 1
 
-    while len(stack.stack) and check == True:
+    while stack.qsize() and check == True:
 
-        board_from_stack, depth_of_configuration = stack.pop()
+        board_from_stack, depth_of_configuration = stack.get()
 
         if depth_of_configuration < depth:
 
@@ -653,7 +651,7 @@ def id_solve(first_node, first_node_archive):
                     if tuple_board_child not in archive:
                         archive[tuple_board_from_stack].append(tuple_board_child)
                         archive[tuple_board_child] = []
-                        stack.push(board_child, depth_of_configuration + 1)
+                        stack.put((board_child, depth_of_configuration + 1))
 
                     car.updatePosition(-1)
 
@@ -665,7 +663,7 @@ def id_solve(first_node, first_node_archive):
                     if tuple_board_child not in archive:
                         archive[tuple_board_from_stack].append(tuple_board_child)
                         archive[tuple_board_child] = []
-                        stack.push(board_child, depth_of_configuration + 1)
+                        stack.put((board_child, depth_of_configuration + 1))
                     car.updatePosition(1)
 
         else:
@@ -674,8 +672,8 @@ def id_solve(first_node, first_node_archive):
                 archive[tuple_board_from_stack].append(tuple_board_child)
                 return find_path(archive, first_node_archive, tuple_board_child)
 
-        if len(stack.stack) == 0:
-            stack.push(first_node, 0)
+        if stack.qsize() == 0:
+            stack.put((first_node, 0))
             archive.clear()
 
             # Make a tuple for first node and put in archive
@@ -763,9 +761,30 @@ if __name__ == "__main__":
         first_node_archive = tuple([board.board_configuration[i][j] for i in xrange(size) for j in xrange(size)])
         path = id_solve(first_node, first_node_archive)
 
+    elif sys.argv[1] == 'first_6x6':
+        with open('first_6x6.txt', 'rb') as f:
+            path = pickle.load(f)
+
+    elif sys.argv[1] == 'second_6x6':
+        with open('second_6x6.txt', 'rb') as f:
+            path = pickle.load(f)
+
+    elif sys.argv[1] == 'third_6x6':
+        with open('third_6x6.txt', 'rb') as f:
+            path = pickle.load(f)
+
+    elif sys.argv[1] == 'first_9x9':
+        with open('first_9x9.txt', 'rb') as f:
+            path = pickle.load(f)
+
     end = time.time()
+
     print "Time elapsed:", (end - start)
     print "Steps", len(path)
     print "Explored configurations per second", len(archive)*1. / (1.*(end - start))
     print "Total configurations", len(archive)
+
+    # comment this out for writing to a file
+    with open('the_12x12.txt', 'wb') as f:
+        pickle.dump(path, f)
     rush_hour_animation(path)
