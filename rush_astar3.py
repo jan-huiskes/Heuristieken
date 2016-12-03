@@ -229,17 +229,6 @@ class VerCar(Car):
 ##############################################################################
 
 
-<<<<<<< HEAD
-cars_objects.append(HorCar(1, 2, 'red', 3, 3))
-cars_objects.append(VerCar(2, 2, 'brown', 0, 0))
-cars_objects.append(HorCar(3, 2, 'blue', 1, 1))
-cars_objects.append(HorCar(4, 2, 'green', 4, 0))
-cars_objects.append(HorCar(5, 2, 'orange', 4, 2))
-cars_objects.append(HorCar(6, 2, 'blue', 3, 5))
-cars_objects.append(VerCar(7, 3, 'yellow', 3, 0))
-cars_objects.append(VerCar(8, 3, 'purple', 2, 3))
-cars_objects.append(VerCar(9, 3, 'brown', 5, 3))
-=======
 # car_objects.append(HorCar(1, 2, 'red', 3, 3))
 # car_objects.append(VerCar(2, 2, 'brown', 0, 0))
 # car_objects.append(HorCar(3, 2, 'blue', 1, 1))
@@ -249,7 +238,7 @@ cars_objects.append(VerCar(9, 3, 'brown', 5, 3))
 # car_objects.append(VerCar(7, 3, 'yellow', 3, 0))
 # car_objects.append(VerCar(8, 3, 'purple', 2, 3))
 # car_objects.append(VerCar(9, 3, 'brown', 5, 3))
->>>>>>> 1116ab1b692d1e487040e238f44af5688ee86c4b
+
 
 
 # ##############################################################################
@@ -356,36 +345,7 @@ car_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # The third 9x9 board configuration
 # ##############################################################################
 
-<<<<<<< HEAD
-#
-# cars_objects.append(HorCar(1, 2, 'red', 0, 4))
-# cars_objects.append(VerCar(2, 3, 'purple', 0, 0))
-# cars_objects.append(HorCar(3, 3, 'yellow', 1, 0))
-# cars_objects.append(VerCar(4, 3, 'gray', 4, 0))
-# cars_objects.append(HorCar(5, 2, 'blue', 2, 1))
-# cars_objects.append(HorCar(6, 2, 'green', 5, 1))
-# cars_objects.append(VerCar(7, 2, 'orange', 1, 2))
-# cars_objects.append(HorCar(8, 2, 'black', 2, 2))
-# cars_objects.append(HorCar(9, 3, 'yellow', 5, 2))
-# cars_objects.append(VerCar(10, 3, 'yellow', 3, 3))
-# cars_objects.append(HorCar(11, 2, 'pink', 4, 3))
-# cars_objects.append(HorCar(12, 2, 'brown', 6, 3))
-# cars_objects.append(VerCar(13, 2, 'blue', 2, 4))
-# cars_objects.append(VerCar(14, 2, 'orange', 4, 5))
-# cars_objects.append(VerCar(15, 2, 'pink', 5, 5))
-# cars_objects.append(HorCar(16, 3, 'gray', 6, 5))
-# cars_objects.append(VerCar(17, 2, 'black', 0, 6))
-# cars_objects.append(HorCar(18, 2, 'green', 2, 6))
-# cars_objects.append(HorCar(19, 2, 'purple', 7, 6))
-# cars_objects.append(HorCar(20, 3, 'yellow', 1, 7))
-# cars_objects.append(VerCar(21, 2, 'green', 4, 7))
-# cars_objects.append(HorCar(22, 2, 'orange', 5, 7))
-# cars_objects.append(VerCar(23, 2, 'blue', 7, 7))
-# cars_objects.append(HorCar(24, 2, 'blue', 0, 8))
-# cars_objects.append(HorCar(25, 2, 'pink', 2, 8))
-# cars_objects.append(VerCar(26, 3, 'purple', 8, 1))
-=======
->>>>>>> 1116ab1b692d1e487040e238f44af5688ee86c4b
+
 
 # car_objects.append(HorCar(1, 2, 'red', 0, 4))
 # car_objects.append(VerCar(2, 3, 'purple', 0, 0))
@@ -419,54 +379,7 @@ car_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # # The 12x12 board configuration
 # ##############################################################################
 
-#
-<<<<<<< HEAD
-# cars_objects.append(HorCar(1, 2, 'red', 2, 6))
-# cars_objects.append(HorCar(2, 2, 'green', 1, 0))
-# cars_objects.append(HorCar(3, 3, 'yellow', 3, 0))
-# cars_objects.append(VerCar(4, 3, 'gray', 6, 0))
-# cars_objects.append(HorCar(5, 2, 'blue', 7, 0))
-# cars_objects.append(VerCar(6, 2, 'pink', 9, 0))
-# cars_objects.append(VerCar(7, 3, 'purple', 10, 0))
-# cars_objects.append(VerCar(8, 2, 'pink', 11, 0))
-# cars_objects.append(VerCar(9, 2, 'blue', 2, 2))
-# cars_objects.append(HorCar(10, 3, 'yellow', 3, 2))
-# cars_objects.append(HorCar(11, 2, 'green', 8, 2))
-# cars_objects.append(VerCar(12, 2, 'black', 11, 2))
-# cars_objects.append(HorCar(13, 2, 'orange', 0, 3))
-# cars_objects.append(HorCar(14, 3, 'purple', 3, 3))
-# cars_objects.append(VerCar(15, 3, 'black', 6, 3))
-# cars_objects.append(HorCar(16, 3, 'pink', 7, 3))
-# cars_objects.append(HorCar(17, 3, 'yellow', 0, 4))
-# cars_objects.append(VerCar(18, 2, 'pink', 3, 4))
-# cars_objects.append(HorCar(19, 2, 'green', 4, 4))
-# cars_objects.append(VerCar(20, 3, 'blue', 7, 4))
-# cars_objects.append(VerCar(21, 2, 'gray', 9, 4))
-# cars_objects.append(HorCar(22, 2, 'orange', 10, 4))
-# cars_objects.append(HorCar(23, 3, 'brown', 0, 5))
-# cars_objects.append(VerCar(24, 2, 'orange', 4, 5))
-# cars_objects.append(VerCar(25, 2, 'pink', 5, 5))
-# cars_objects.append(HorCar(26, 2, 'green', 10, 5))
-# cars_objects.append(VerCar(27, 3, 'purple', 0, 6))
-# cars_objects.append(VerCar(28, 3, 'yellow', 1, 6))
-# cars_objects.append(HorCar(29, 3, 'brown', 2, 7))
-# cars_objects.append(VerCar(30, 2, 'green', 5, 7))
-# cars_objects.append(VerCar(31, 3, 'yellow', 6, 7))
-# cars_objects.append(HorCar(32, 3, 'purple', 7, 7))
-# cars_objects.append(HorCar(33, 2, 'orange', 7, 8))
-# cars_objects.append(HorCar(34, 2, 'pink', 9, 8))
-# cars_objects.append(HorCar(35, 3, 'gray', 0, 9))
-# cars_objects.append(HorCar(36, 2, 'orange', 3, 9))
-# cars_objects.append(VerCar(37, 2, 'pink', 5, 9))
-# cars_objects.append(HorCar(38, 2, 'green', 7, 9))
-# cars_objects.append(VerCar(39, 2, 'orange', 10, 9))
-# cars_objects.append(VerCar(40, 2, 'blue', 11, 9))
-# cars_objects.append(VerCar(41, 2, 'green', 0, 10))
-# cars_objects.append(VerCar(42, 2, 'blue', 6, 10))
-# cars_objects.append(HorCar(43, 3, 'purple', 7, 11))
-# cars_objects.append(HorCar(44, 2, 'pink', 10, 11))
-#
-=======
+
 # car_objects.append(HorCar(1, 2, 'red', 2, 6))
 # car_objects.append(HorCar(2, 2, 'green', 1, 0))
 # car_objects.append(HorCar(3, 3, 'yellow', 3, 0))
@@ -512,7 +425,6 @@ car_objects.append(HorCar(13, 3, 'orange', 3, 5))
 # car_objects.append(HorCar(43, 3, 'purple', 7, 11))
 # car_objects.append(HorCar(44, 2, 'pink', 10, 11))
 
->>>>>>> 1116ab1b692d1e487040e238f44af5688ee86c4b
 
 board = Board(size, size)
 def win_row(size):
@@ -717,15 +629,14 @@ stack = Queue.LifoQueue()
 def id_solve(root, root_arch):
     # Make a copy for the first node and put in queue
     stack.put((root, 0))
-    archive[root_arch] = []
-    check = True
+    archive[root_arch] = [0]
     depth = 1
 
-    while stack.qsize() and check == True:
+    while stack.qsize():
 
         stackboard, config_depth = stack.get()
 
-        if config_depth < depth:
+        if config_depth <= depth:
 
             board.set_board(stackboard)
 
@@ -738,9 +649,13 @@ def id_solve(root, root_arch):
                     child = board.getboard(car, 1, stackboard)
                     tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
 
-                    if tuple_child not in archive:
+                    if tuple_child not in archive or archive[tuple_child][0] > config_depth + 1:
+                        if (won(child)):
+                            archive[tuple_stackboard].append(tuple_child)
+                            archive[tuple_child] = [config_depth + 1]
+                            return find_path(archive, root_arch, tuple_child)
                         archive[tuple_stackboard].append(tuple_child)
-                        archive[tuple_child] = []
+                        archive[tuple_child] = [config_depth + 1]
                         stack.put((child, config_depth + 1))
 
                     car.updatePosition(-1)
@@ -750,24 +665,22 @@ def id_solve(root, root_arch):
                     child = board.getboard(car, -1, stackboard)
                     tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
 
-                    if tuple_child not in archive:
+                    if tuple_child not in archive or archive[tuple_child][0] > config_depth + 1:
+                        if (won(child)):
+                            archive[tuple_stackboard].append(tuple_child)
+                            archive[tuple_child] = [config_depth + 1]
+                            return find_path(archive, root_arch, tuple_child)
                         archive[tuple_stackboard].append(tuple_child)
-                        archive[tuple_child] = []
+                        archive[tuple_child] = [config_depth + 1]
                         stack.put((child, config_depth + 1))
                     car.updatePosition(1)
-
-        else:
-            if (won(child)):
-                board.set_board(child)
-                archive[tuple_stackboard].append(tuple_child)
-                return find_path(archive, root_arch, tuple_child)
 
         if stack.qsize() == 0:
             stack.put((root, 0))
             archive.clear()
 
             # Make a tuple for first node and put in archive
-            archive[root_arch] = []
+            archive[root_arch] = [0]
 
             depth += 1
 
