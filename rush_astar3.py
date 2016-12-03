@@ -246,19 +246,19 @@ class VerCar(Car):
 # ##############################################################################
 
 
-# car_objects.append(HorCar(1, 2, 'red', 2, 3))
-# car_objects.append(VerCar(2, 2, 'brown', 0, 0))
-# car_objects.append(HorCar(3, 2, 'green', 0, 2))
-# car_objects.append(HorCar(4, 2, 'blue', 2, 2))
-# car_objects.append(VerCar(5, 2, 'pink', 3, 0))
-# car_objects.append(HorCar(6, 2, 'orange', 4, 0))
-# car_objects.append(HorCar(7, 2, 'yellow', 4, 1))
-# car_objects.append(VerCar(8, 2, 'purple', 4, 2))
-# car_objects.append(VerCar(9, 3, 'brown', 5, 2))
-# car_objects.append(HorCar(10, 2, 'green', 1, 4))
-# car_objects.append(HorCar(11, 2, 'blue', 3, 4))
-# car_objects.append(HorCar(12, 2, 'yellow', 2, 5))
-# car_objects.append(HorCar(13, 2, 'orange', 4, 5))
+car_objects.append(HorCar(1, 2, 'red', 2, 3))
+car_objects.append(VerCar(2, 2, 'brown', 0, 0))
+car_objects.append(HorCar(3, 2, 'green', 0, 2))
+car_objects.append(HorCar(4, 2, 'blue', 2, 2))
+car_objects.append(VerCar(5, 2, 'pink', 3, 0))
+car_objects.append(HorCar(6, 2, 'orange', 4, 0))
+car_objects.append(HorCar(7, 2, 'yellow', 4, 1))
+car_objects.append(VerCar(8, 2, 'purple', 4, 2))
+car_objects.append(VerCar(9, 3, 'brown', 5, 2))
+car_objects.append(HorCar(10, 2, 'green', 1, 4))
+car_objects.append(HorCar(11, 2, 'blue', 3, 4))
+car_objects.append(HorCar(12, 2, 'yellow', 2, 5))
+car_objects.append(HorCar(13, 2, 'orange', 4, 5))
 
 
 # ############################################################################
@@ -266,19 +266,19 @@ class VerCar(Car):
 # ############################################################################
 
 
-car_objects.append(HorCar(1, 2, 'red', 0, 3))
-car_objects.append(VerCar(2, 2, 'brown', 0, 0))
-car_objects.append(HorCar(3, 2, 'green', 0, 2))
-car_objects.append(VerCar(4, 2, 'blue', 2, 0))
-car_objects.append(VerCar(5, 2, 'pink', 2, 2))
-car_objects.append(HorCar(6, 2, 'purple', 1, 4))
-car_objects.append(HorCar(7, 2, 'blue', 1, 5))
-car_objects.append(HorCar(8, 2, 'purple', 4, 1))
-car_objects.append(HorCar(9, 2, 'orange', 3, 2))
-car_objects.append(VerCar(10, 2, 'pink', 5, 2))
-car_objects.append(VerCar(11, 2, 'yellow', 3, 3))
-car_objects.append(HorCar(12, 2, 'green', 4, 4))
-car_objects.append(HorCar(13, 3, 'orange', 3, 5))
+# car_objects.append(HorCar(1, 2, 'red', 0, 3))
+# car_objects.append(VerCar(2, 2, 'brown', 0, 0))
+# car_objects.append(HorCar(3, 2, 'green', 0, 2))
+# car_objects.append(VerCar(4, 2, 'blue', 2, 0))
+# car_objects.append(VerCar(5, 2, 'pink', 2, 2))
+# car_objects.append(HorCar(6, 2, 'purple', 1, 4))
+# car_objects.append(HorCar(7, 2, 'blue', 1, 5))
+# car_objects.append(HorCar(8, 2, 'purple', 4, 1))
+# car_objects.append(HorCar(9, 2, 'orange', 3, 2))
+# car_objects.append(VerCar(10, 2, 'pink', 5, 2))
+# car_objects.append(VerCar(11, 2, 'yellow', 3, 3))
+# car_objects.append(HorCar(12, 2, 'green', 4, 4))
+# car_objects.append(HorCar(13, 3, 'orange', 3, 5))
 
 
 # ############################################################################
@@ -455,6 +455,9 @@ def won(board):
 
 
 def find_path(graph, start, end, path=[]):
+    """
+    find_path finds the path to the solution in the archive using recursion
+    """
     path = path + [start]
     if start == end:
         return path
@@ -469,7 +472,7 @@ def find_path(graph, start, end, path=[]):
 
 def a_star(lis):
     """
-    A-star function calculates cost by counting cars in front of red car
+    A-star function calculates cost by counting cars in front of red car and the cars on the blocking cars
     """
     row = lis[win_row(size)]
 
@@ -478,22 +481,25 @@ def a_star(lis):
         if row[i] == 1:
             place_of_red = i
             break
-    # determine how many cars are in front of red and how many in front of those
+    # cars in front of red and how many in front of those
     carcheck = 0
     for i in xrange(place_of_red, len(row)):
         if row[i] > 1:
+            # difference between start car and winning row
             diff = win_row(size) - car_objects[row[i] - 1].starty
             length = car_objects[row[i] - 1].length
+            # car in front of red
             carcheck += 1
+            # check if car is on top of blocking car
             if win_row(size) - length + diff >= 0:
                 row_up = lis[win_row(size) - length + diff]
                 if row_up[i] > 1:
                     carcheck += 1
+            # check if car is down on blocking car
             row_down = lis[win_row(size) + 1 + diff]
             if row_down[i] > 1:
                 carcheck += 1
 
-    # cost is simply amount cars in front of red
     return carcheck
 
 
@@ -526,8 +532,7 @@ def astar_solve():
     root = tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)])
     archive[root] = []
 
-    not_found = True
-    while not_found:
+    while 1:
 
         # Get first element for setting board and car objects
         cost, qboard, depth = queue_priority.get()
@@ -595,8 +600,7 @@ def breadth_solve():
     root = tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)])
     archive[root] = []
 
-    not_found = True
-    while not_found:
+    while 1:
 
         # Get first element for setting board and car objects
         qboard = queue.get()
