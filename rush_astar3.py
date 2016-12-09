@@ -604,14 +604,14 @@ def archived(tuple_qboard, qboard, car, step):
 
     tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
 
-    if tuple_child not in archive:
+    if str(tuple_child) not in archive:
         if (won(child)):
             board.set_board(child)
-            archive[tuple_qboard].append(child)
+            archive[str(tuple_qboard)].append(child)
             return (True, child)
 
-        archive[tuple_qboard].append(child)
-        archive[tuple_child] = []
+        archive[str(tuple_qboard)].append(child)
+        archive[str(tuple_child)] = []
         queue.put(child)
 
     return (False, None)
@@ -622,7 +622,7 @@ def breadth_solve():
 
     # Make a tuple for first node and put in archive
     root = tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)])
-    archive[root] = []
+    archive[str(root)] = []
 
     while queue.qsize():
         # Get first element for setting board and car objects
@@ -660,7 +660,7 @@ stack = Queue.LifoQueue()
 def id_solve(root, root_arch):
     # Make a copy for the first node and put in queue
     stack.put((root, 0))
-    archive[root_arch] = [0]
+    archive[str(root_arch)] = [0]
     depth = 1
 
     while stack.qsize():
@@ -680,13 +680,13 @@ def id_solve(root, root_arch):
                     child = board.getboard(car, 1, stackboard)
                     tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
 
-                    if tuple_child not in archive or archive[tuple_child][0] > config_depth + 1:
+                    if str(tuple_child) not in archive or archive[str(tuple_child)][0] > config_depth + 1:
                         if (won(child)):
-                            archive[tuple_stackboard].append(tuple_child)
-                            archive[tuple_child] = [config_depth + 1]
+                            archive[str(tuple_stackboard)].append(tuple_child)
+                            archive[str(tuple_child)] = [config_depth + 1]
                             return find_path(archive, root_arch, tuple_child)
-                        archive[tuple_stackboard].append(tuple_child)
-                        archive[tuple_child] = [config_depth + 1]
+                        archive[str(tuple_stackboard)].append(tuple_child)
+                        archive[str(tuple_child)] = [config_depth + 1]
                         stack.put((child, config_depth + 1))
 
                     car.updatePosition(-1)
@@ -696,13 +696,13 @@ def id_solve(root, root_arch):
                     child = board.getboard(car, -1, stackboard)
                     tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
 
-                    if tuple_child not in archive or archive[tuple_child][0] > config_depth + 1:
+                    if str(tuple_child) not in archive or archive[str(tuple_child)][0] > config_depth + 1:
                         if (won(child)):
-                            archive[tuple_stackboard].append(tuple_child)
-                            archive[tuple_child] = [config_depth + 1]
+                            archive[str(tuple_stackboard)].append(tuple_child)
+                            archive[str(tuple_child)] = [config_depth + 1]
                             return find_path(archive, root_arch, tuple_child)
-                        archive[tuple_stackboard].append(tuple_child)
-                        archive[tuple_child] = [config_depth + 1]
+                        archive[str(tuple_stackboard)].append(tuple_child)
+                        archive[str(tuple_child)] = [config_depth + 1]
                         stack.put((child, config_depth + 1))
                     car.updatePosition(1)
 
@@ -711,7 +711,7 @@ def id_solve(root, root_arch):
             archive.clear()
 
             # Make a tuple for first node and put in archive
-            archive[root_arch] = [0]
+            archive[str(root_arch)] = [0]
 
             depth += 1
 
