@@ -10,7 +10,7 @@ from matplotlib import animation
 import matplotlib.pyplot as plt
 import pickle
 
-size = 6
+size = 9
 
 # Saving every car object of the board
 car_objects = []
@@ -246,19 +246,19 @@ class VerCar(Car):
 # ##############################################################################
 
 
-car_objects.append(HorCar(1, 2, 'red', 2, 3))
-car_objects.append(VerCar(2, 2, 'brown', 0, 0))
-car_objects.append(HorCar(3, 2, 'green', 0, 2))
-car_objects.append(HorCar(4, 2, 'blue', 2, 2))
-car_objects.append(VerCar(5, 2, 'pink', 3, 0))
-car_objects.append(HorCar(6, 2, 'orange', 4, 0))
-car_objects.append(HorCar(7, 2, 'yellow', 4, 1))
-car_objects.append(VerCar(8, 2, 'purple', 4, 2))
-car_objects.append(VerCar(9, 3, 'brown', 5, 2))
-car_objects.append(HorCar(10, 2, 'green', 1, 4))
-car_objects.append(HorCar(11, 2, 'blue', 3, 4))
-car_objects.append(HorCar(12, 2, 'yellow', 2, 5))
-car_objects.append(HorCar(13, 2, 'orange', 4, 5))
+# car_objects.append(HorCar(1, 2, 'red', 2, 3))
+# car_objects.append(VerCar(2, 2, 'brown', 0, 0))
+# car_objects.append(HorCar(3, 2, 'green', 0, 2))
+# car_objects.append(HorCar(4, 2, 'blue', 2, 2))
+# car_objects.append(VerCar(5, 2, 'pink', 3, 0))
+# car_objects.append(HorCar(6, 2, 'orange', 4, 0))
+# car_objects.append(HorCar(7, 2, 'yellow', 4, 1))
+# car_objects.append(VerCar(8, 2, 'purple', 4, 2))
+# car_objects.append(VerCar(9, 3, 'brown', 5, 2))
+# car_objects.append(HorCar(10, 2, 'green', 1, 4))
+# car_objects.append(HorCar(11, 2, 'blue', 3, 4))
+# car_objects.append(HorCar(12, 2, 'yellow', 2, 5))
+# car_objects.append(HorCar(13, 2, 'orange', 4, 5))
 
 
 # ############################################################################
@@ -286,28 +286,28 @@ car_objects.append(HorCar(13, 2, 'orange', 4, 5))
 # ############################################################################
 
 
-# car_objects.append(HorCar(1, 2, 'red', 1, 4))
-# car_objects.append(VerCar(2, 2, 'green', 0, 7))
-# car_objects.append(HorCar(3, 3, 'yellow', 1, 8))
-# car_objects.append(VerCar(4, 3, 'gray', 5, 6))
-# car_objects.append(HorCar(5, 3, 'pink', 6, 7))
-# car_objects.append(HorCar(6, 2, 'blue', 0, 5))
-# car_objects.append(VerCar(7, 3, 'orange', 3, 5))
-# car_objects.append(HorCar(8, 3, 'purple', 5, 5))
-# car_objects.append(VerCar(9, 3, 'yellow', 8, 4))
-# car_objects.append(VerCar(10, 2, 'pink', 0, 3))
-# car_objects.append(VerCar(11, 2, 'green', 3, 3))
-# car_objects.append(HorCar(12, 3, 'brown', 5, 3))
-# car_objects.append(VerCar(13, 3, 'orange', 8, 1))
-# car_objects.append(HorCar(14, 2, 'black', 0, 2))
-# car_objects.append(VerCar(15, 2, 'blue', 0, 0))
-# car_objects.append(VerCar(16, 3, 'yellow', 2, 1))
-# car_objects.append(HorCar(17, 3, 'gray', 1, 0))
-# car_objects.append(VerCar(18, 2, 'blue', 3, 1))
-# car_objects.append(VerCar(19, 2, 'black', 4, 0))
-# car_objects.append(HorCar(20, 2, 'brown', 4, 2))
-# car_objects.append(HorCar(21, 2, 'pink', 5, 0))
-# car_objects.append(HorCar(22, 2, 'green', 7, 0))
+car_objects.append(HorCar(1, 2, 'red', 1, 4))
+car_objects.append(VerCar(2, 2, 'green', 0, 7))
+car_objects.append(HorCar(3, 3, 'yellow', 1, 8))
+car_objects.append(VerCar(4, 3, 'gray', 5, 6))
+car_objects.append(HorCar(5, 3, 'pink', 6, 7))
+car_objects.append(HorCar(6, 2, 'blue', 0, 5))
+car_objects.append(VerCar(7, 3, 'orange', 3, 5))
+car_objects.append(HorCar(8, 3, 'purple', 5, 5))
+car_objects.append(VerCar(9, 3, 'yellow', 8, 4))
+car_objects.append(VerCar(10, 2, 'pink', 0, 3))
+car_objects.append(VerCar(11, 2, 'green', 3, 3))
+car_objects.append(HorCar(12, 3, 'brown', 5, 3))
+car_objects.append(VerCar(13, 3, 'orange', 8, 1))
+car_objects.append(HorCar(14, 2, 'black', 0, 2))
+car_objects.append(VerCar(15, 2, 'blue', 0, 0))
+car_objects.append(VerCar(16, 3, 'yellow', 2, 1))
+car_objects.append(HorCar(17, 3, 'gray', 1, 0))
+car_objects.append(VerCar(18, 2, 'blue', 3, 1))
+car_objects.append(VerCar(19, 2, 'black', 4, 0))
+car_objects.append(HorCar(20, 2, 'brown', 4, 2))
+car_objects.append(HorCar(21, 2, 'pink', 5, 0))
+car_objects.append(HorCar(22, 2, 'green', 7, 0))
 
 
 # ##############################################################################
@@ -568,7 +568,7 @@ def astar_solve():
                     return find_path(archive, root, tuple_child)
 
                 car.updatePosition(1)
-        depth += 1
+
 
 
 archive = {}
