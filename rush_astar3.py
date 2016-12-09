@@ -6,6 +6,7 @@
 import sys
 import time
 import Queue
+import hashlib
 from matplotlib import animation
 import matplotlib.pyplot as plt
 import pickle
@@ -151,6 +152,13 @@ class Board(object):
                     check_lis.append(set_config[i][j])
                     car_objects[set_config[i][j] - 1].setCarPosition(j, size - 1 - i)
 
+    # def __hash__(self):
+    #     return hash(str(self))
+    #
+    # def __cmp__(self, other):
+    #     # similarly the strings are good for comparisons
+    #     return cmp(str(self), str(other))
+
 
 
 class Car(object):
@@ -227,8 +235,8 @@ class VerCar(Car):
 ##############################################################################
 # The first 6x6 board configuration
 ##############################################################################
-
-
+#
+# #
 # car_objects.append(HorCar(1, 2, 'red', 3, 3))
 # car_objects.append(VerCar(2, 2, 'brown', 0, 0))
 # car_objects.append(HorCar(3, 2, 'blue', 1, 1))
@@ -245,7 +253,11 @@ class VerCar(Car):
 # # The second 6x6 board configuration
 # ##############################################################################
 
+<<<<<<< HEAD
 
+=======
+#
+>>>>>>> be0dacaa9911ebd857962762d14681ae050ba97b
 # car_objects.append(HorCar(1, 2, 'red', 2, 3))
 # car_objects.append(VerCar(2, 2, 'brown', 0, 0))
 # car_objects.append(HorCar(3, 2, 'green', 0, 2))
@@ -264,27 +276,28 @@ class VerCar(Car):
 # ############################################################################
 # The third 6x6 board configuration
 # ############################################################################
-
-
-# car_objects.append(HorCar(1, 2, 'red', 0, 3))
-# car_objects.append(VerCar(2, 2, 'brown', 0, 0))
-# car_objects.append(HorCar(3, 2, 'green', 0, 2))
-# car_objects.append(VerCar(4, 2, 'blue', 2, 0))
-# car_objects.append(VerCar(5, 2, 'pink', 2, 2))
-# car_objects.append(HorCar(6, 2, 'purple', 1, 4))
-# car_objects.append(HorCar(7, 2, 'blue', 1, 5))
-# car_objects.append(HorCar(8, 2, 'purple', 4, 1))
-# car_objects.append(HorCar(9, 2, 'orange', 3, 2))
-# car_objects.append(VerCar(10, 2, 'pink', 5, 2))
-# car_objects.append(VerCar(11, 2, 'yellow', 3, 3))
-# car_objects.append(HorCar(12, 2, 'green', 4, 4))
-# car_objects.append(HorCar(13, 3, 'orange', 3, 5))
+#
+# #
+car_objects.append(HorCar(1, 2, 'red', 0, 3))
+car_objects.append(VerCar(2, 2, 'brown', 0, 0))
+car_objects.append(HorCar(3, 2, 'green', 0, 2))
+car_objects.append(VerCar(4, 2, 'blue', 2, 0))
+car_objects.append(VerCar(5, 2, 'pink', 2, 2))
+car_objects.append(HorCar(6, 2, 'purple', 1, 4))
+car_objects.append(HorCar(7, 2, 'blue', 1, 5))
+car_objects.append(HorCar(8, 2, 'purple', 4, 1))
+car_objects.append(HorCar(9, 2, 'orange', 3, 2))
+car_objects.append(VerCar(10, 2, 'pink', 5, 2))
+car_objects.append(VerCar(11, 2, 'yellow', 3, 3))
+car_objects.append(HorCar(12, 2, 'green', 4, 4))
+car_objects.append(HorCar(13, 3, 'orange', 3, 5))
 
 
 # ############################################################################
 # The first 9x9 board configuration
 # ############################################################################
 
+<<<<<<< HEAD
 
 car_objects.append(HorCar(1, 2, 'red', 1, 4))
 car_objects.append(VerCar(2, 2, 'green', 0, 7))
@@ -308,6 +321,31 @@ car_objects.append(VerCar(19, 2, 'black', 4, 0))
 car_objects.append(HorCar(20, 2, 'brown', 4, 2))
 car_objects.append(HorCar(21, 2, 'pink', 5, 0))
 car_objects.append(HorCar(22, 2, 'green', 7, 0))
+=======
+#
+# car_objects.append(HorCar(1, 2, 'red', 1, 4))
+# car_objects.append(VerCar(2, 2, 'green', 0, 7))
+# car_objects.append(HorCar(3, 3, 'yellow', 1, 8))
+# car_objects.append(VerCar(4, 3, 'gray', 5, 6))
+# car_objects.append(HorCar(5, 3, 'pink', 6, 7))
+# car_objects.append(HorCar(6, 2, 'blue', 0, 5))
+# car_objects.append(VerCar(7, 3, 'orange', 3, 5))
+# car_objects.append(HorCar(8, 3, 'purple', 5, 5))
+# car_objects.append(VerCar(9, 3, 'yellow', 8, 4))
+# car_objects.append(VerCar(10, 2, 'pink', 0, 3))
+# car_objects.append(VerCar(11, 2, 'green', 3, 3))
+# car_objects.append(HorCar(12, 3, 'brown', 5, 3))
+# car_objects.append(VerCar(13, 3, 'orange', 8, 1))
+# car_objects.append(HorCar(14, 2, 'black', 0, 2))
+# car_objects.append(VerCar(15, 2, 'blue', 0, 0))
+# car_objects.append(VerCar(16, 3, 'yellow', 2, 1))
+# car_objects.append(HorCar(17, 3, 'gray', 1, 0))
+# car_objects.append(VerCar(18, 2, 'blue', 3, 1))
+# car_objects.append(VerCar(19, 2, 'black', 4, 0))
+# car_objects.append(HorCar(20, 2, 'brown', 4, 2))
+# car_objects.append(HorCar(21, 2, 'pink', 5, 0))
+# car_objects.append(HorCar(22, 2, 'green', 7, 0))
+>>>>>>> be0dacaa9911ebd857962762d14681ae050ba97b
 
 
 # ##############################################################################
@@ -346,7 +384,7 @@ car_objects.append(HorCar(22, 2, 'green', 7, 0))
 # ##############################################################################
 
 
-
+# #
 # car_objects.append(HorCar(1, 2, 'red', 0, 4))
 # car_objects.append(VerCar(2, 3, 'purple', 0, 0))
 # car_objects.append(HorCar(3, 3, 'yellow', 1, 0))
@@ -379,7 +417,7 @@ car_objects.append(HorCar(22, 2, 'green', 7, 0))
 # # The 12x12 board configuration
 # ##############################################################################
 
-
+#
 # car_objects.append(HorCar(1, 2, 'red', 2, 6))
 # car_objects.append(HorCar(2, 2, 'green', 1, 0))
 # car_objects.append(HorCar(3, 3, 'yellow', 3, 0))
@@ -458,16 +496,22 @@ def find_path(graph, start, end, path=[]):
     """
     find_path finds the path to the solution in the archive using recursion
     """
+    # Elements are two d list, the animation function is made for tuples
+    if type(start) == list:
+        start = tuple([start[i][j] for i in xrange(size) for j in xrange(size)])
+
     path = path + [start]
-    if start == end:
+    if str(start) == str(end):
         return path
-    if not graph.has_key(start):
+
+    if not graph.has_key(str(start)):
         return False
-    for node in graph[start]:
+    for node in graph[str(start)]:
         if node not in path:
             newpath = find_path(graph, node, end, path)
             if newpath:
                 return newpath
+
     return False
 
 def a_star(lis):
@@ -476,12 +520,12 @@ def a_star(lis):
     """
     row = lis[win_row(size)]
 
-    # determine where red car is placed
+    # Determine position of red car
     for i in xrange(len(row)):
         if row[i] == 1:
             place_of_red = i
             break
-    # cars in front of red and how many in front of those
+    # Cars in front of red and how many in front of those
     carcheck = 0
     for i in xrange(place_of_red, len(row)):
         if row[i] > 1:
@@ -506,37 +550,49 @@ def a_star(lis):
 
 archive = {}
 queue_priority = Queue.PriorityQueue()
-def archived_as(child, tuple_child, tuple_qboard, depth):
+def archived_as(tuple_qboard, qboard, car, depth, step):
+    child = board.getboard(car, step, qboard)
+    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
 
-    if tuple_child not in archive:
+    if str(tuple_child) not in archive:
 
         if (won(child)):
             board.set_board(child)
-            archive[tuple_qboard].append(tuple_child)
-            return True
+            archive[str(tuple_qboard)].append(child)
+            return (True, tuple_child)
 
-        archive[tuple_qboard].append(tuple_child)
-        archive[tuple_child] = []
+    #    archive[qboard.__hash__].append(child)
+    #    archive[child.__hash__] = []
+        archive[str(tuple_qboard)].append(child)
+        archive[str(tuple_child)] = []
         queue_priority.put((a_star(child) + depth, child, depth))
 
-    return
+    return (False, None)
+
 
 def astar_solve():
     # Depth of a board
     depth = 0
 
+    #amount = 3000000 # for printing 12x12
+
     # Tuple consisting of (cost, first board, depth)
     queue_priority.put((0, [[board.config[j][i] for i in xrange(size)] for j in xrange(size)], depth))
 
     # Make a tuple for first node and put in archive
-    root = tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)])
+    root = str(tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)]))
     archive[root] = []
 
-    while 1:
+    while queue_priority.qsize():
 
         # Get first element for setting board and car objects
         cost, qboard, depth = queue_priority.get()
         board.set_board(qboard)
+
+    #    if len(archive) > amount:
+        #    print "Total configurations", len(archive), "after", time.time() - start, " seconds"
+        #    print "depth", depth
+        #    amount += 3000000
 
         # Make tuple of qboard
         tuple_qboard = tuple([qboard[i][j] for i in xrange(size) for j in xrange(size)])
@@ -545,12 +601,9 @@ def astar_solve():
         for car in car_objects:
             if car.updatePosition(1):
                 # Obtain partial copied board and tuple of it
-                child = board.getboard(car, 1, qboard)
-                tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
-
+                found, tuple_child = archived_as(tuple_qboard, qboard, car, depth + 1, 1)
                 # Determine if al ready in archive or if found final configuration
-                if archived_as(child, tuple_child, tuple_qboard, depth + 1):
-
+                if found:
                     # Return the path when puzzle solved
                     return find_path(archive, root, tuple_child)
 
@@ -558,35 +611,36 @@ def astar_solve():
 
             if car.updatePosition(-1):
                 # Obtain partial copied board and tuple of it
-                child = board.getboard(car, -1, qboard)
-                tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
-
+                found, tuple_child = archived_as(tuple_qboard, qboard, car, depth + 1, -1)
                 # Determine if al ready in archive or if found final configuration
-                if archived_as(child, tuple_child, tuple_qboard, depth + 1):
-
+                if found:
                     # Return the path when puzzle solved
                     return find_path(archive, root, tuple_child)
 
                 car.updatePosition(1)
 
 
+#def equal(child, other):
+#    return all(child[i][j] == other[i][j] for i in xrange(size) for j in xrange(size))
+
 
 archive = {}
 queue = Queue.Queue()
-def archived(qboard, tuple_qboard, car, step):
+#def archived(hash_parent, qboard, car, step):
+def archived(tuple_qboard, qboard, car, step):
 
     # Obtain partial copied board and tuple of it
     child = board.getboard(car, step, qboard)
+
     tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
 
     if tuple_child not in archive:
-
         if (won(child)):
             board.set_board(child)
-            archive[tuple_qboard].append(tuple_child)
-            return (True, tuple_child)
+            archive[tuple_qboard].append(child)
+            return (True, child)
 
-        archive[tuple_qboard].append(tuple_child)
+        archive[tuple_qboard].append(child)
         archive[tuple_child] = []
         queue.put(child)
 
@@ -600,8 +654,7 @@ def breadth_solve():
     root = tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)])
     archive[root] = []
 
-    while 1:
-
+    while queue.qsize():
         # Get first element for setting board and car objects
         qboard = queue.get()
         board.set_board(qboard)
@@ -614,18 +667,22 @@ def breadth_solve():
 
             if car.updatePosition(1):
                 # Determine if al ready in archive or if found final configuration
-                found, tuple_child = archived(qboard, tuple_qboard, car, 1)
+                found, child = archived(tuple_qboard, qboard, car, 1)
                 if found:
+                    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
                     # Return the path when puzzle solved
                     return find_path(archive, root, tuple_child)
+
                 car.updatePosition(-1)
 
             if car.updatePosition(-1):
                 # Determine if al ready in archive or if found final configuration
-                found, tuple_child = archived(qboard, tuple_qboard, car, -1)
+                found, child = archived(tuple_qboard, qboard, car, -1)
                 if found:
+                    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
                     # Return the path when puzzle solved
                     return find_path(archive, root, tuple_child)
+
                 car.updatePosition(1)
 
 archive = {}
@@ -711,7 +768,7 @@ def rush_hour_animation(animation_list):
     def animate(i_time):
 
         # Obtain 1d board
-        board_1d = animation_list[i_time]
+        board_1d = animation_list[i_time + 1]
 
         # Make from 1d board a 2d board
         board = [board_1d[i : i + size] for i in range(0, size*size, size)]
@@ -738,7 +795,7 @@ def rush_hour_animation(animation_list):
 
     # Calling the main animation function
     anim = animation.FuncAnimation(fig, animate, init_func=init,
-                           frames=len(animation_list), interval=200, blit=True, repeat = False)
+                           frames=(len(animation_list) -1), interval=200, blit=True, repeat = False)
 
     # Turn off tick labels
     ax.set_yticklabels([])
@@ -782,6 +839,14 @@ if __name__ == "__main__":
 
     elif sys.argv[1] == 'first_9x9':
         with open('first_9x9.txt', 'rb') as f:
+            path = pickle.load(f)
+
+    elif sys.argv[1] == 'second_9x9':
+        with open('second_9x9.txt', 'rb') as f:
+            path = pickle.load(f)
+
+    elif sys.argv[1] == 'third_9x9':
+        with open('third_9x9.txt', 'rb') as f:
             path = pickle.load(f)
 
     end = time.time()
