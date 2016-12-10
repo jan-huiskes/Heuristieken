@@ -462,25 +462,22 @@ def won(board):
     return all(row[i] <= 1 for i in range(index, len(row)))
 
 
-def find_path(graph, start, end, path=[]):
+def find_path(graph, end, start, path=[]):
     """
     find_path finds the path to the solution in the archive using recursion
     """
     # Elements are two d list, the animation function is made for tuples
     if type(start) == list:
         start = tuple([start[i][j] for i in xrange(size) for j in xrange(size)])
-
-    path = path + [start]
+    path = [start] + path
     if str(start) == str(end):
         return path
-
     if not graph.has_key(str(start)):
         return False
-    for node in graph[str(start)]:
-        if node not in path:
-            newpath = find_path(graph, node, end, path)
-            if newpath:
-                return newpath
+    node = graph[str(start)]
+    newpath = find_path(graph, end, node, path)
+    if newpath:
+        return newpath
 
     return False
 
@@ -504,37 +501,34 @@ def a_star(lis):
             length = car_objects[row[i] - 1].length
             # car in front of red
             carcheck += 1
-            # check if car is on top of blocking car
-            if win_row(size) - length + diff >= 0:
-                row_up = lis[win_row(size) - length + diff]
-                if row_up[i] > 1:
-                    carcheck += 1
-            # check if car is down on blocking car
+            row_up = lis[win_row(size) - length + diff]
             row_down = lis[win_row(size) + 1 + diff]
+            # check if car is on top of blocking car
+            if win_row(size) - length + diff >= 0 and row_up[i] > 1:
+                carcheck += 1
+            # check if car is below of blocking car
             if row_down[i] > 1:
                 carcheck += 1
 
     return carcheck
 
-
+# list of direction car steps
+moves = [-1, 1]
 
 archive = {}
 queue_priority = Queue.PriorityQueue()
-def archived_as(tuple_qboard, qboard, car, depth, step):
+def archived_as(qboard, car, depth, step):
     child = board.getboard(car, step, qboard)
     tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
 
     if str(tuple_child) not in archive:
-
+        archive[str(tuple_child)] = qboard
         if (won(child)):
             board.set_board(child)
-            archive[str(tuple_qboard)].append(child)
-            return (True, tuple_child)
+            return (True, child)
 
     #    archive[qboard.__hash__].append(child)
     #    archive[child.__hash__] = []
-        archive[str(tuple_qboard)].append(child)
-        archive[str(tuple_child)] = []
         queue_priority.put((a_star(child) + depth, child, depth))
 
     return (False, None)
@@ -545,13 +539,13 @@ def astar_solve():
     depth = 0
 
     #amount = 3000000 # for printing 12x12
-
+    root = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
     # Tuple consisting of (cost, first board, depth)
-    queue_priority.put((0, [[board.config[j][i] for i in xrange(size)] for j in xrange(size)], depth))
+    queue_priority.put((0, root, depth))
 
     # Make a tuple for first node and put in archive
-    root = str(tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)]))
-    archive[root] = []
+    root_str = str(tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)]))
+    archive[root_str] = root
 
     while queue_priority.qsize():
 
@@ -564,31 +558,18 @@ def astar_solve():
         #    print "depth", depth
         #    amount += 3000000
 
-        # Make tuple of qboard
-        tuple_qboard = tuple([qboard[i][j] for i in xrange(size) for j in xrange(size)])
-
         # Determine which car can be moved
         for car in car_objects:
-            if car.updatePosition(1):
-                # Obtain partial copied board and tuple of it
-                found, tuple_child = archived_as(tuple_qboard, qboard, car, depth + 1, 1)
-                # Determine if al ready in archive or if found final configuration
-                if found:
-                    # Return the path when puzzle solved
-                    return find_path(archive, root, tuple_child)
+            for move in moves:
+                if car.updatePosition(move):
+                    # Obtain partial copied board and tuple of it
+                    found, child = archived_as(qboard, car, depth + 1, move)
+                    # Determine if al ready in archive or if found final configuration
+                    if found:
+                        # Return the path when puzzle solved
+                        return find_path(archive, root_str, child)
 
-                car.updatePosition(-1)
-
-            if car.updatePosition(-1):
-                # Obtain partial copied board and tuple of it
-                found, tuple_child = archived_as(tuple_qboard, qboard, car, depth + 1, -1)
-                # Determine if al ready in archive or if found final configuration
-                if found:
-                    # Return the path when puzzle solved
-                    return find_path(archive, root, tuple_child)
-
-                car.updatePosition(1)
-
+                    car.updatePosition(-move)
 
 #def equal(child, other):
 #    return all(child[i][j] == other[i][j] for i in xrange(size) for j in xrange(size))
@@ -597,70 +578,97 @@ def astar_solve():
 archive = {}
 queue = Queue.Queue()
 #def archived(hash_parent, qboard, car, step):
-def archived(tuple_qboard, qboard, car, step):
+def archived(qboard, car, step):
 
-    # Obtain partial copied board and tuple of it
     child = board.getboard(car, step, qboard)
-
     tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
 
     if str(tuple_child) not in archive:
+        archive[str(tuple_child)] = qboard
         if (won(child)):
             board.set_board(child)
-            archive[str(tuple_qboard)].append(child)
             return (True, child)
 
-        archive[str(tuple_qboard)].append(child)
-        archive[str(tuple_child)] = []
+    #    archive[qboard.__hash__].append(child)
+    #    archive[child.__hash__] = []
         queue.put(child)
 
     return (False, None)
 
+
 def breadth_solve():
     # Make a copy for the first node and put in queue
-    queue.put([[board.config[j][i] for i in xrange(size)] for j in xrange(size)])
+    root = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
+    queue.put(root)
 
     # Make a tuple for first node and put in archive
-    root = tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)])
-    archive[str(root)] = []
+    root_str = str(tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)]))
+    archive[root_str] = root
 
     while queue.qsize():
         # Get first element for setting board and car objects
         qboard = queue.get()
         board.set_board(qboard)
 
-        # Make tuple of qboard
-        tuple_qboard = tuple([qboard[i][j] for i in xrange(size) for j in xrange(size)])
 
         # Determine which car can be moved
         for car in car_objects:
+            for move in moves:
+                if car.updatePosition(move):
+                    # Determine if al ready in archive or if found final configuration
+                    found, child = archived(qboard, car, move)
+                    if found:
+                        # Return the path when puzzle solved
+                        return find_path(archive, root_str, child)
 
-            if car.updatePosition(1):
-                # Determine if al ready in archive or if found final configuration
-                found, child = archived(tuple_qboard, qboard, car, 1)
-                if found:
-                    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
-                    # Return the path when puzzle solved
-                    return find_path(archive, root, tuple_child)
+                    car.updatePosition(-move)
 
-                car.updatePosition(-1)
 
-            if car.updatePosition(-1):
-                # Determine if al ready in archive or if found final configuration
-                found, child = archived(tuple_qboard, qboard, car, -1)
-                if found:
-                    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
-                    # Return the path when puzzle solved
-                    return find_path(archive, root, tuple_child)
 
-                car.updatePosition(1)
+def find_path_id(graph, end, start, path=[]):
+    """
+    find_path finds the path to the solution in the archive using recursion
+    """
+    # Elements are two d list, the animation function is made for tuples
+    if type(start) == list:
+        start = tuple([start[i][j] for i in xrange(size) for j in xrange(size)])
+    path = [start] + path
+    if str(start) == str(end):
+        return path
+    if not graph.has_key(str(start)):
+        return False
+    node = graph[str(start)][1]
+    newpath = find_path_id(graph, end, node, path)
+    if newpath:
+        return newpath
+
+    return False
 
 archive = {}
 stack = Queue.LifoQueue()
-def id_solve(root, root_arch):
+#def archived(hash_parent, qboard, car, step):
+def archived_id(stackboard, car, step, config_depth):
+
+    child = board.getboard(car, step, stackboard)
+    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
+
+
+    if str(tuple_child) not in archive or archive[str(tuple_child)][0] > config_depth + 1:
+        archive[str(tuple_child)] = [config_depth + 1, stackboard]
+        if (won(child)):
+            board.set_board(child)
+            return (True, child)
+
+        stack.put((child, config_depth + 1))
+
+    return (False, None)
+
+def id_solve():
     # Make a copy for the first node and put in queue
+    root = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
+    root_str = str(tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)]))
     stack.put((root, 0))
-    archive[str(root_arch)] = [0]
+    archive[root_str] = [0, root]
     depth = 1
 
     while stack.qsize():
@@ -671,47 +679,24 @@ def id_solve(root, root_arch):
 
             board.set_board(stackboard)
 
-            # Make tuple of stackboard
-            tuple_stackboard = tuple([stackboard[i][j] for i in xrange(size) for j in xrange(size)])
-
             for car in car_objects:
-                if car.updatePosition(1):
-                    # Obtain partial copied board and tuple of it
-                    child = board.getboard(car, 1, stackboard)
-                    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
+                for move in moves:
+                    if car.updatePosition(move):
 
-                    if str(tuple_child) not in archive or archive[str(tuple_child)][0] > config_depth + 1:
-                        if (won(child)):
-                            archive[str(tuple_stackboard)].append(tuple_child)
-                            archive[str(tuple_child)] = [config_depth + 1]
-                            return find_path(archive, root_arch, tuple_child)
-                        archive[str(tuple_stackboard)].append(tuple_child)
-                        archive[str(tuple_child)] = [config_depth + 1]
-                        stack.put((child, config_depth + 1))
+                        found, child = archived_id(stackboard, car, move, config_depth)
+                        if found:
+                            return find_path_id(archive, root_str, child)
 
-                    car.updatePosition(-1)
 
-                if car.updatePosition(-1):
-                    # Obtain partial copied board and tuple of it
-                    child = board.getboard(car, -1, stackboard)
-                    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
+                        car.updatePosition(-move)
 
-                    if str(tuple_child) not in archive or archive[str(tuple_child)][0] > config_depth + 1:
-                        if (won(child)):
-                            archive[str(tuple_stackboard)].append(tuple_child)
-                            archive[str(tuple_child)] = [config_depth + 1]
-                            return find_path(archive, root_arch, tuple_child)
-                        archive[str(tuple_stackboard)].append(tuple_child)
-                        archive[str(tuple_child)] = [config_depth + 1]
-                        stack.put((child, config_depth + 1))
-                    car.updatePosition(1)
 
         if stack.qsize() == 0:
             stack.put((root, 0))
             archive.clear()
 
             # Make a tuple for first node and put in archive
-            archive[str(root_arch)] = [0]
+            archive[root_str] = [0, root]
 
             depth += 1
 
@@ -788,12 +773,10 @@ if __name__ == "__main__":
 
     if sys.argv[1] == 'astar':
         path = astar_solve()
-    elif sys.argv[1] == 'breadth':
+    elif sys.argv[1] == 'bf':
         path = breadth_solve()
     elif sys.argv[1] == 'id':
-        root = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
-        root_arch = tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)])
-        path = id_solve(root, root_arch)
+        path = id_solve()
 
     elif sys.argv[1] == 'first_6x6':
         with open('first_6x6.txt', 'rb') as f:
