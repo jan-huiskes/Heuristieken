@@ -237,15 +237,15 @@ class VerCar(Car):
 ##############################################################################
 #
 # #
-# car_objects.append(HorCar(1, 2, 'red', 3, 3))
-# car_objects.append(VerCar(2, 2, 'brown', 0, 0))
-# car_objects.append(HorCar(3, 2, 'blue', 1, 1))
-# car_objects.append(HorCar(4, 2, 'green', 4, 0))
-# car_objects.append(HorCar(5, 2, 'orange', 4, 2))
-# car_objects.append(HorCar(6, 2, 'blue', 3, 5))
-# car_objects.append(VerCar(7, 3, 'yellow', 3, 0))
-# car_objects.append(VerCar(8, 3, 'purple', 2, 3))
-# car_objects.append(VerCar(9, 3, 'brown', 5, 3))
+car_objects.append(HorCar(1, 2, 'red', 3, 3))
+car_objects.append(VerCar(2, 2, 'brown', 0, 0))
+car_objects.append(HorCar(3, 2, 'blue', 1, 1))
+car_objects.append(HorCar(4, 2, 'green', 4, 0))
+car_objects.append(HorCar(5, 2, 'orange', 4, 2))
+car_objects.append(HorCar(6, 2, 'blue', 3, 5))
+car_objects.append(VerCar(7, 3, 'yellow', 3, 0))
+car_objects.append(VerCar(8, 3, 'purple', 2, 3))
+car_objects.append(VerCar(9, 3, 'brown', 5, 3))
 
 
 
@@ -273,19 +273,19 @@ class VerCar(Car):
 # ############################################################################
 #
 # #
-car_objects.append(HorCar(1, 2, 'red', 0, 3))
-car_objects.append(VerCar(2, 2, 'brown', 0, 0))
-car_objects.append(HorCar(3, 2, 'green', 0, 2))
-car_objects.append(VerCar(4, 2, 'blue', 2, 0))
-car_objects.append(VerCar(5, 2, 'pink', 2, 2))
-car_objects.append(HorCar(6, 2, 'purple', 1, 4))
-car_objects.append(HorCar(7, 2, 'blue', 1, 5))
-car_objects.append(HorCar(8, 2, 'purple', 4, 1))
-car_objects.append(HorCar(9, 2, 'orange', 3, 2))
-car_objects.append(VerCar(10, 2, 'pink', 5, 2))
-car_objects.append(VerCar(11, 2, 'yellow', 3, 3))
-car_objects.append(HorCar(12, 2, 'green', 4, 4))
-car_objects.append(HorCar(13, 3, 'orange', 3, 5))
+# car_objects.append(HorCar(1, 2, 'red', 0, 3))
+# car_objects.append(VerCar(2, 2, 'brown', 0, 0))
+# car_objects.append(HorCar(3, 2, 'green', 0, 2))
+# car_objects.append(VerCar(4, 2, 'blue', 2, 0))
+# car_objects.append(VerCar(5, 2, 'pink', 2, 2))
+# car_objects.append(HorCar(6, 2, 'purple', 1, 4))
+# car_objects.append(HorCar(7, 2, 'blue', 1, 5))
+# car_objects.append(HorCar(8, 2, 'purple', 4, 1))
+# car_objects.append(HorCar(9, 2, 'orange', 3, 2))
+# car_objects.append(VerCar(10, 2, 'pink', 5, 2))
+# car_objects.append(VerCar(11, 2, 'yellow', 3, 3))
+# car_objects.append(HorCar(12, 2, 'green', 4, 4))
+# car_objects.append(HorCar(13, 3, 'orange', 3, 5))
 
 
 # ############################################################################
@@ -517,6 +517,7 @@ moves = [-1, 1]
 
 archive = {}
 queue_priority = Queue.PriorityQueue()
+
 def archived_as(qboard, car, depth, step):
     child = board.getboard(car, step, qboard)
     tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
