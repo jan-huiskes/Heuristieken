@@ -403,8 +403,6 @@ def board7():
     car_objects.append(HorCar(43, 2, 'orange', 10, 4))
     car_objects.append(HorCar(44, 2, 'green', 10, 5))
 
-
-
 def win_row(size):
     """
     Simple function to determine the winning row
@@ -492,7 +490,6 @@ moves = [-1, 1]
 
 archive = {}
 queue_priority = Queue.PriorityQueue()
-
 def archived_as(qboard, car, depth, step):
     """
     Determines if board should be added to archive
@@ -774,6 +771,8 @@ python rush_hour.py animation board1")
         size = 12
         board7()
 
+    # Initialize board object
+    board = Board(size, size)
 
     # Decides which algorithm to run
     if sys.argv[1] == 'astar':
