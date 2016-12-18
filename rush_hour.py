@@ -9,6 +9,7 @@ import Queue
 from matplotlib import animation
 import matplotlib.pyplot as plt
 import pickle
+import hashlib
 
 # Contains every car-object of the board
 car_objects = []
@@ -22,20 +23,20 @@ class Board(object):
         self.width = width
 
         # Obtaining a 2D board
-        config = [[0 for x in xrange(size)] for x in xrange(size)]
+        config = [[0 for x in xrange(size)] for y in xrange(size)]
 
         # Setting the cars onto the board
         count = 1
-        for cars in car_objects:
-            if type(cars) is HorCar:
-                x = cars.startx
-                y = cars.starty
-                for i in xrange(cars.length):
+        for car in car_objects:
+            if type(car) is HorCar:
+                x = car.startx
+                y = car.starty
+                for i in xrange(car.length):
                     config[size - 1 - y][x + i] = count
             else:
-                x = cars.startx
-                y = cars.starty
-                for i in xrange(cars.length):
+                x = car.startx
+                y = car.starty
+                for i in xrange(car.length):
                     config[size - 1 -(y + i)][x] = count
             count += 1
 
@@ -149,6 +150,17 @@ class Board(object):
                     check_lis.append(set_config[i][j])
                     car_objects[set_config[i][j] - 1].setCarPosition(j,
                                                                 size - 1 - i)
+
+class HashBoard(object):
+    def __init__(self, config):
+        self.config = config
+
+    def __hash__(self):
+        return hash(self.config.__repr__())
+
+    def __eq__(self, other):
+        return all(self.config[i][j] == other.config[i][j]
+                                    for i in xrange(size) for j in range(size))
 
 class Car(object):
     def __init__(self, index, length, color, x, y):
@@ -433,15 +445,17 @@ def find_path(graph, end, start, path=[]):
     """
     Finds path to the solution in the archive using recursion
     """
-    # Elements are two d lists, the animation function is made for tuples
-    if type(start) == list:
-        start = tuple([start[i][j] for i in xrange(size) for j in xrange(size)])
+    # Adds board to the path
     path = [start] + path
-    if str(start) == str(end):
+    if start == end:
         return path
-    if not graph.has_key(str(start)):
+
+    # If a key does not exist, consider other path
+    if not graph.has_key(HashBoard(start)):
         return False
-    node = graph[str(start)]
+
+    # Keep traversing
+    node = graph[HashBoard(start)]
     newpath = find_path(graph, end, node, path)
     if newpath:
         return newpath
@@ -466,9 +480,6 @@ def a_star(board):
     amountCars = 0
     for i in xrange(place_of_red, len(row)):
         if row[i] > 1:
-
-        #    amountCars +=1
-
             # Difference between start car and winning row
             diff = win_row(size) - car_objects[row[i] - 1].starty
             length = car_objects[row[i] - 1].length
@@ -497,17 +508,13 @@ def archived_as(qboard, car, depth, step):
     # Get partial copied board
     child = board.getboard(car, step, qboard)
 
-    # Make tuple and string of it to reduce memory size
-    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
-
-    if str(tuple_child) not in archive:
-        archive[str(tuple_child)] = qboard
+    if HashBoard(child) not in archive:
+        archive[HashBoard(child)] = qboard
         if (won(child)):
-            board.set_board(child)
             return (True, child)
 
         queue_priority.put((a_star(child) + depth, child, depth))
-        #queue_priority.put((a_star(child), child, depth))
+
 
     return (False, None)
 
@@ -522,9 +529,7 @@ def astar_solve():
     root = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
     queue_priority.put((0, root, depth))
 
-    # Make a tuple for first node and put in archive
-    root_str = str(tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)]))
-    archive[root_str] = root
+    archive[HashBoard(root)] = root
 
     while queue_priority.qsize():
         # Get first element for setting board and car objects
@@ -533,17 +538,16 @@ def astar_solve():
 
         # Determine which car can be moved
         for car in car_objects:
-            if car.index < 34:
-                for move in moves:
-                    if car.updatePosition(move):
-                        # Determines if child of qboard is in the archive
-                        found, child = archived_as(qboard, car, depth + 1, move)
-                        # If not, then board is winning config
-                        if found:
-                            # Return the path when puzzle solved
-                            return find_path(archive, root_str, child)
+            for move in moves:
+                if car.updatePosition(move):
+                    # Determines if child of qboard is in the archive
+                    found, child = archived_as(qboard, car, depth + 1, move)
+                    # If not, then board is winning config
+                    if found:
+                        # Return the path when puzzle solved
+                        return find_path(archive, root, child)
 
-                        car.updatePosition(-move)
+                    car.updatePosition(-move)
 
 archive = {}
 queue = Queue.Queue()
@@ -554,13 +558,9 @@ def archived(qboard, car, step):
     # Get partial copied board
     child = board.getboard(car, step, qboard)
 
-    # Make tuple and string of it to reduce memory size
-    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
-
-    if str(tuple_child) not in archive:
-        archive[str(tuple_child)] = qboard
+    if HashBoard(child) not in archive:
+        archive[HashBoard(child)] = qboard
         if (won(child)):
-            board.set_board(child)
             return (True, child)
 
         queue.put(child)
@@ -575,9 +575,7 @@ def breadth_solve():
     root = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
     queue.put(root)
 
-    # Make a tuple for first node and put in archive
-    root_str = str(tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)]))
-    archive[root_str] = root
+    archive[HashBoard(root)] = root
 
     while queue.qsize():
         # Get first element for setting board and car objects
@@ -593,7 +591,7 @@ def breadth_solve():
                     # If not, then board is winning config
                     if found:
                         # Return the path when puzzle solved
-                        return find_path(archive, root_str, child)
+                        return find_path(archive, root, child)
 
                     car.updatePosition(-move)
 
@@ -602,15 +600,13 @@ def find_path_id(graph, end, start, path=[]):
     Finds path to the solution in the archive using recursion (this function
     is only for iterative deepenings)
     """
-    # Elements are two-d list, make tuples of it so we can find the str of tuple
-    if type(start) == list:
-        start = tuple([start[i][j] for i in xrange(size) for j in xrange(size)])
+
     path = [start] + path
-    if str(start) == str(end):
+    if start == end:
         return path
-    if not graph.has_key(str(start)):
+    if not graph.has_key(HashBoard(start)):
         return False
-    node = graph[str(start)][1]
+    node = graph[HashBoard(start)][1]
     newpath = find_path_id(graph, end, node, path)
     if newpath:
         return newpath
@@ -626,13 +622,9 @@ def archived_id(stackboard, car, step, config_depth):
     # Get partial copied board
     child = board.getboard(car, step, stackboard)
 
-    # Make tuple and string of it to reduce memory size
-    tuple_child = tuple([child[i][j] for i in xrange(size) for j in xrange(size)])
-
-    if str(tuple_child) not in archive or archive[str(tuple_child)][0] > config_depth + 1:
-        archive[str(tuple_child)] = [config_depth + 1, stackboard]
+    if HashBoard(child) not in archive or archive[HashBoard(child)][0] > config_depth + 1:
+        archive[HashBoard(child)] = [config_depth + 1, stackboard]
         if (won(child)):
-            board.set_board(child)
             return (True, child)
 
         stack.append((child, config_depth + 1))
@@ -645,10 +637,10 @@ def id_solve():
     """
     # Make a copy for the first node and put in the  stack
     root = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
-    root_str = str(tuple([board.config[i][j] for i in xrange(size) for j in xrange(size)]))
+
     stack.append((root, 0))
-    archive[root_str] = [0, root]
-    depth = 1
+    archive[HashBoard(root)] = [0, root]
+    depth = 0
 
     while len(stack):
         # Get last element for setting board and car objects
@@ -665,13 +657,13 @@ def id_solve():
                         # If not, then board is winning config
                         if found:
                             # Return the path when puzzle solved
-                            return find_path_id(archive, root_str, child)
+                            return find_path_id(archive, root, child)
                         car.updatePosition(-move)
         # If the depth is reached, start all over
         if len(stack) == 0:
             stack.append((root, 0))
             archive.clear()
-            archive[root_str] = [0, root]
+            archive[HashBoard(root)] = [0, root]
             depth += 1
 
 def rush_hour_animation(animation_list):
@@ -697,10 +689,7 @@ def rush_hour_animation(animation_list):
     def animate(i_time):
 
         # Obtain 1d board
-        board_1d = animation_list[i_time]
-
-        # Make from 1d board a 2d board
-        board = [board_1d[i : i + size] for i in range(0, size*size, size)]
+        board = animation_list[i_time]
 
         # This is for maintaining the car positions
         car_positions = [([],[]) for _ in range(len(car_objects))]
@@ -792,7 +781,4 @@ python rush_hour.py animation board1")
     print "Steps", len(path)
     print "Total configurations", len(archive)
 
-    # comment this out for writing to a file
-    # with open('board7.txt', 'wb') as f:
-    #      pickle.dump(path, f)
     rush_hour_animation(path)
