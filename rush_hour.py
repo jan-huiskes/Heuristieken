@@ -14,6 +14,7 @@ import hashlib
 # Contains every car-object of the board
 car_objects = []
 
+
 class Board(object):
     def __init__(self, width, height):
         """
