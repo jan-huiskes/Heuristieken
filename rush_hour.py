@@ -9,11 +9,9 @@ import Queue
 from matplotlib import animation
 import matplotlib.pyplot as plt
 import pickle
-import hashlib
 
 # Contains every car-object of the board
 car_objects = []
-
 
 class Board(object):
     def __init__(self, width, height):
@@ -515,7 +513,6 @@ def archived_as(qboard, car, depth, step):
             return (True, child)
 
         queue_priority.put((a_star(child) + depth, child, depth))
-
 
     return (False, None)
 
