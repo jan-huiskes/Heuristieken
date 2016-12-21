@@ -1,14 +1,29 @@
-# Heuristic: Rush hour
-# Contributors: Jan Huiskes, Boris Wolvers, Saar Hoek
-#
-# Solving any Rush Hour configuration
+"""
+    Heuristics:      Rush hour
+    Contributors:    Jan Huiskes, Boris Wolvers, Saar Hoek
+    Filename:        rush_hour.py
 
+    Description: This program solves a rush hour board with a specific
+    algorithm. The structure of the code is as follows: first we introduce the
+    static board object along with the car objects. We also have a seperate
+    object to hash a board into an archive. Beneath the objects we defined the
+    different rush hour board configurations, three 6x6's, three 9x9's and one
+    12x12 board. The rest of the code contains the algorithms and relevant
+    functions, e.g. determine winning row, retrieve winning path, animating.
+
+    Algorithms:
+        - breadth first
+        - astar
+        - iterative deepening
+        - random
+"""
 import sys
 import time
 import Queue
 from matplotlib import animation
 import matplotlib.pyplot as plt
 import pickle
+import random
 
 # Contains every car-object of the board
 car_objects = []
@@ -152,12 +167,21 @@ class Board(object):
 
 class HashBoard(object):
     def __init__(self, config):
+        """
+        Initializes a partial copied board
+        """
         self.config = config
 
     def __hash__(self):
+        """
+        Returns hash of board when object is saved into archive
+        """
         return hash(self.config.__repr__())
 
     def __eq__(self, other):
+        """
+        Determines if boards are equal when collision occur
+        """
         return all(self.config[i][j] == other.config[i][j]
                                     for i in xrange(size) for j in range(size))
 
@@ -401,7 +425,6 @@ def board7():
     car_objects.append(VerCar(31, 2, 'blue', 6, 10))
     car_objects.append(HorCar(32, 3, 'purple', 7, 11))
     car_objects.append(HorCar(33, 2, 'pink', 10, 11))
-    # From here right corner
     car_objects.append(HorCar(34, 2, 'blue', 7, 0))
     car_objects.append(VerCar(35, 2, 'pink', 9, 0))
     car_objects.append(VerCar(36, 3, 'purple', 10, 0))
@@ -495,12 +518,12 @@ def a_star(board):
 
     return amountCars
 
-# List of direction car steps
+# List of directions car steps
 moves = [-1, 1]
 
 archive = {}
 queue_priority = Queue.PriorityQueue()
-def archived_as(qboard, car, depth, step):
+def archive_astar(qboard, car, depth, step):
     """
     Determines if board should be added to archive
     """
@@ -512,6 +535,7 @@ def archived_as(qboard, car, depth, step):
         if (won(child)):
             return (True, child)
 
+        # Put board in queue with calculated cost
         queue_priority.put((a_star(child) + depth, child, depth))
 
     return (False, None)
@@ -536,10 +560,11 @@ def astar_solve():
 
         # Determine which car can be moved
         for car in car_objects:
+            # Moves are 1 or -1
             for move in moves:
                 if car.updatePosition(move):
                     # Determines if child of qboard is in the archive
-                    found, child = archived_as(qboard, car, depth + 1, move)
+                    found, child = archive_astar(qboard, car, depth + 1, move)
                     # If not, then board is winning config
                     if found:
                         # Return the path when puzzle solved
@@ -549,7 +574,7 @@ def astar_solve():
 
 archive = {}
 queue = Queue.Queue()
-def archived(qboard, car, step):
+def archive_breadth(qboard, car, step):
     """
     Determines if board should be added to archive
     """
@@ -582,10 +607,11 @@ def breadth_solve():
 
         # Determine which car can be moved
         for car in car_objects:
+            # Moves are 1 or -1
             for move in moves:
                 if car.updatePosition(move):
                     # Determines if child of qboard is in the archive
-                    found, child = archived(qboard, car, move)
+                    found, child = archive_breadth(qboard, car, move)
                     # If not, then board is winning config
                     if found:
                         # Return the path when puzzle solved
@@ -598,12 +624,16 @@ def find_path_id(graph, end, start, path=[]):
     Finds path to the solution in the archive using recursion (this function
     is only for iterative deepenings)
     """
-
+    # Adds board to the path
     path = [start] + path
     if start == end:
         return path
+
+    # If a key does not exist, consider other path
     if not graph.has_key(HashBoard(start)):
         return False
+
+    # Keep traversing
     node = graph[HashBoard(start)][1]
     newpath = find_path_id(graph, end, node, path)
     if newpath:
@@ -613,7 +643,7 @@ def find_path_id(graph, end, start, path=[]):
 
 archive = {}
 stack = []
-def archived_id(stackboard, car, step, config_depth):
+def archive_id(stackboard, car, step, config_depth):
     """
     Determines if board should be added to archive
     """
@@ -636,7 +666,10 @@ def id_solve():
     # Make a copy for the first node and put in the  stack
     root = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
 
+    # Append board with depth as tuple to stack
     stack.append((root, 0))
+
+    # Append board with depth to archive
     archive[HashBoard(root)] = [0, root]
     depth = 0
 
@@ -651,12 +684,13 @@ def id_solve():
                 for move in moves:
                     if car.updatePosition(move):
                         # Determines if child of qboard is in the archive
-                        found, child = archived_id(stackboard, car, move, config_depth)
+                        found, child = archive_id(stackboard, car, move, config_depth)
                         # If not, then board is winning config
                         if found:
                             # Return the path when puzzle solved
                             return find_path_id(archive, root, child)
                         car.updatePosition(-move)
+
         # If the depth is reached, start all over
         if len(stack) == 0:
             stack.append((root, 0))
@@ -664,7 +698,46 @@ def id_solve():
             archive[HashBoard(root)] = [0, root]
             depth += 1
 
-def rush_hour_animation(animation_list):
+def random_solver():
+    """
+    This functions solves a board randomly, for each iteration a random car
+    of board is chosen, which will be random moved (up or down, left or right)
+    """
+    path = []
+    root = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
+    path.append(root)
+
+    found = False
+
+    while not found:
+        # If the path contains more than 10.000 steps, just return
+        if len(path) > 10000:
+            return "Path exceeded 10.000 steps"
+
+        board_config = [[board.config[j][i] for i in xrange(size)] for j in xrange(size)]
+        board.set_board(board_config)
+
+        # Make a list for the indexes of car_objects list (which contains all cars)
+        index_car_objects = [i for i in range(len(car_objects))]
+
+        # Shuffles list
+        random.shuffle(index_car_objects)
+
+        # Pick a random car (this works better than random.random()*len(car_objects)
+        # for choosing random car)
+        car = car_objects[index_car_objects[0]]
+
+        # Choose random move from global moves list
+        move = moves[int(random.random()*2)]
+        if car.updatePosition(move):
+            # Gets child and append to path
+            child = board.getboard(car, move, board_config)
+            path.append(child)
+            if (won(child)):
+                found = True
+                return path
+
+def rush_hour_animation(animation_list, timeframe):
     """
     Plot the animation of found path
     """
@@ -711,7 +784,7 @@ def rush_hour_animation(animation_list):
 
     # Calling the main animation function
     anim = animation.FuncAnimation(fig, animate, init_func=init,
-                           frames=(len(animation_list)), interval=200,
+                           frames=(len(animation_list)), interval=timeframe,
                            blit=True, repeat = False)
 
     # Turn off tick labels
@@ -761,6 +834,9 @@ python rush_hour.py animation board1")
     # Initialize board object
     board = Board(size, size)
 
+    # Declare timeframe for each configuration for the animation
+    timeframe = 200
+
     # Decides which algorithm to run
     if sys.argv[1] == 'astar':
         path = astar_solve()
@@ -768,15 +844,24 @@ python rush_hour.py animation board1")
         path = breadth_solve()
     elif sys.argv[1] == 'id':
         path = id_solve()
+    elif sys.argv[1] == 'random':
+        path = random_solver()
+        timeframe = 10
+        if type(path) == str:
+            print path
+            sys.exit(2)
 
     # Just obtain a solution path for animation
     elif sys.argv[1] == 'animation':
         with open('Boards/' + sys.argv[2] + '.txt', 'rb') as f:
             path = pickle.load(f)
+        if sys.argv[2] == 'board7':
+            timeframe = 10
 
     end = time.time()
     print "Time elapsed:", (end - start)
     print "Steps", len(path)
     print "Total configurations", len(archive)
 
-    rush_hour_animation(path)
+    # Start animation
+    rush_hour_animation(path, timeframe)
